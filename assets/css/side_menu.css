@@ -1,0 +1,690 @@
+/* Import Satoshi font */
+@import url('https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Navigation Rail */
+.nav-rail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 56px;
+    background: rgba(255, 255, 255, 0.40);
+    box-shadow: 0 2px 10px 0 rgba(245, 245, 245, 0.16);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 40px 16px;
+    flex-direction: column;
+    gap: 32px;
+    z-index: 200;
+    transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.nav-rail.expanded {
+    width: 240px;
+    align-items: flex-start;
+}
+
+.nav-rail.expanded .rail-logo {
+    padding-left: 8px;
+}
+
+.nav-rail.expanded .rail-logo img {
+    width: auto;
+    height: 16px;
+}
+
+.rail-top {
+    display: flex;
+    padding-top: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.rail-logo {
+    display: flex;
+    padding: 13px 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    margin-bottom: 32px;
+}
+
+.rail-logo img {
+    width: 38px;
+    height: 10px;
+    aspect-ratio: 19/5;
+}
+
+/* Side Menu Arrow */
+.side-menu-arrow {
+    position: absolute;
+    top: 76px;
+    right: -17px; 
+    transform: translateY(-50%);
+    display: inline-flex;
+    padding: 4px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 30px;
+    background: #fff;
+    box-shadow: 0 4px 20px 0 rgba(209, 209, 209, 0.25);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    z-index: 210; /* above the rail */
+}
+
+/* Reveal when hovering the sidebar (or the arrow itself) */
+.nav-rail:hover .side-menu-arrow,
+.side-menu-arrow:hover {
+    opacity: 1;
+}
+
+.arrow-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.rail-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1 0 0;
+}
+
+.rail-nav img {
+    width: 20px;
+    height: 20px;
+    aspect-ratio: 1/1;
+}
+
+.rail-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: #344155;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    gap: 12px;
+}
+
+.rail-btn .btn-text {
+    display: none;
+    position: absolute;
+    left: 48px;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-rail.expanded .rail-btn {
+    width: 100%;
+    height: 44px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    background: transparent;
+    border-radius: 8px;
+}
+
+.nav-rail.expanded .rail-btn:hover {
+    background: #f5f7fa;
+}
+
+.nav-rail.expanded .rail-btn .btn-text {
+    display: block;
+    position: static;
+    left: auto;
+}
+
+/* Expandable button styles */
+.expandable-btn {
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+}
+
+/* Align content within the expanded state using flex */
+.nav-rail.expanded .expandable-btn,
+.nav-rail.expanded .rail-btn {
+    display: flex;
+    align-items: center;
+}
+
+.nav-rail.expanded .rail-nav{
+    width: 100%;
+}
+
+.expandable-btn .chevron-icon {
+    display: none;
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    transition: transform 0.2s ease;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-rail.expanded .expandable-btn .chevron-icon {
+    display: block;
+    position: static;
+    right: auto;
+    top: auto;
+    transform: none;
+}
+
+.expandable.expanded .expandable-btn .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-rail.expanded .nav-item{
+    width: 100%;
+}
+
+.nav-item .icon-default {
+    display: block;
+}
+
+.nav-item .icon-hover {
+    display: none;
+}
+
+.nav-item:hover .icon-default {
+    display: none;
+}
+
+.nav-item:hover .icon-hover {
+    display: block;
+}
+
+/* Keep hover icon when item is active */
+.nav-item .rail-btn.active .icon-default { display: none; }
+.nav-item .rail-btn.active .icon-hover { display: block; }
+
+/* Expanded menu styles */
+.expanded-menu {
+    display: none;
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+    margin-top: 8px;
+    min-width: auto;
+    width: 100%;
+}
+
+.expandable.expanded .expanded-menu {
+    display: block;
+}
+
+/* Highlight group header when expanded */
+.expandable.expanded > .rail-btn {
+    background: #E8F1FC;
+}
+
+/* When group expanded, keep hover icon */
+.expandable.expanded .icon-default { display: none; }
+.expandable.expanded .icon-hover { display: block; }
+
+.expanded-menu .menu-item {
+    display: block;
+    padding: 8px 16px;
+    color: #333333;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    /* border-radius: 4px; */
+    margin-bottom: 4px;
+    border-left: 4px solid transparent;
+}
+
+.expanded-menu .menu-item:hover {
+    background-color: #F5F7FA;
+    color: #003366;
+}
+
+/* Active state for submenu items (inline expanded) */
+.expanded-menu .menu-item.active {
+    background-color: #E8F1FC;
+    color: #003366;
+    border-left-color: #003366;
+}
+
+/* When sidebar is collapsed, show hover-based dropdown */
+.nav-rail:not(.expanded) .expandable .expanded-menu {
+    display: none;
+}
+
+.nav-rail:not(.expanded) .expandable:hover .hover-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* When sidebar is expanded, hide hover-based dropdown and show inline menu */
+.nav-rail.expanded .expandable .hover-dropdown {
+    display: none;
+}
+
+/* When sidebar is expanded, disable hover dropdowns for all top-level nav items */
+.nav-rail.expanded .nav-item .nav-dropdown {
+    display: none !important;
+}
+
+/* Inline menu should only show when the group itself is expanded via chevron */
+/* .nav-rail.expanded .expandable .expanded-menu { display: block; } */
+
+/* Hover-based dropdown (for non-expanded state) */
+.nav-dropdown {
+    position: absolute;
+    left: 46px; /* Width of nav-rail - 10px to create gap */
+    top: 0;
+    min-width: 160px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px 0px rgba(209, 209, 209, 0.25);
+    padding: 8px 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    transform: translateX(-10px);
+    z-index: 220;
+}
+
+/* Add padding to create hoverable gap */
+.nav-dropdown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 10px;
+    height: 100%;
+}
+
+.nav-item:hover .nav-dropdown:not(.expanded-menu) {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.nav-dropdown .menu-item {
+    display: block;
+    padding: 8px 16px;
+    color: #333333;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.nav-dropdown .menu-item:hover {
+    background-color: #F5F7FA;
+    color: #003366;
+}
+
+/* Active state for submenu items (hover dropdown) */
+.nav-dropdown .menu-item.active {
+    background-color: #E8F1FC;
+    color: #003366;
+    border-left-color: #003366;
+}
+
+.rail-btn:hover {
+    background: #f5f7fa;
+}
+
+.rail-btn.active {
+    background: #e8f1fc;
+    border-color: #cfe0fb;
+    color: #036;
+}
+
+.rail-bottom {
+    display: flex;
+    height: 96px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    flex-shrink: 0;
+    align-self: stretch;
+    /* margin-bottom: 40px; */
+}
+
+/* Language and User FABs */
+.language-fab,
+.user-fab {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 0;            /* remove default button border */
+    outline: none;        /* remove focus outline */
+    box-shadow: none;     /* ensure no shadow border */
+}
+
+.language-fab {
+    width: auto;
+    border-radius: 14px;
+}
+
+.nav-rail.expanded .language-fab {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 4px 8px;
+}
+
+.language-text {
+    display: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-rail.expanded .language-text {
+    display: block;
+}
+
+.language-fab:hover {
+    background: #f5f7fa;
+}
+
+.flag-placeholder {
+    font-size: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flag-placeholder img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.lang-flag {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.user-fab {
+    background-color: #003366;
+    color: #fff;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 20px; 
+    letter-spacing: 0.28px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Expanded rail-bottom design */
+.nav-rail.expanded .rail-bottom {
+    width: 100%;
+    height: auto;
+    gap: 0;
+    padding: 0;
+}
+
+.nav-rail.expanded .menu-container {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.nav-rail.expanded .language-fab,
+.nav-rail.expanded .user-fab {
+    border-radius: 8px;
+    padding: 12px 16px;
+    justify-content: flex-start;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.nav-rail.expanded .language-fab{
+    width: 100%;
+    height: 48px;
+}
+
+/* Ensure user row behaves like language row when expanded */
+.nav-rail.expanded .user-fab {
+    width: 100%;
+    height: 48px;
+    background: transparent; /* override blue circle background */
+    color: #1f2937;
+    border: 0;
+    outline: none;
+}
+
+.user-fab:hover,
+.user-fab:focus,
+.user-fab:focus-visible {
+    border: 0;
+    outline: none;
+    box-shadow: none;
+}
+
+
+.nav-rail.expanded .language-fab:hover,
+.nav-rail.expanded .user-fab:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.nav-rail.expanded .flag-placeholder img {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-rail.expanded .language-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* .nav-rail.expanded .user-fab {
+    background: #003366;
+    color: #fff;
+    font-weight: 00;
+} */
+
+.nav-rail.expanded .user-avatar {
+    width: 24px;
+    height: 24px;
+    background: #003366;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.nav-rail.expanded .user-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+/* Hide user name when not expanded */
+.user-name {
+    display: none;
+}
+
+/* Add chevron arrows for expanded state */
+.nav-rail.expanded .language-fab::after,
+.nav-rail.expanded .user-fab::after {
+    content: '';
+    margin-left: auto;
+    width: 16px;
+    height: 16px;
+    background-image: url('/assets/images/chevron-arrow.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Update dropdown positioning for expanded state */
+.nav-rail.expanded .dropdown-menu {
+    left: 100%;
+    top: 0;
+    transform: translateX(8px);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px 0px rgba(209, 209, 209, 0.25);
+}
+
+.nav-rail.expanded .dropdown-menu::before {
+    left: -8px;
+    width: 8px;
+}
+
+.menu-container {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    left: 46px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-10px);
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px 0px rgba(209, 209, 209, 0.25);
+    padding: 8px 0;
+    min-width: 140px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 220;
+}
+
+/* Add padding to create hoverable gap */
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 10px;
+    height: 100%;
+}
+
+.menu-container:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+.lang-item {
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1f2937;
+    transition: all 0.2s ease;
+}
+
+.lang-item:hover {
+    background: #f5f7fa;
+}
+
+.lang-item.active {
+    font-weight: 700;
+    color: #036;
+}
+
+/* User Menu */
+.user-container {
+    position: relative;
+}
+.nav-rail.expanded  .user-initial {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    padding: 0; /* keep circular */
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    aspect-ratio: 1/1;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.28px;
+    border-radius: 50%;
+    background: #036;
+    color: #fff;
+} 
+
+.user-menu-dropdown {
+    width: 178px;
+    border-radius: 0 8px 8px 0;
+}
+
+.menu-item {
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1f2937;
+    text-decoration: none;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+    border-left: 4px solid #003366;
+    background: #E8F1FC;
+}
+
+.logout-item {
+    color: #dc2626;
+}
+
+.logout-item:hover {
+    background: #fee2e2;
+}

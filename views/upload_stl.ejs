@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload STL - Doctor Portal</title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/add_case.css">
+    <script src="/assets/js/components.js"></script>
+</head>
+<body>
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/aligners-cases" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item active">Upload STL</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Upload STL</h1>
+            </div>
+
+            <!-- Upload STL Form -->
+            <form class="add-case-form" id="uploadStlForm">
+                <!-- Patient Details Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Patient Details</h2>
+                    <div class="form-content">
+                        <div class="form-grid">
+                            <div class="form-field">
+                                <label for="patientName">* Name</label>
+                                <input type="text" id="patientName" name="patientName" placeholder="Input here" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="patientGender">Gender</label>
+                                <select id="patientGender" name="patientGender">
+                                    <option value="">Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="dateOfBirth">Date of Birth</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth">
+                            </div>
+                            <div class="form-field">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="treatmentBrand">* Treatment Brand</label>
+                                <select id="treatmentBrand" name="treatmentBrand" required>
+                                    <option value="">Select</option>
+                                    <option value="brand1">Brand 1</option>
+                                    <option value="brand2">Brand 2</option>
+                                    <option value="brand3">Brand 3</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="customSN">Custom SN</label>
+                                <input type="text" id="customSN" name="customSN" placeholder="Input here">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Upload Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Model Upload</h2>
+                    <div class="form-content">
+                        <div class="form-grid">
+                            <div class="form-field">
+                                <label for="product">* Product</label>
+                                <select id="product" name="product" required>
+                                    <option value="">Select</option>
+                                    <option value="invisalign">Invisalign</option>
+                                    <option value="clearcorrect">ClearCorrect</option>
+                                    <option value="spark">Spark</option>
+                                    <option value="sureSmile">SureSmile</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="productArrivalDate">* Product Arrival Date <span class="info-icon">ℹ</span></label>
+                                <input type="date" id="productArrivalDate" name="productArrivalDate" required>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="modelType">* Model Type</label>
+                            <select id="modelType" name="modelType" required>
+                                <option value="">Select</option>
+                                <option value="stl">STL</option>
+                                <option value="ply">PLY</option>
+                                <option value="zip">ZIP</option>
+                            </select>
+                        </div>
+
+                        <!-- Documents Upload -->
+                        <div class="upload-field mt-24">
+                            <label for="documents">* Documents (*STL, PLY or ZIP)</label>
+                            <p class="upload-instructions">Upload one or multiple attachments.</p>
+                            <div class="file-upload file-upload-simple">
+                                <input type="file" id="documents" name="documents" accept=".stl,.ply,.zip" required>
+                                <div class="upload-placeholder">
+                                    <span>Choose File</span>
+                                    <img src="" alt="Upload Icon" class="file-upload-icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="saveDraftBtn">Save as Draft</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Load navigation rail component
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.html');
+        });
+
+        // File upload handling
+        document.querySelectorAll('.file-upload input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const uploadPlaceholder = this.parentNode.querySelector('.upload-placeholder');
+                const firstSpan = uploadPlaceholder.querySelector('span:first-child');
+                
+                if (this.files.length > 0) {
+                    if (this.parentNode.classList.contains('file-upload-simple')) {
+                        if (this.files.length === 1) {
+                            firstSpan.textContent = this.files[0].name;
+                        } else {
+                            firstSpan.textContent = `${this.files.length} files selected`;
+                        }
+                    } else {
+                        firstSpan.textContent = this.files[0].name;
+                    }
+                    this.parentNode.classList.add('has-file');
+                } else {
+                    firstSpan.textContent = 'Choose File';
+                    this.parentNode.classList.remove('has-file');
+                }
+            });
+        });
+
+        // Drag and drop functionality for file upload
+        const fileUpload = document.querySelector('.file-upload');
+        const fileInput = document.getElementById('documents');
+
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('drag-over');
+        });
+
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('drag-over');
+        });
+
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change', { bubbles: true });
+                fileInput.dispatchEvent(event);
+            }
+        });
+
+        fileUpload.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Form submission
+        document.getElementById('uploadStlForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/upload-stl', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('STL files uploaded successfully!');
+                    window.location.href = '/aligners-cases';
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Failed to upload STL files');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Save as draft
+        document.getElementById('saveDraftBtn').addEventListener('click', async () => {
+            const formData = new FormData(document.getElementById('uploadStlForm'));
+            formData.append('status', 'draft');
+            
+            try {
+                const response = await fetch('/save-stl-draft', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Draft saved successfully!');
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Failed to save draft');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

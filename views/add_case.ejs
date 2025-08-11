@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Case - Doctor Portal</title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/add_case.css">
+    <script src="/assets/js/components.js"></script>
+</head>
+<body>
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/aligners-cases" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item active">Add New Case</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Add New Case</h1>
+            </div>
+
+            <!-- Add Case Form -->
+            <form class="add-case-form" id="addCaseForm">
+                <!-- Patient Details Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Patient Details</h2>
+                    <div class="form-content">
+                        <div class="form-grid">
+                        <div class="form-field">
+                            <label for="patientName">* Name</label>
+                            <input type="text" id="patientName" name="patientName" placeholder="Input here" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="patientGender">* Gender</label>
+                            <select id="patientGender" name="patientGender" required>
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="dateOfBirth">* Date of Birth</label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Input here">
+                        </div>
+                        <div class="form-field">
+                            <label for="treatmentBrand">* Treatment Brand</label>
+                            <select id="treatmentBrand" name="treatmentBrand" required>
+                                <option value="">Select</option>
+                                <option value="brand1">Brand 1</option>
+                                <option value="brand2">Brand 2</option>
+                                <option value="brand3">Brand 3</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="customSR">Custom SR</label>
+                            <input type="text" id="customSR" name="customSR" placeholder="Input here">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Treatment Details Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Treatment Details</h2>
+                    <div class="form-content">
+                    
+                    <!-- Clinical Condition -->
+                    <div class="clinical-condition">
+                        <h3 class="subsection-title">Clinical Condition</h3>
+                        <div class="condition-grid">
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="crowding">
+                                    <span class="checkmark"></span>
+                                    Crowding
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="class_ii_div_1">
+                                    <span class="checkmark"></span>
+                                    Class II div 1
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="overjet">
+                                    <span class="checkmark"></span>
+                                    Overjet
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="deep_bite">
+                                    <span class="checkmark"></span>
+                                    Deep Bite
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="class_ii_div_2">
+                                    <span class="checkmark"></span>
+                                    Class II div 2
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="anterior_crossbite">
+                                    <span class="checkmark"></span>
+                                    Anterior Crossbite
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="spacing">
+                                    <span class="checkmark"></span>
+                                    Spacing
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="class_iii">
+                                    <span class="checkmark"></span>
+                                    Class III
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="posterior_crossbite">
+                                    <span class="checkmark"></span>
+                                    Posterior Crossbite
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="narrow_arch">
+                                    <span class="checkmark"></span>
+                                    Narrow Arch
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="open_bite">
+                                    <span class="checkmark"></span>
+                                    Open Bite
+                                </label>
+                            </div>
+                            <div class="condition-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="clinical_condition" value="others">
+                                    <span class="checkmark"></span>
+                                    Others
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IPR and Attachments -->
+                    <div class="ipr-attachments">
+                        <div class="form-field">
+                            <label for="ipr">* IPR</label>
+                            <select id="ipr" name="ipr" required>
+                                <option value="">As Recommended</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="attachments">* Attachments</label>
+                            <select id="attachments" name="attachments" required>
+                                <option value="">As Recommended</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Treatment Notes -->
+                    <div class="form-field mt-24">
+                        <label for="treatmentNotes">Treatment Notes</label>
+                        <textarea id="treatmentNotes" name="treatmentNotes" placeholder="Input here" rows="6"></textarea>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Model Upload Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Model Upload</h2>
+                    <div class="form-content">
+                    
+                    <div class="form-field">
+                        <label for="modelType">* Model Type</label>
+                        <select id="modelType" name="modelType" required>
+                            <option value="">Select</option>
+                            <option value="stl">STL</option>
+                            <option value="ply">PLY</option>
+                            <option value="obj">OBJ</option>
+                        </select>
+                    </div>
+
+                    <!-- File Upload Grid -->
+                    <div class="upload-grid">
+                        <div class="upload-field">
+                            <label for="upperScan">* Upper Scan (*STL/*PLY)</label>
+                            <div class="file-upload file-upload-simple">
+                                <input type="file" id="upperScan" name="upperScan" accept=".stl,.ply" required>
+                                <div class="upload-placeholder">
+                                    <span>Choose File</span>
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="upload-field">
+                            <label for="lowerScan">* Lower Scan (*STL/*PLY)</label>
+                            <div class="file-upload file-upload-simple">
+                                <input type="file" id="lowerScan" name="lowerScan" accept=".stl,.ply" required>
+                                <div class="upload-placeholder">
+                                    <span>Choose File</span>
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="upload-field">
+                            <label for="biteScan">Bite Scan (*STL/*PLY)</label>
+                            <div class="file-upload file-upload-simple">
+                                <input type="file" id="biteScan" name="biteScan" accept=".stl,.ply" required>
+                                <div class="upload-placeholder">
+                                    <span>Choose File</span>
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Photos -->
+                    <div class="clinical-photos">
+                        <h3 class="subsection-title">Clinical Photos</h3>
+                        <p class="upload-instructions">Please click on the images below to upload photos</p>
+                        
+                        <div class="photo-grid">
+                            <div class="photo-row">
+                                <div class="photo-upload face-photo" data-type="frontal">
+                                    <img src="/assets/images/full-face-front.png" alt="Face Front" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="photo-upload face-photo" data-type="smile">
+                                    <img src="/assets/images/full-smiling-face.png" alt="Face Smile" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="photo-upload face-photo" data-type="profile">
+                                    <img src="/assets/images/right-side-profile.png" alt="Face Profile" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                            </div>
+                            
+                            <div class="photo-row">
+                                <div class="photo-upload teeth-photo" data-type="left">
+                                    <img src="/assets/images/buccal-right.png" alt="Teeth Left" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="photo-upload teeth-photo" data-type="front">
+                                    <img src="/assets/images/bretracted-anterior-frontal.png" alt="Teeth Front" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="photo-upload teeth-photo" data-type="right">
+                                    <img src="/assets/images/buccal-left.png" alt="Teeth Right" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="photo-upload teeth-photo" data-type="upper">
+                                    <img src="/assets/images/mandibular-occlusal.png" alt="Teeth Upper" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="photo-upload teeth-photo" data-type="lower">
+                                    <img src="/assets/images/maxillary-occlusal.png" alt="Teeth Lower" class="photo-outline">
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- X-Ray Upload -->
+                    <div class="upload-field mt-24">
+                        <label for="xray">X-Ray (*JPEG, PNG or ZIP)</label>
+                        <div class="file-upload file-upload-simple">
+                            <input type="file" id="xray" name="xray" accept=".jpg,.jpeg,.png,.zip">
+                            <div class="upload-placeholder">
+                                <span>Choose File</span>
+                                <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Documents Upload -->
+                    <div class="upload-field mt-16">
+                        <label for="documents">Other Documents / Photos (*JPEG, PNG or ZIP)</label>
+                        <div class="file-upload file-upload-simple">
+                            <input type="file" id="documents" name="documents" accept=".jpg,.jpeg,.png,.zip" multiple>
+                            <div class="upload-placeholder">
+                                <span>Choose File</span>
+                                <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="saveDraftBtn">Save as Draft</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Load navigation rail component
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.html');
+        });
+
+        // File upload handling
+        document.querySelectorAll('.file-upload input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const uploadPlaceholder = this.parentNode.querySelector('.upload-placeholder');
+                const firstSpan = uploadPlaceholder.querySelector('span:first-child');
+                
+                if (this.files.length > 0) {
+                    if (this.parentNode.classList.contains('file-upload-simple')) {
+                        firstSpan.textContent = this.files[0].name;
+                    } else {
+                        firstSpan.textContent = this.files[0].name;
+                    }
+                    this.parentNode.classList.add('has-file');
+                } else {
+                    firstSpan.textContent = 'Choose File';
+                    this.parentNode.classList.remove('has-file');
+                }
+            });
+        });
+
+        // Clinical photos drag and drop
+        document.querySelectorAll('.photo-upload').forEach(upload => {
+            const input = upload.querySelector('input[type="file"]');
+            
+            upload.addEventListener('click', () => {
+                input.click();
+            });
+
+            upload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                upload.classList.add('drag-over');
+            });
+
+            upload.addEventListener('dragleave', () => {
+                upload.classList.remove('drag-over');
+            });
+
+            upload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                upload.classList.remove('drag-over');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    const event = new Event('change', { bubbles: true });
+                    input.dispatchEvent(event);
+                    
+                    // Show preview
+                    const file = files[0];
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            upload.style.backgroundImage = `url(${e.target.result})`;
+                            upload.style.backgroundSize = 'cover';
+                            upload.style.backgroundPosition = 'center';
+                            upload.classList.add('has-image');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            upload.style.backgroundImage = `url(${e.target.result})`;
+                            upload.style.backgroundSize = 'cover';
+                            upload.style.backgroundPosition = 'center';
+                            upload.classList.add('has-image');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('addCaseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/add-case', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Case submitted successfully!');
+                    window.location.href = '/aligners-cases';
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Failed to submit case');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Save as draft
+        document.getElementById('saveDraftBtn').addEventListener('click', async () => {
+            const formData = new FormData(document.getElementById('addCaseForm'));
+            formData.append('status', 'draft');
+            
+            try {
+                const response = await fetch('/save-draft', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Draft saved successfully!');
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Failed to save draft');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

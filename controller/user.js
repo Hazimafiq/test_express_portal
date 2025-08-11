@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
 // Change password
 exports.changePassword = async (req, res) => {
     try {
-        const { username } = req.session.us·er; // Assume middleware sets req.session.user
+        const { username } = req.session.user; // Assume middleware sets req.session.user
         const { oldPassword, newPassword } = req.body;
         if (!oldPassword || !newPassword) {
             return res.status(400).json({ message: 'Old and new passwords are required' });

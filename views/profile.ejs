@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Doctor Portal</title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/profile.css">
+    <script src="/assets/js/components.js"></script>
+</head>
+<body>
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">></span>
+                <span class="breadcrumb-item active">Profile</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Profile</h1>
+                <button class="btn btn-primary" id="changePasswordBtn">Change Password</button>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="profile-content">
+                <!-- User Info -->
+                <div class="user-info">
+                    <div class="user-avatar">K</div>
+                    <div class="user-details">
+                        <h2 class="full-name">Kayley Chai Min Xuan</h2>
+                        <!-- <p class="user-id">User ID: 28930183</p> -->
+                    </div>
+                </div>
+
+                <!-- Profile Details Grid -->
+                <div class="profile-grid">
+                    <div class="profile-column">
+                        <div class="profile-field">
+                            <label>Username</label>
+                            <span>minxuan001</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Role</label>
+                            <span>Doctor</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-column">
+                        <div class="profile-field">
+                            <label>Phone Number</label>
+                            <span>-</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Email</label>
+                            <span>-</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-column">
+                        <div class="profile-field">
+                            <label>Clinic</label>
+                            <span>B2B Anna Dental Clinic - Subang Jaya</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Country</label>
+                            <span>Malaysia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="delivery-address">
+                    <label>Delivery Address</label>
+                    <span>Level 1, Jalan SS 15/2A, SS 15, 47500 Subang Jaya, Selangor</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="passwordModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Password</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-field">
+                        <label for="currentPassword">* Current Password</label>
+                        <div class="input-container">
+                            <input type="password" id="currentPassword" placeholder="************" required>
+                            <button type="button" class="eye-toggle" data-target="currentPassword">
+                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="newPassword">* New Password</label>
+                        <div class="password-strength-container">
+                            <span class="password-strength" id="passwordStrength"></span>
+                        </div>
+                        <div class="input-container">
+                            <input type="password" id="newPassword" placeholder="************" required>
+                            <button type="button" class="eye-toggle" data-target="newPassword">
+                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="password-strength-bars" id="passwordStrengthBars">
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                        </div>
+                        <div class="validation-message" id="newPasswordError"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="confirmPassword">* Confirm New Password</label>
+                        <div class="input-container">
+                            <input type="password" id="confirmPassword" placeholder="************" required>
+                            <button type="button" class="eye-toggle" data-target="confirmPassword">
+                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="validation-message" id="confirmPasswordError"></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="confirmBtn">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load navigation rail component
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.html');
+        });
+
+        // Modal functionality
+        const modal = document.getElementById('passwordModal');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        changePasswordBtn.onclick = () => {
+            modal.style.display = 'flex';
+            clearValidation();
+        };
+        
+        closeModal.onclick = () => {
+            modal.style.display = 'none';
+            clearValidation();
+        };
+        
+        cancelBtn.onclick = () => {
+            modal.style.display = 'none';
+            clearValidation();
+        };
+        
+        window.onclick = (e) => {
+            if (e.target == modal) {
+                modal.style.display = 'none';
+                clearValidation();
+            }
+        };
+
+        // Password visibility toggle functionality
+        document.querySelectorAll('.eye-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const targetId = toggle.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                const isPassword = input.type === 'password';
+                
+                input.type = isPassword ? 'text' : 'password';
+                
+                // Update icon
+                const eyeIcon = toggle.querySelector('.eye-icon');
+                if (isPassword) {
+                    eyeIcon.innerHTML = `
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94L17.94 17.94z"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19l-6.95-6.95a3 3 0 0 0-4.24 0z"/>
+                    `;
+                } else {
+                    eyeIcon.innerHTML = `
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    `;
+                }
+            });
+        });
+
+        // Password validation functions
+        function validatePassword(password) {
+            const errors = [];
+            
+            if (password.length < 8) {
+                errors.push('at least 8 characters');
+            }
+            if (!/(?=.*[0-9])/.test(password)) {
+                errors.push('1 number');
+            }
+            if (!/(?=.*[!@#$%^&*])/.test(password)) {
+                errors.push('1 special character');
+            }
+            if (!/(?=.*[A-Z])/.test(password)) {
+                errors.push('1 uppercase');
+            }
+            if (!/(?=.*[a-z])/.test(password)) {
+                errors.push('1 lowercase character');
+            }
+            
+            return errors;
+        }
+
+        function getPasswordStrength(password) {
+            const errors = validatePassword(password);
+            
+            // Weak: Missing 3 or more requirements
+            if (errors.length >= 3) return 'weak';
+            
+            // Good: Missing 1-2 requirements OR all requirements met but less than 12 chars
+            if (errors.length >= 1) return 'good';
+            
+            // At this point errors.length === 0 (all requirements met)
+            if (password.length >= 12) return 'strong';
+            return 'good';
+        }
+
+        function showValidationError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            
+            input.classList.add('error');
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        }
+
+        function clearValidationError(inputId) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            
+            input.classList.remove('error');
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.className = 'validation-message';
+            }
+        }
+
+        function showValidationMessage(inputId, message, type) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            
+            input.classList.remove('error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.className = `validation-message ${type}`;
+            }
+        }
+
+        function clearValidation() {
+            ['currentPassword', 'newPassword', 'confirmPassword'].forEach(id => {
+                clearValidationError(id);
+            });
+            
+            // Clear password strength
+            const strengthElement = document.getElementById('passwordStrength');
+            const strengthBars = document.getElementById('passwordStrengthBars');
+            strengthElement.textContent = '';
+            strengthElement.className = 'password-strength';
+            strengthBars.className = 'password-strength-bars';
+            
+            // Reset form
+            document.getElementById('changePasswordForm').reset();
+        }
+
+        // Real-time validation
+        document.getElementById('newPassword').addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strengthElement = document.getElementById('passwordStrength');
+            const strengthBars = document.getElementById('passwordStrengthBars');
+            
+            if (password.length > 0) {
+                const errors = validatePassword(password);
+                const strength = getPasswordStrength(password);
+                
+                // Update strength indicator text
+                strengthElement.textContent = strength.charAt(0).toUpperCase() + strength.slice(1);
+                strengthElement.className = `password-strength ${strength}`;
+                
+                // Show and update strength bars
+                strengthBars.className = `password-strength-bars visible ${strength}`;
+                
+                // Show validation errors or success messages
+                console.log('Password:', password, 'Errors:', errors, 'Strength:', strength); // Debug log
+                
+                if (errors.length > 0) {
+                    // Dynamic error message showing only missing requirements
+                    const message = `Password need to be ${errors.join(', ')}.`;
+                    showValidationError('newPassword', message);
+                } else {
+                    // Show success messages for good and strong passwords
+                    if (strength === 'good') {
+                        showValidationMessage('newPassword', 'Your password meets all the necessary requirements. You can optionally lengthen it to make it stronger.', 'success');
+                    } else if (strength === 'strong') {
+                        showValidationMessage('newPassword', 'Your password is strongly secure and you are all set.', 'success');
+                    } else {
+                        clearValidationError('newPassword');
+                    }
+                }
+            } else {
+                strengthElement.textContent = '';
+                strengthElement.className = 'password-strength';
+                // Hide strength bars when password is empty
+                strengthBars.className = 'password-strength-bars';
+                clearValidationError('newPassword');
+            }
+            
+            // Re-validate confirm password if it has a value
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (confirmPassword.length > 0) {
+                validateConfirmPassword();
+            }
+        });
+
+        function validateConfirmPassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (confirmPassword.length > 0) {
+                if (newPassword !== confirmPassword) {
+                    showValidationError('confirmPassword', 'Confirm New Password is required.');
+                } else {
+                    clearValidationError('confirmPassword');
+                }
+            }
+        }
+
+        document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+
+        // Enhanced form submission
+        document.getElementById('changePasswordForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Clear previous validation
+            clearValidation();
+            let hasErrors = false;
+
+            // Validate current password
+            if (!currentPassword) {
+                showValidationError('currentPassword', 'Current Password is required.');
+                hasErrors = true;
+            }
+
+            // Validate new password
+            const passwordErrors = validatePassword(newPassword);
+            if (!newPassword) {
+                showValidationError('newPassword', 'New Password is required.');
+                hasErrors = true;
+            } else if (passwordErrors.length > 0) {
+                const message = `Password need to be ${passwordErrors.join(', ')}.`;
+                showValidationError('newPassword', message);
+                hasErrors = true;
+            }
+
+            // Validate confirm password
+            if (!confirmPassword) {
+                showValidationError('confirmPassword', 'Confirm New Password is required.');
+                hasErrors = true;
+            } else if (newPassword !== confirmPassword) {
+                showValidationError('confirmPassword', 'Confirm New Password is required.');
+                hasErrors = true;
+            }
+
+            if (hasErrors) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        oldPassword: currentPassword,
+                        newPassword: newPassword
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Password changed successfully');
+                    modal.style.display = 'none';
+                    clearValidation();
+                } else {
+                    alert(data.message || 'Failed to change password');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const languageFab = document.getElementById('languageFab');
+            if (!languageFab) return;
+            languageFab.addEventListener('click', () => console.log('Language selection clicked'));
+
+            // User button click handler
+        document.getElementById('userBtn').onclick = async () => {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    const response = await fetch('/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    if (response.ok) {
+                        window.location.href = '/login';
+                    } else {
+                        alert('Failed to logout');
+                    }
+                } catch (error) {
+                    alert('Network error. Please try again.');
+                }
+            }
+        };
+        });
+
+        
+    </script>
+</body>
+</html>

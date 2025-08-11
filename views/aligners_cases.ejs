@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aligners Cases - Doctor Portal</title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/aligners_cases.css">
+    <script src="/assets/js/components.js"></script>
+</head>
+<body>
+    <!-- Top header hidden for rail layout -->
+    <header class="header" aria-hidden="true"></header>
+
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Aligner Cases</h1>
+                <div class="page-actions">
+                    <button class="btn btn-secondary">
+                        Export
+                    </button>
+                    <button class="btn btn-secondary">
+                        Upload STL
+                    </button>
+                    <button class="btn btn-primary" id="addNewCaseBtn">
+                        Add New Case
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="search-filters-section">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                        </svg>
+                        <input type="text" placeholder="Search case ID, patient name" class="search-input" id="searchInput">
+                    </div>
+                </div>
+                
+                <div class="filters-container">
+                    <!-- Custom styled dropdown to match design -->
+                    <div class="chip-select custom-dropdown" id="brandDropdown">
+                        <button type="button" class="chip-button" id="brandButton">
+                            <span class="chip-button-label">Treatment Brand</span>
+                            <span class="chip-caret">▾</span>
+                        </button>
+                        <div class="chip-menu" id="brandMenu">
+                            <button class="chip-menu-item" data-value="dca-pro">DCA Pro</button>
+                            <button class="chip-menu-item" data-value="diamond-aligners">Diamond Aligners</button>
+                            <button class="chip-menu-item" data-value="oem-plain">OEM-Plain</button>
+                            <button class="chip-menu-item" data-value="oem-clinic-brand">OEM-Clinic Brand</button>
+                        </div>
+                        <!-- hidden native select for value storage and keyboard fallback -->
+                        <select class="chip-input native-select" id="treatmentBrandFilter" hidden>
+                            <option value="">Treatment Brand</option>
+                            <option value="dca-pro">DCA Pro</option>
+                            <option value="diamond-aligners">Diamond Aligners</option>
+                            <option value="oem-plain">OEM-Plain</option>
+                            <option value="oem-clinic-brand">OEM-Clinic Brand</option>
+                        </select>
+                    </div>
+                    <!-- Created Date custom calendar -->
+                    <div class="chip-select date-dropdown" id="createdDropdown">
+                        <button type="button" class="chip-button" id="createdButton">
+                            <span class="chip-button-label">Created Date</span>
+                            <span class="chip-caret">▾</span>
+                        </button>
+                        <div class="date-menu" id="createdMenu" data-target="created">
+                            <div class="date-header">
+                                <button class="date-nav prev" data-dir="-1">‹</button>
+                                <div class="date-title">Month YYYY</div>
+                                <button class="date-nav next" data-dir="1">›</button>
+                            </div>
+                            <div class="date-weekdays">
+                                <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                            </div>
+                            <div class="date-grid"></div>
+                            <div class="date-footer">
+                                <button class="date-apply primary">Apply</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="createdDateFilter" />
+                    </div>
+                    <!-- Last Updated Date custom calendar -->
+                    <div class="chip-select date-dropdown" id="updatedDropdown">
+                        <button type="button" class="chip-button" id="updatedButton">
+                            <span class="chip-button-label">Last Updated Date</span>
+                            <span class="chip-caret">▾</span>
+                        </button>
+                        <div class="date-menu" id="updatedMenu" data-target="updated">
+                            <div class="date-header">
+                                <button class="date-nav prev" data-dir="-1">‹</button>
+                                <div class="date-title">Month YYYY</div>
+                                <button class="date-nav next" data-dir="1">›</button>
+                            </div>
+                            <div class="date-weekdays">
+                                <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                            </div>
+                            <div class="date-grid"></div>
+                            <div class="date-footer">
+                                <button class="date-apply primary">Apply</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="lastUpdatedFilter" />
+                    </div>
+                    <button class="filter-reset" id="resetFilters">Reset</button>
+                </div>
+            </div>
+
+            <!-- Status Tabs -->
+            <div class="status-tabs">
+                <div class="tab-list" role="tablist">
+                    <button class="tab-button active" data-status="all" role="tab">
+                        All <span class="tab-count">30</span>
+                    </button>
+                    <button class="tab-button" data-status="draft" role="tab">
+                        Draft <span class="tab-count">4</span>
+                    </button>
+                    <button class="tab-button" data-status="submitted" role="tab">
+                        Submitted <span class="tab-count">26</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cases Table -->
+            <div class="cases-table-container">
+                <table class="cases-table" id="casesTable">
+                    <thead>
+                        <tr>
+                            <th class="th-case-id">Case ID</th>
+                            <th class="th-patient-name">Patient Name</th>
+                            <th class="th-category">Category</th>
+                            <th class="th-treatment-brand">Treatment Brand</th>
+                            <th class="th-created-at sortable" data-sort="created">
+                                Created At 
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th class="th-last-updated sortable" data-sort="updated">
+                                Last Updated 
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th class="th-status">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row" data-status="draft" data-brand="dca-pro">
+                            <td class="td-case-id">C00010</td>
+                            <td class="td-patient-name">Siti Khadijah binti Amin</td>
+                            <td class="td-category">New Case</td>
+                            <td class="td-treatment-brand">DCA Pro</td>
+                            <td class="td-created-at">14/07/2025</td>
+                            <td class="td-last-updated">18/07/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-draft">Draft</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="submitted" data-brand="dca-pro">
+                            <td class="td-case-id">C00009</td>
+                            <td class="td-patient-name">Jennifer Tan Yi Wen</td>
+                            <td class="td-category">New Case</td>
+                            <td class="td-treatment-brand">DCA Pro</td>
+                            <td class="td-created-at">20/06/2025</td>
+                            <td class="td-last-updated">22/06/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-submitted">Submitted</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="submitted" data-brand="diamond-aligners">
+                            <td class="td-case-id">C00008</td>
+                            <td class="td-patient-name">Low Zi Xuan</td>
+                            <td class="td-category">Upload STL</td>
+                            <td class="td-treatment-brand">Diamond Aligners</td>
+                            <td class="td-created-at">11/06/2025</td>
+                            <td class="td-last-updated">12/06/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-submitted">Submitted</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="submitted" data-brand="diamond-aligners">
+                            <td class="td-case-id">C00007</td>
+                            <td class="td-patient-name">Lim Wei Jie</td>
+                            <td class="td-category">Upload STL</td>
+                            <td class="td-treatment-brand">Diamond Aligners</td>
+                            <td class="td-created-at">25/05/2025</td>
+                            <td class="td-last-updated">27/05/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-submitted">Submitted</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="submitted" data-brand="dca-pro">
+                            <td class="td-case-id">C00006</td>
+                            <td class="td-patient-name">Carol Chan Sin Yue</td>
+                            <td class="td-category">Upload STL</td>
+                            <td class="td-treatment-brand">DCA Pro</td>
+                            <td class="td-created-at">19/04/2025</td>
+                            <td class="td-last-updated">20/04/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-submitted">Submitted</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="submitted" data-brand="oem-clinic-brand">
+                            <td class="td-case-id">C00005</td>
+                            <td class="td-patient-name">Lim Mei Shin</td>
+                            <td class="td-category">Upload STL</td>
+                            <td class="td-treatment-brand">OEM-Clinic Brand</td>
+                            <td class="td-created-at">10/04/2025</td>
+                            <td class="td-last-updated">13/04/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-submitted">Submitted</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="submitted" data-brand="oem-clinic-brand">
+                            <td class="td-case-id">C00004</td>
+                            <td class="td-patient-name">Nur Hidayah binti Ismail</td>
+                            <td class="td-category">New Case</td>
+                            <td class="td-treatment-brand">OEM-Clinic Brand</td>
+                            <td class="td-created-at">14/03/2025</td>
+                            <td class="td-last-updated">16/03/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-submitted">Submitted</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="draft" data-brand="diamond-aligners">
+                            <td class="td-case-id">C00003</td>
+                            <td class="td-patient-name">Avvinashravi</td>
+                            <td class="td-category">New Case</td>
+                            <td class="td-treatment-brand">Diamond Aligners</td>
+                            <td class="td-created-at">09/12/2025</td>
+                            <td class="td-last-updated">13/12/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-draft">Draft</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="draft" data-brand="oem-clinic-brand">
+                            <td class="td-case-id">C00002</td>
+                            <td class="td-patient-name">Nur Aqilah binti Shudin</td>
+                            <td class="td-category">New Case</td>
+                            <td class="td-treatment-brand">OEM-Clinic Brand</td>
+                            <td class="td-created-at">01/11/2025</td>
+                            <td class="td-last-updated">02/11/2024</td>
+                            <td class="td-status">
+                                <span class="status-badge status-draft">Draft</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="draft" data-brand="oem-clinic-brand">
+                            <td class="td-case-id">C00001</td>
+                            <td class="td-patient-name">Chia Yu Xuan</td>
+                            <td class="td-category">New Case</td>
+                            <td class="td-treatment-brand">OEM-Clinic Brand</td>
+                            <td class="td-created-at">20/06/2024</td>
+                            <td class="td-last-updated">20/06/2024</td>
+                            <td class="td-status">
+                                <span class="status-badge status-draft">Draft</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    <label class="entries-label">
+                        Show 
+                        <select class="entries-select" id="entriesPerPage">
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        entries
+                    </label>
+                </div>
+                
+                <nav class="pagination-nav" aria-label="Pagination Navigation">
+                    <button class="pagination-btn prev-btn" disabled>
+                        <span class="pagination-icon">←</span>
+                    </button>
+                    
+                    <div class="pagination-numbers">
+                        <button class="pagination-btn page-btn active" data-page="1">1</button>
+                        <button class="pagination-btn page-btn" data-page="2">2</button>
+                        <span class="pagination-ellipsis">...</span>
+                        <button class="pagination-btn page-btn" data-page="10">10</button>
+                    </div>
+                    
+                    <button class="pagination-btn next-btn">
+                        <span class="pagination-icon">→</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M9 11H15M9 15H15M17 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3H12.5858C12.851 3 13.1054 3.10536 13.2929 3.29289L19.7071 9.70711C19.8946 9.89464 20 10.149 20 10.4142V19C20 20.1046 19.1046 21 18 21H17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="empty-title">No cases found</h3>
+                <p class="empty-description">Try adjusting your search or filter criteria</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load navigation rail component
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.html');
+        });
+
+        // Add new case button
+        const addNewCaseBtn = document.getElementById('addNewCaseBtn');
+        addNewCaseBtn.addEventListener('click', () => {
+            window.location.href = '/add-case';
+        });
+
+        // Search and filter functionality
+        const searchInput = document.getElementById('searchInput');
+        const treatmentBrandFilter = document.getElementById('treatmentBrandFilter');
+        const createdDateFilter = document.getElementById('createdDateFilter');
+        const lastUpdatedFilter = document.getElementById('lastUpdatedFilter');
+        const resetFilters = document.getElementById('resetFilters');
+        const casesTable = document.getElementById('casesTable');
+        const emptyState = document.getElementById('emptyState');
+        const tabButtons = document.querySelectorAll('.tab-button');
+
+        let currentTab = 'all';
+
+        function filterCases() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const brandValue = treatmentBrandFilter.value;
+            
+            const rows = document.querySelectorAll('.table-row');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const patientName = row.querySelector('.td-patient-name').textContent.toLowerCase();
+                const caseId = row.querySelector('.td-case-id').textContent.toLowerCase();
+                const status = row.getAttribute('data-status');
+                const brand = row.getAttribute('data-brand');
+
+                const matchesSearch = !searchTerm || patientName.includes(searchTerm) || caseId.includes(searchTerm);
+                const matchesBrand = !brandValue || brand === brandValue;
+                const matchesTab = currentTab === 'all' || status === currentTab;
+
+                if (matchesSearch && matchesBrand && matchesTab) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Show empty state if no cases visible
+            if (visibleCount === 0) {
+                emptyState.style.display = 'flex';
+                casesTable.parentElement.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                casesTable.parentElement.style.display = 'block';
+            }
+        }
+
+        // Tab functionality
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                button.classList.add('active');
+                
+                // Update current tab
+                currentTab = button.getAttribute('data-status');
+                
+                // Filter cases
+                filterCases();
+            });
+        });
+
+        // Event listeners
+        searchInput.addEventListener('input', filterCases);
+        treatmentBrandFilter.addEventListener('change', filterCases);
+        createdDateFilter.addEventListener('change', filterCases);
+        lastUpdatedFilter.addEventListener('change', filterCases);
+
+        resetFilters.addEventListener('click', () => {
+            searchInput.value = '';
+            treatmentBrandFilter.value = '';
+            createdDateFilter.value = '';
+            lastUpdatedFilter.value = '';
+            filterCases();
+        });
+
+        // Custom dropdown (Treatment Brand)
+        const brandButton = document.getElementById('brandButton');
+        const brandMenu = document.getElementById('brandMenu');
+        const nativeBrandSelect = document.getElementById('treatmentBrandFilter');
+        const brandLabel = brandButton.querySelector('.chip-button-label');
+        brandButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            brandMenu.classList.toggle('open');
+        });
+        document.addEventListener('click', () => brandMenu.classList.remove('open'));
+        brandMenu.querySelectorAll('.chip-menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const value = e.currentTarget.getAttribute('data-value');
+                const text = e.currentTarget.textContent.trim();
+                nativeBrandSelect.value = value;
+                brandLabel.textContent = text || 'Treatment Brand';
+                brandMenu.classList.remove('open');
+                filterCases();
+            });
+        });
+
+        // Floating language menu
+        const languageFab = document.getElementById('languageFab');
+        const languageMenu = document.getElementById('languageMenu');
+        languageFab.addEventListener('click', (e) => {
+            e.stopPropagation();
+            languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
+        });
+        document.addEventListener('click', () => { languageMenu.style.display = 'none'; });
+        document.querySelectorAll('.lang-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.lang-item').forEach(b => b.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                languageMenu.style.display = 'none';
+            });
+        });
+
+        // Pagination functionality
+        const entriesSelect = document.getElementById('entriesPerPage');
+        const paginationBtns = document.querySelectorAll('.pagination-btn');
+        
+        entriesSelect.addEventListener('change', () => {
+            console.log('Entries per page changed to:', entriesSelect.value);
+            // Add pagination logic here
+        });
+
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('page-btn')) {
+                    // Remove active class from all page buttons
+                    document.querySelectorAll('.page-btn').forEach(pageBtn => {
+                        pageBtn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    console.log('Page changed to:', btn.getAttribute('data-page'));
+                    // Add page change logic here
+                }
+            });
+        });
+
+        // Table row click handlers
+        document.addEventListener('click', (e) => {
+            const row = e.target.closest('.table-row');
+            if (row) {
+                const caseId = row.querySelector('.td-case-id').textContent.trim();
+                window.location.href = `/cases/${encodeURIComponent(caseId)}`;
+            }
+        });
+
+        // Sorting functionality
+        document.querySelectorAll('.sortable').forEach(header => {
+            header.addEventListener('click', () => {
+                const sortType = header.getAttribute('data-sort');
+                console.log('Sort by:', sortType);
+                // Add sorting logic here
+            });
+        });
+
+        // Lightweight calendar builder for date menus with range support
+        function buildCalendar(container, year, month, range) {
+            const title = container.querySelector('.date-title');
+            const grid = container.querySelector('.date-grid');
+            title.textContent = new Date(year, month).toLocaleString(undefined, { month: 'long', year: 'numeric' });
+            grid.innerHTML = '';
+            const firstDay = new Date(year, month, 1);
+            const startWeekday = (firstDay.getDay() + 6) % 7; // Mon=0
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const prevDays = new Date(year, month, 0).getDate();
+            
+            // leading muted
+            for (let i = 0; i < startWeekday; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'date-cell muted';
+                cell.textContent = prevDays - startWeekday + i + 1;
+                grid.appendChild(cell);
+            }
+            
+            // days
+            for (let d = 1; d <= daysInMonth; d++) {
+                const cell = document.createElement('div');
+                cell.className = 'date-cell';
+                cell.textContent = d;
+                cell.dataset.day = d;
+                
+                if (range && range.start && range.end) {
+                    const start = Math.min(range.start, range.end);
+                    const end = Math.max(range.start, range.end);
+                    
+                    if (d === start) cell.classList.add('range-start');
+                    else if (d === end) cell.classList.add('range-end');
+                    else if (d > start && d < end) cell.classList.add('range');
+                } else if (range && range.start && !range.end && d === range.start) {
+                    cell.classList.add('range-start'); // Highlight first click as range-start
+                    console.log('Highlighting first click day:', d, 'range:', range); // Debug
+                }
+                
+                grid.appendChild(cell);
+            }
+            
+            // trailing muted to complete weeks
+            const total = startWeekday + daysInMonth;
+            const trailing = (7 - (total % 7)) % 7;
+            for (let i = 1; i <= trailing; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'date-cell muted';
+                cell.textContent = i;
+                grid.appendChild(cell);
+            }
+        }
+
+        function initDateDropdown(menuId, buttonId, hiddenInputId) {
+            const menu = document.getElementById(menuId);
+            const button = document.getElementById(buttonId);
+            const input = document.getElementById(hiddenInputId);
+            let view = new Date();
+            let range = { start: null, end: null };
+
+            function render() {
+                buildCalendar(menu, view.getFullYear(), view.getMonth(), range.start && range.end ? range : null);
+            }
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.date-menu').forEach(m => m.classList.remove('open'));
+                menu.classList.add('open');
+                render();
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menu.contains(e.target) && !button.contains(e.target)) {
+                    menu.classList.remove('open');
+                }
+            });
+            
+            menu.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent menu from closing when clicking inside
+                const nav = e.target.closest('.date-nav');
+                if (nav) {
+                    const dir = Number(nav.dataset.dir);
+                    view.setMonth(view.getMonth() + dir);
+                    render();
+                    return;
+                }
+                const cell = e.target.closest('.date-cell');
+                if (cell && !cell.classList.contains('muted')) {
+                    const day = Number(cell.dataset.day || cell.textContent);
+                    
+                    if (!range.start || (range.start && range.end)) {
+                        // Start new selection - single date selected
+                        range = { start: day, end: null };
+                        console.log('First click, range:', range); // Debug
+                    } else if (range.start && !range.end) {
+                        // Second click - complete range selection
+                        if (day === range.start) {
+                            // Same day clicked - keep as single date selection
+                            range.end = null;
+                        } else {
+                            // Different day - create range
+                            range.end = day;
+                            if (range.start > range.end) {
+                                [range.start, range.end] = [range.end, range.start];
+                            }
+                        }
+                    }
+                    render();
+                }
+                const apply = e.target.closest('.date-apply');
+                if (apply) {
+                    if (range.start) { // Allow single date selection too
+                        const y = view.getFullYear();
+                        const m = String(view.getMonth() + 1).padStart(2, '0');
+                        
+                        if (range.end) {
+                            // Date range selection
+                            const startDate = String(Math.min(range.start, range.end)).padStart(2, '0');
+                            const endDate = String(Math.max(range.start, range.end)).padStart(2, '0');
+                            input.value = `${y}-${m}-${startDate}|${y}-${m}-${endDate}`;
+                            
+                            const label = button.querySelector('.chip-button-label');
+                            const start = new Date(y, view.getMonth(), Math.min(range.start, range.end));
+                            const end = new Date(y, view.getMonth(), Math.max(range.start, range.end));
+                            
+                            if (range.start === range.end) {
+                                // Single day selection
+                                label.textContent = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                            } else {
+                                // Date range
+                                const startStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                                const endStr = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                                label.textContent = `${startStr} - ${endStr}`;
+                            }
+                        } else {
+                            // Single date selection (only start date)
+                            const startDate = String(range.start).padStart(2, '0');
+                            input.value = `${y}-${m}-${startDate}|${y}-${m}-${startDate}`;
+                            
+                            const label = button.querySelector('.chip-button-label');
+                            const start = new Date(y, view.getMonth(), range.start);
+                            label.textContent = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        }
+                        
+                        menu.classList.remove('open');
+                        filterCases();
+                    }
+                }
+            });
+        }
+
+        initDateDropdown('createdMenu', 'createdButton', 'createdDateFilter');
+        initDateDropdown('updatedMenu', 'updatedButton', 'lastUpdatedFilter');
+    </script>
+</body>
+</html>

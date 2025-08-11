@@ -1,0 +1,73 @@
+<aside class="nav-rail">
+    <div class="rail-top">
+        <a class="rail-logo" href="/">
+            <img src="/assets/images/33labs-logo.png" alt="33LABS" />
+        </a>
+        <div id="sideMenuArrow" class="side-menu-arrow">
+            <img src="/assets/images/side-menu-arrow4x.png" alt="Side Menu" class="arrow-icon">
+        </div>
+        <nav class="rail-nav">
+            <div class="nav-item">
+                <a class="rail-btn" href="/dashboard" title="Dashboard">
+                    <img src="/assets/images/nav-icon.svg" alt="Home" class="icon-default" />
+                    <img src="/assets/images/nav-icon-hover.svg" alt="Home" class="icon-hover" />
+                    <span class="btn-text">Manage Cases</span>
+                </a>
+                <div class="nav-dropdown">
+                    <a href="/dashboard" class="menu-item">Manage Cases</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a class="rail-btn" href="/aligners-cases" title="Aligner Cases">
+                    <img src="/assets/images/add-case-icon.svg" alt="Aligner Cases" class="icon-default" />
+                    <img src="/assets/images/add-case-icon-hover.svg" alt="Aligner Cases" class="icon-hover" />
+                    <span class="btn-text">Create Cases</span>
+                </a>
+                <div class="nav-dropdown">
+                    <a href="/aligners-cases" class="menu-item">Add New Case</a>
+                    <a href="/aligners-cases" class="menu-item">Upload STL</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a class="rail-btn" href="/users" title="User Management">
+                    <img src="/assets/images/user-management-icon.svg" alt="Users" class="icon-default" />
+                    <img src="/assets/images/user-management-icon-hover.svg" alt="Users" class="icon-hover" />
+                    <span class="btn-text">User Management</span>
+                </a>
+                <div class="nav-dropdown">
+                    <a href="/aligners-cases" class="menu-item">Manage Users</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="rail-bottom">
+        <!-- Language selector -->
+        <div class="menu-container language-container">
+            <div id="languageFab" class="language-fab" title="Language">
+                <span class="flag-placeholder">
+                    <img src="/assets/images/msia-flag.png" alt="English" />
+                </span>
+                <span class="language-text">English</span>
+            </div>
+            <div id="languageMenu" class="dropdown-menu language-menu">
+                <button class="menu-item lang-item active">
+                    <span>English</span>
+                </button>
+                <button class="menu-item lang-item">
+                    <span>Thai</span>
+                </button>
+            </div>
+        </div>
+        <!-- User menu -->
+        <div class="menu-container user-container">
+            <button id="userBtn" class="user-fab">
+                <span class="user-initial">K</span>
+                <span class="user-name">Kayley Chai Min...</span>
+            </button>
+            <div id="userMenu" class="dropdown-menu user-menu-dropdown">
+                <a href="/profile" class="menu-item">Profile</a>
+                <button class="menu-item logout-item">Logout</button>
+            </div>
+        </div>
+    </div>
+</aside>

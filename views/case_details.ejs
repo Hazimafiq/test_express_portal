@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Details - <%= caseId %></title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/case_details.css">
+    <script src="/assets/js/components.js"></script>
+    <script>
+        window.CASE_ID = "<%= caseId %>";
+    </script>
+</head>
+<body>
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/aligners-cases" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item active">Case Details C0000<%= caseId %></span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <div class="title-badges-row">
+                        <h1 class="page-title">C0000<%= caseId %></h1>
+                        <div class="page-badges">
+                            <span class="pill-badge badge-blue" id="badgeCategory">New Case</span>
+                            <span class="pill-badge badge-green" id="badgeStatus">Submitted</span>
+                        </div>
+                    </div>
+                    <div class="subtitle" id="submittedSubtitle">Submitted on 20/6/2025</div>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" id="addPlanBtn">Add Treatment Plan</button>
+                    <button class="btn btn-primary" id="setDraftBtn">Set as Draft</button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="patient">Patient Details</button>
+                <button class="tab" data-tab="treatment">Treatment Details</button>
+                <button class="tab" data-tab="simulations">Simulations</button>
+                <button class="tab" data-tab="comments">Comments</button>
+                <button class="tab" data-tab="attachments">Attachments</button>
+            </div>
+
+            <!-- Patient Details Panel -->
+            <section class="tab-panel" id="panel-patient">
+                <div class="patient-details-container">
+                    <div class="patient-header">
+                        <div class="avatar" id="patientAvatar">J</div>
+                        <div class="identity">
+                            <div class="name" id="patientName">Jennifer Tan Yi Wen</div>
+                            <div class="meta" id="patientId">Patient ID: 13989023001</div>
+                        </div>
+                    </div>
+                    
+                    <div class="patient-info-grid">
+                        <div class="info-row">
+                            <div class="info-item">
+                                <label>Gender</label>
+                                <span id="kvGender">Female</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Date of Birth</label>
+                                <span id="kvDob">12/02/1996</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Email</label>
+                                <span id="kvEmail">-</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-item">
+                                <label>Treatment Brand</label>
+                                <span id="kvBrand">DCA Pro</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Category</label>
+                                <span id="kvCategory">New Case</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Custom SN</label>
+                                <span id="kvCustomSn">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Other Panels (placeholders) -->
+            <section class="tab-panel hidden" id="panel-treatments">
+                <div class="card"><div class="placeholder">Treatment details go here.</div></div>
+            </section>
+            <section class="tab-panel hidden" id="panel-simulations">
+                <div class="card"><div class="placeholder">Simulations go here.</div></div>
+            </section>
+            <section class="tab-panel hidden" id="panel-comments">
+                <div class="card"><div class="placeholder">Comments go here.</div></div>
+            </section>
+            <section class="tab-panel hidden" id="panel-attachments">
+                <div class="card"><div class="placeholder">Attachments go here.</div></div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.html');
+
+            // Tab switching functionality
+            const tabEls = document.querySelectorAll('.tab');
+            const panels = {
+                patient: document.getElementById('panel-patient'),
+                treatment: document.getElementById('panel-treatments'),
+                simulations: document.getElementById('panel-simulations'),
+                comments: document.getElementById('panel-comments'),
+                attachments: document.getElementById('panel-attachments'),
+            };
+            
+            tabEls.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    tabEls.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked tab
+                    btn.classList.add('active');
+                    
+                    // Show/hide panels
+                    const tab = btn.getAttribute('data-tab');
+                    Object.entries(panels).forEach(([key, el]) => {
+                        if (!el) return;
+                        el.classList.toggle('hidden', key !== tab);
+                    });
+                });
+            });
+
+            // TODO: Replace with real API call to fetch case data by CASE_ID
+            // fetch(`/api/cases/${window.CASE_ID}`)
+            //   .then(response => response.json())
+            //   .then(data => {
+            //     // Populate the page with real data
+            //   });
+        });
+    </script>
+</body>
+</html>
+
+
