@@ -103,13 +103,281 @@
                 <div class="card"><div class="placeholder">Treatment details go here.</div></div>
             </section>
             <section class="tab-panel hidden" id="panel-simulations">
-                <div class="card"><div class="placeholder">Simulations go here.</div></div>
+                <div class="simulations-container">
+                    <div class="simulation-plan">
+                        <h2 class="plan-title">Plan 1</h2>
+                        <div class="plan-divider"></div>
+                        <p class="plan-instruction">Please click the box to view simulation or download document.</p>
+                        
+                        <div class="simulation-details">
+                            <div class="detail-item">
+                                <label>Date Uploaded</label>
+                                <span class="detail-value">23/07/2025</span>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <label>Simulation URL</label>
+                                <div class="url-field">
+                                    <img src="/assets/images/external-link-icon.svg" alt="External Link" class="field-icon">
+                                    <span class="url-text">https://dca.patientalignerplan.com/Viewer/show.html?mlink...</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <label>IPR (*PDF)</label>
+                                <div class="pdf-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="pdf-text">17350043-RKE-7808.pdf</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
             <section class="tab-panel hidden" id="panel-comments">
-                <div class="card"><div class="placeholder">Comments go here.</div></div>
+                <div class="comments-section">
+                    <!-- Comment Item 1 -->
+                    <div class="comment-container">
+                        <div class="comment-item">
+                            <div class="comment-avatar">K</div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">Khoo Ming Sheng</span>
+                                    <span class="comment-time">07/09/2025 10:52</span>
+                                </div>
+                                <div class="comment-text">
+                                    Pls fabricate ULT+ UL set 1-5 +before model<br>
+                                    Use DCA Lab<br>
+                                    ETD before 21 October 2024
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comment Item 2 -->
+                    <div class="comment-container">
+                        <div class="comment-item">
+                            <div class="comment-avatar">K</div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">Khoo Ming Sheng</span>
+                                    <span class="comment-time">07/09/2025 14:02</span>
+                                </div>
+                                <div class="comment-text">
+                                    Pls fabricate UL set 6-18<br>
+                                    Use DCA Lab<br>
+                                    ETD before 17 November 2024
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comment Input Section -->
+                    <div class="comment-input-section">
+                        <div class="comment-input-container">
+                            <textarea class="comment-input" placeholder="Write a comment..."></textarea>
+                            <button class="btn btn-primary comment-submit">Send</button>
+                        </div>
+                    </div>
+                </div>
             </section>
             <section class="tab-panel hidden" id="panel-attachments">
-                <div class="card"><div class="placeholder">Attachments go here.</div></div>
+                <!-- Model Section in its own container -->
+                <div class="attachments-container">
+                    <div class="attachment-section">
+                        <h3 class="attachment-section-title">Model</h3>
+                        <p class="attachment-section-subtitle">Please click <a href="#" class="link">here</a> to download all models.</p>
+                        
+                        <div class="attachment-files">
+                            <!-- Upper Scan -->
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="attachment-file-name">1241228053-upperjaw.stl</div>
+                                <div class="attachment-file-info">Upper Scan</div>
+                            </div>
+                            
+                            <!-- Lower Scan -->
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="attachment-file-name">2412280553-lowerjaw.stl</div>
+                                <div class="attachment-file-info">Lower Scan</div>
+                            </div>
+                            
+                            <!-- Bite Scan -->
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="attachment-file-name">2412280553-biteregister1.stl</div>
+                                <div class="attachment-file-info">Bite Scan</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Clinical Photos Section in its own container -->
+                <div class="attachments-container">
+                    <div class="attachment-section">
+                        <h3 class="attachment-section-title">Clinical Photos</h3>
+                        <p class="attachment-section-subtitle">Please click <a href="#" class="link">here</a> to download all photos.</p>
+                        
+                        <!-- First Row - Face Photos -->
+                        <div class="attachment-files-row">
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder1.png" alt="Full Face Front">
+
+                            </div>
+                            
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder1.png" alt="Full Smiling Face">
+
+                            </div>
+                            
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder1.png" alt="Right Side Profile">
+                           
+                            </div>
+                        </div>
+                        
+                        <!-- Second Row - Intraoral Photos -->
+                        <div class="attachment-files-row">
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder2.png" alt="Buccal Right">
+
+                            </div>
+                            
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder2.png" alt="Retracted Anterior Frontal">
+                         
+                            </div>
+                            
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder2.png" alt="Buccal Left">
+  
+                            </div>
+                            
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder2.png" alt="Maxillary Occlusal">
+                           
+                            </div>
+                            
+                            <div class="attachment-file">
+                                <div class="attachment-file-overlay">
+                                    <div class="attachment-file-overlay-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <img src="/assets/images/placeholder2.png" alt="Mandibular Occlusal">
+             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- X-Ray Section in its own container -->
+                <div class="attachments-container">
+                    <div class="attachment-section">
+                        <h3 class="attachment-section-title">X-Ray</h3>
+                        <p class="attachment-section-subtitle">No file uploaded.</p>
+                    </div>
+                </div>
+                
+                <!-- Other Documents/Photos Section in its own container -->
+                <div class="attachments-container">
+                    <div class="attachment-section">
+                        <h3 class="attachment-section-title">Other Documents / Photos</h3>
+                        <p class="attachment-section-subtitle">No file uploaded.</p>
+                    </div>
+                </div>
             </section>
         </div>
     </main>
@@ -117,6 +385,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/views/components/side-menu.html');
+
+            // Add treatment plan button
+            const addPlanBtn = document.getElementById('addPlanBtn');
+            addPlanBtn.addEventListener('click', () => {
+                window.location.href = `/add-treatment-plan/${window.CASE_ID}`;
+            });
 
             // Tab switching functionality
             const tabEls = document.querySelectorAll('.tab');
@@ -154,5 +428,3 @@
     </script>
 </body>
 </html>
-
-
