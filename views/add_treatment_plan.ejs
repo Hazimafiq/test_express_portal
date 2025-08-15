@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Treatment Plan - Doctor Portal</title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/add_treatment_plan.css">
+    <script src="/assets/js/components.js"></script>
+</head>
+<body>
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/aligners-cases" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item">Case Details C0000<%= caseId %></span>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item active">Add Treatment Plan</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Add Treatment Plan</h1>
+            </div>
+
+            <!-- Add Treatment Plan Form -->
+            <form class="treatment-plan-form" id="treatmentPlanForm">
+                <!-- Form Container -->
+                <div class="form-container">
+                    <div class="form-section">
+                        <h2 class="section-title">Plan 2</h2>
+                        <div class="form-content">
+                            <div class="form-field">
+                                <label for="simulationUrl" class="form-label">
+                                    Simulation URL <span class="required">*</span>
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="simulationUrl" 
+                                    name="simulationUrl" 
+                                    class="form-input" 
+                                    placeholder="http.domainname.com"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-field">
+                                <label for="iprFile" class="form-label">
+                                    IPR <span class="required">(*PDF)</span>
+                                </label>
+                                <div class="file-upload-container">
+                                    <input 
+                                        type="file" 
+                                        id="iprFile" 
+                                        name="iprFile" 
+                                        class="file-input" 
+                                        accept=".pdf"
+                                        required
+                                    >
+                                    <label for="iprFile" class="file-upload-label">
+                                        <span class="file-placeholder">Choose File</span>
+                                        <img src="/assets/images/document-icon.svg" alt="Document Icon" class="file-icon">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions Container -->
+                <div class="form-container">
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Load navigation rail component
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.html');
+        });
+
+        // File upload functionality
+        document.getElementById('iprFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const placeholder = document.querySelector('.file-placeholder');
+            
+            if (file) {
+                placeholder.textContent = file.name;
+            } else {
+                placeholder.textContent = 'Choose File';
+            }
+        });
+
+        // Form submission
+        document.querySelector('.treatment-plan-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Handle form submission here
+            console.log('Form submitted');
+        });
+    </script>
+</body>
+</html>

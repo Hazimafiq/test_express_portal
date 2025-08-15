@@ -293,6 +293,252 @@ body {
   font-weight: 500;
 }
 
+/* Attachments Panel Styles */
+.attachments-container {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.attachments-container:last-child {
+  margin-bottom: 0;
+}
+
+.attachment-section {
+  margin-bottom: 32px;
+}
+
+.attachment-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.attachment-section-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.attachment-section-subtitle .link {
+  color: #036;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.attachment-section-subtitle .link:hover {
+  text-decoration: underline;
+}
+
+.attachment-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.attachment-files-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.attachment-files-row:last-child {
+  margin-bottom: 0;
+}
+
+.attachment-file {
+  position: relative;
+  width: 80px;
+  cursor: pointer;
+}
+
+.attachment-file img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Clinical photos specific styling */
+#clinical-photos-container .attachment-file {
+  width: 80px;
+}
+
+#clinical-photos-container .attachment-file img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.attachment-file-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attachment-file-info {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.attachment-file-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.attachment-file:hover .attachment-file-overlay {
+  opacity: 1;
+}
+
+.attachment-file-overlay-icon {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attachment-file-overlay-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .attachment-files {
+    gap: 12px;
+  }
+  
+  .attachment-file {
+    width: calc(50% - 6px);
+  }
+}
+
+@media (max-width: 480px) {
+  .attachment-files {
+    flex-direction: column;
+  }
+  
+  .attachment-file {
+    width: 100%;
+  }
+}
+
+/* Simulations Panel Styles */
+.simulations-container {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.simulation-plan {
+  max-width: 800px;
+}
+
+.plan-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+}
+
+.plan-divider {
+  width: 91px;
+  height: 2px;
+  background: #88C1ED;
+  margin-bottom: 16px;
+}
+
+.plan-instruction {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 400;
+  margin-bottom: 32px;
+}
+
+.simulation-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.detail-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.url-field,
+.pdf-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.url-field:hover,
+.pdf-field:hover {
+  border-color: #036;
+  background: #f8fafc;
+}
+
+.field-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.url-text,
+.pdf-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .content-container {
@@ -347,6 +593,18 @@ body {
   .patient-info-grid {
     padding: 16px;
   }
+  
+  .simulations-container {
+    padding: 16px;
+  }
+  
+  .plan-title {
+    font-size: 20px;
+  }
+  
+  .simulation-details {
+    gap: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -357,6 +615,118 @@ body {
   
   .btn {
     justify-content: center;
+    width: 100%;
+  }
+}
+
+/* Comments Panel Styles */
+.comments-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment-container, .comment-input-section {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.comment-item {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1e40af;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.comment-content {
+  flex-grow: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.comment-time {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.comment-text {
+  color: #1e293b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.comment-input-section {
+  margin-top: 8px;
+}
+
+.comment-input-container {
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.comment-input {
+  flex-grow: 1;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #036;
+}
+
+.comment-submit {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .comments-section {
+    gap: 12px;
+  }
+
+  .comment-item {
+    padding: 16px;
+  }
+
+  .comment-input-container {
+    padding: 16px;
+    flex-direction: column;
+  }
+  
+  .comment-submit {
     width: 100%;
   }
 }

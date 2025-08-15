@@ -56,6 +56,12 @@ router.get('/cases/:caseId', (req, res) => {
     });
 });
 
+// Add treatment plan route
+router.get('/add-treatment-plan/:caseId', (req, res) => {
+    const { caseId } = req.params;
+    res.render('add_treatment_plan', { caseId });
+});
+
 // Add new case routes
 router.get('/add-case', (req, res) => {
     // if (!req.session.user) {
