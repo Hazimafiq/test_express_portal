@@ -172,3 +172,370 @@ function initializeNavRail() {
         });
     }
 }
+
+// Universal Form Validation System
+class FormValidation {
+    constructor() {
+        this.errorColor = '#dc2626';
+        this.successColor = '#059669';
+        this.defaultBorderColor = '#d1d5db';
+    }
+
+    /**
+     * Show error on a form field with red border and error message
+     * @param {string|HTMLElement} fieldIdentifier - Field ID string or DOM element
+     * @param {string} message - Error message to display
+     */
+    showError(fieldIdentifier, message) {
+        const field = typeof fieldIdentifier === 'string' 
+            ? document.getElementById(fieldIdentifier) 
+            : fieldIdentifier;
+        
+        if (!field) return;
+
+        // Add error class to field
+        field.classList.add('field-error');
+        field.classList.remove('field-success');
+
+        // Find or create error message element
+        let errorElement = this.getErrorElement(field);
+        
+        // Set error message
+        errorElement.textContent = message;
+        errorElement.className = 'field-error-message show';
+        
+        // Add red border and shadow
+        field.style.borderColor = this.errorColor;
+        field.style.boxShadow = `0 0 0 3px rgba(220, 38, 38, 0.1)`;
+    }
+
+    /**
+     * Show success state on a form field with green border
+     * @param {string|HTMLElement} fieldIdentifier - Field ID string or DOM element
+     * @param {string} message - Optional success message
+     */
+    showSuccess(fieldIdentifier, message = '') {
+        const field = typeof fieldIdentifier === 'string' 
+            ? document.getElementById(fieldIdentifier) 
+            : fieldIdentifier;
+        
+        if (!field) return;
+
+        // Add success class to field
+        field.classList.add('field-success');
+        field.classList.remove('field-error');
+
+        // Find or create error message element (reused for success)
+        let errorElement = this.getErrorElement(field);
+        
+        // Set success message or clear
+        if (message) {
+            errorElement.textContent = message;
+            errorElement.className = 'field-error-message field-success-message show';
+        } else {
+            errorElement.textContent = '';
+            errorElement.className = 'field-error-message';
+        }
+        
+        // Add green border
+        field.style.borderColor = this.successColor;
+        field.style.boxShadow = `0 0 0 3px rgba(5, 150, 105, 0.1)`;
+    }
+
+    /**
+     * Clear error/success state from a form field
+     * @param {string|HTMLElement} fieldIdentifier - Field ID string or DOM element
+     */
+    clearValidation(fieldIdentifier) {
+        const field = typeof fieldIdentifier === 'string' 
+            ? document.getElementById(fieldIdentifier) 
+            : fieldIdentifier;
+        
+        if (!field) return;
+
+        // Remove classes
+        field.classList.remove('field-error', 'field-success');
+        
+        // Find and clear error message
+        let errorElement = this.getErrorElement(field);
+        errorElement.textContent = '';
+        errorElement.className = 'field-error-message';
+        
+        // Reset border styles
+        field.style.borderColor = this.defaultBorderColor;
+        field.style.boxShadow = '';
+    }
+
+    /**
+     * Clear all validation states from a form
+     * @param {string|HTMLElement} formIdentifier - Form ID string or DOM element
+     */
+    clearAllValidation(formIdentifier) {
+        const form = typeof formIdentifier === 'string' 
+            ? document.getElementById(formIdentifier) 
+            : formIdentifier;
+        
+        if (!form) return;
+
+        // Clear all fields with error/success states
+        const fields = form.querySelectorAll('.field-error, .field-success');
+        fields.forEach(field => this.clearValidation(field));
+
+        // Clear all error messages
+        const errorMessages = form.querySelectorAll('.field-error-message');
+        errorMessages.forEach(msg => {
+            msg.textContent = '';
+            msg.className = 'field-error-message';
+        });
+    }
+
+    /**
+     * Validate multiple fields at once
+     * @param {Array} validations - Array of {field, rule, message} objects
+     * @returns {boolean} - True if all validations pass
+     */
+    validateFields(validations) {
+        let isValid = true;
+        const errors = [];
+
+        // First pass: collect all validation results
+        validations.forEach(validation => {
+            const { field, rule, message } = validation;
+            const fieldElement = typeof field === 'string' ? document.getElementById(field) : field;
+            
+            if (!fieldElement) return;
+
+            let fieldValid = true;
+
+            // Run validation rule
+            if (typeof rule === 'function') {
+                fieldValid = rule(fieldElement.value, fieldElement);
+            } else if (Array.isArray(rule)) {
+                // Handle multiple rules - all must pass
+                fieldValid = rule.every(r => {
+                    if (typeof r === 'function') {
+                        return r(fieldElement.value, fieldElement);
+                    } else if (r === 'required') {
+                        return fieldElement.value.trim() !== '';
+                    } else if (r === 'email') {
+                        return this.isValidEmail(fieldElement.value);
+                    } else if (r === 'integer') {
+                        return /^\d+$/.test(fieldElement.value.trim());
+                    } else if (r === 'phone') {
+                        return /^\d{10,15}$/.test(fieldElement.value.replace(/\D/g, ''));
+                    } else if (r === 'radio') {
+                        // For radio groups, check if any radio with same name is checked
+                        const radioName = fieldElement.name;
+                        const radioButtons = document.querySelectorAll(`input[name="${radioName}"]`);
+                        return Array.from(radioButtons).some(radio => radio.checked);
+                    }
+                    return true;
+                });
+            } else if (rule === 'required') {
+                fieldValid = fieldElement.value.trim() !== '';
+            } else if (rule === 'email') {
+                fieldValid = this.isValidEmail(fieldElement.value);
+            } else if (rule === 'integer') {
+                fieldValid = /^\d+$/.test(fieldElement.value.trim());
+            } else if (rule === 'phone') {
+                fieldValid = /^\d{10,15}$/.test(fieldElement.value.replace(/\D/g, ''));
+            } else if (rule === 'radio') {
+                // For radio groups, check if any radio with same name is checked
+                const radioName = fieldElement.name;
+                const radioButtons = document.querySelectorAll(`input[name="${radioName}"]`);
+                fieldValid = Array.from(radioButtons).some(radio => radio.checked);
+            }
+
+            // Collect validation results
+            if (!fieldValid) {
+                errors.push({ field: fieldElement, message });
+                isValid = false;
+            }
+        });
+
+        // Second pass: apply all validation states
+        validations.forEach(validation => {
+            const { field } = validation;
+            const fieldElement = typeof field === 'string' ? document.getElementById(field) : field;
+            
+            if (!fieldElement) return;
+
+            // Check if this field has an error
+            const fieldError = errors.find(error => error.field === fieldElement);
+            
+            if (fieldError) {
+                this.showError(fieldElement, fieldError.message);
+            } else {
+                this.clearValidation(fieldElement);
+            }
+        });
+
+        return isValid;
+    }
+
+    /**
+     * Validate all required fields in a form and show all errors at once
+     * @param {string|HTMLElement} formIdentifier - Form ID string or DOM element
+     * @param {string} defaultMessage - Default message for empty required fields
+     * @returns {boolean} - True if all required fields are filled
+     */
+    validateRequiredFields(formIdentifier, defaultMessage = 'This field is required.') {
+        const form = typeof formIdentifier === 'string' 
+            ? document.getElementById(formIdentifier) 
+            : formIdentifier;
+        
+        if (!form) return true;
+
+        // Find all required fields
+        const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+        let isValid = true;
+        const errors = [];
+
+        // Check all required fields
+        requiredFields.forEach(field => {
+            let isEmpty = false;
+            
+            if (field.type === 'radio' || field.type === 'checkbox') {
+                // For radio/checkbox, check if any in the group is checked
+                const name = field.name;
+                const checked = form.querySelector(`input[name="${name}"]:checked`);
+                isEmpty = !checked;
+            } else {
+                // For regular inputs and selects
+                isEmpty = !field.value || field.value.trim() === '';
+            }
+
+            if (isEmpty) {
+                // Get custom message from data attribute or use default
+                const customMessage = field.getAttribute('data-error-message') || defaultMessage;
+                errors.push({ field, message: customMessage });
+                isValid = false;
+            }
+        });
+
+        // Apply all validation states
+        requiredFields.forEach(field => {
+            const fieldError = errors.find(error => error.field === field);
+            
+            if (fieldError) {
+                this.showError(field, fieldError.message);
+            } else {
+                this.clearValidation(field);
+            }
+        });
+
+        return isValid;
+    }
+
+    /**
+     * Get or create error message element for a field
+     * @param {HTMLElement} field - The form field element
+     * @returns {HTMLElement} - The error message element
+     */
+    getErrorElement(field) {
+        // Handle radio button groups differently
+        if (field.type === 'radio') {
+            const radioGroup = field.closest('.role-selection') || field.closest('.form-field');
+            let errorElement = radioGroup.querySelector('.field-error-message');
+            
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'field-error-message';
+                radioGroup.appendChild(errorElement);
+            }
+            
+            return errorElement;
+        }
+        
+        let errorElement = field.parentNode.querySelector('.field-error-message');
+        
+        if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'field-error-message';
+            
+            // Insert after the field (or after password container if it exists)
+            const passwordContainer = field.closest('.password-input-container');
+            const insertAfter = passwordContainer || field;
+            insertAfter.parentNode.insertBefore(errorElement, insertAfter.nextSibling);
+        }
+        
+        return errorElement;
+    }
+
+    /**
+     * Validate radio button group by name
+     * @param {string} radioName - Name attribute of radio group
+     * @param {string} message - Error message to display
+     * @returns {boolean} - True if a radio button is selected
+     */
+    validateRadioGroup(radioName, message) {
+        const radioButtons = document.querySelectorAll(`input[name="${radioName}"]`);
+        const isSelected = Array.from(radioButtons).some(radio => radio.checked);
+        
+        if (!isSelected && radioButtons.length > 0) {
+            // Show error on the first radio button (which will show for the group)
+            this.showError(radioButtons[0], message);
+            return false;
+        } else if (radioButtons.length > 0) {
+            // Clear error from the group
+            this.clearValidation(radioButtons[0]);
+            return true;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Simple email validation
+     * @param {string} email - Email to validate
+     * @returns {boolean} - True if valid email format
+     */
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    /**
+     * Show a general form error message at the top of the form
+     * @param {string|HTMLElement} formIdentifier - Form ID string or DOM element
+     * @param {string} message - Error message to display
+     */
+    showFormError(formIdentifier, message) {
+        const form = typeof formIdentifier === 'string' 
+            ? document.getElementById(formIdentifier) 
+            : formIdentifier;
+        
+        if (!form) return;
+
+        // Remove existing form error
+        this.clearFormError(form);
+
+        // Create form error element
+        const errorElement = document.createElement('div');
+        errorElement.className = 'form-error-message';
+        errorElement.textContent = message;
+        
+        // Insert at the beginning of the form
+        form.insertBefore(errorElement, form.firstChild);
+    }
+
+    /**
+     * Clear general form error message
+     * @param {string|HTMLElement} formIdentifier - Form ID string or DOM element
+     */
+    clearFormError(formIdentifier) {
+        const form = typeof formIdentifier === 'string' 
+            ? document.getElementById(formIdentifier) 
+            : formIdentifier;
+        
+        if (!form) return;
+
+        const existingError = form.querySelector('.form-error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+    }
+}
+
+// Create global instance
+window.formValidation = new FormValidation();

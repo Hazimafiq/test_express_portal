@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User - Doctor Portal</title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/create_user.css">
+    <script src="/assets/js/components.js"></script>
+</head>
+<body>
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/aligners-cases" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item">User Management</span>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item active">Create User</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Create User</h1>
+            </div>
+
+            <!-- Create User Form -->
+            <form class="create-user-form" id="createUserForm">
+                <!-- Personal Details Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Personal Details</h2>
+                    <div class="form-content">
+                        <div class="form-grid">
+                            <div class="form-field">
+                                <label for="username">* Username</label>
+                                <input type="text" id="username" name="username" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="fullName">* Full Name</label>
+                                <input type="text" id="fullName" name="fullName" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="email">* Email</label>
+                                <input type="email" id="email" name="email" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="phoneNumber">* Phone Number</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="country">* Country</label>
+                                <select id="country" name="country">
+                                    <option value="">Select</option>
+                                    <option value="malaysia">Malaysia</option>
+                                    <option value="thailand">Thailand</option>
+                                    <option value="singapore">Singapore</option>
+                                    <option value="indonesia">Indonesia</option>
+                                    <option value="philippines">Philippines</option>
+                                    <option value="vietnam">Vietnam</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="clinic">Clinic</label>
+                                <input type="text" id="clinic" name="clinic" placeholder="Input here">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Address Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Delivery Address</h2>
+                    <div class="form-content">
+                        <div class="form-grid">
+                            <div class="form-field">
+                                <label for="address">* Address</label>
+                                <input type="text" id="address" name="address" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="postcode">Postcode</label>
+                                <input type="text" id="postcode" name="postcode" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="city">* City</label>
+                                <input type="text" id="city" name="city" placeholder="Input here">
+                            </div>
+                            <div class="form-field">
+                                <label for="state">* State</label>
+                                <select id="state" name="state">
+                                    <option value="">Select</option>
+                                    <option value="selangor">Selangor</option>
+                                    <option value="kuala_lumpur">Kuala Lumpur</option>
+                                    <option value="penang">Penang</option>
+                                    <option value="johor">Johor</option>
+                                    <option value="perak">Perak</option>
+                                    <option value="kedah">Kedah</option>
+                                    <option value="kelantan">Kelantan</option>
+                                    <option value="terengganu">Terengganu</option>
+                                    <option value="pahang">Pahang</option>
+                                    <option value="negeri_sembilan">Negeri Sembilan</option>
+                                    <option value="melaka">Melaka</option>
+                                    <option value="perlis">Perlis</option>
+                                    <option value="sabah">Sabah</option>
+                                    <option value="sarawak">Sarawak</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Password</h2>
+                    <div class="form-content">
+                        <div class="form-grid">
+                            <div class="form-field">
+                                <label for="password">* Password</label>
+                                <div class="password-input-container">
+                                    <input type="password" id="password" name="password" placeholder="************">
+                                    <button type="button" class="password-toggle" data-target="password">
+                                        <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <label for="confirmPassword">* Confirm Password</label>
+                                <div class="password-input-container">
+                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="************">
+                                    <button type="button" class="password-toggle" data-target="confirmPassword">
+                                        <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Access Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Role Access</h2>
+                    <div class="form-content">
+                        <div class="form-field">
+                            <label>* Role</label>
+                            <div class="role-selection" id="roleSelection">
+                                <div class="role-option">
+                                    <label class="radio-label">
+                                        <input type="radio" name="role" value="doctor">
+                                        <span class="radio-custom"></span>
+                                        Doctor
+                                    </label>
+                                </div>
+                                <div class="role-option">
+                                    <label class="radio-label">
+                                        <input type="radio" name="role" value="staff">
+                                        <span class="radio-custom"></span>
+                                        Staff
+                                    </label>
+                                </div>
+                                <div class="role-option">
+                                    <label class="radio-label">
+                                        <input type="radio" name="role" value="superadmin">
+                                        <span class="radio-custom"></span>
+                                        Superadmin
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Load navigation rail component
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.ejs');
+        });
+
+        // Password toggle functionality
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                const eyeIcon = this.querySelector('.eye-icon');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    eyeIcon.src = '/assets/images/eye-closed-icon.svg';
+                } else {
+                    input.type = 'password';
+                    eyeIcon.src = '/assets/images/eye-icon.svg';
+                }
+            });
+        });
+
+        // Form submission with universal validation
+        document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Clear any existing validation errors
+            formValidation.clearAllValidation('createUserForm');
+            formValidation.clearFormError('createUserForm');
+            
+            // Define validation rules
+            const validations = [
+                {
+                    field: 'username',
+                    rule: 'required',
+                    message: 'Username is required.'
+                },
+                {
+                    field: 'fullName',
+                    rule: 'required',
+                    message: 'Full Name is required.'
+                },
+                {
+                    field: 'email',
+                    rule: ['required', 'email'],
+                    message: 'Email is required and must be valid.'
+                },
+                {
+                    field: 'phoneNumber',
+                    rule: ['required', 'phone'],
+                    message: 'Phone number is required and must be 10-15 digits.'
+                },
+                {
+                    field: 'country',
+                    rule: 'required',
+                    message: 'Country is required.'
+                },
+                {
+                    field: 'address',
+                    rule: 'required',
+                    message: 'Address is required.'
+                },
+                {
+                    field: 'city',
+                    rule: 'required',
+                    message: 'City is required.'
+                },
+                {
+                    field: 'state',
+                    rule: 'required',
+                    message: 'State is required.'
+                },
+                {
+                    field: 'password',
+                    rule: (value) => value.length >= 8,
+                    message: 'Password must be at least 8 characters long.'
+                },
+                {
+                    field: 'confirmPassword',
+                    rule: (value) => value === document.getElementById('password').value,
+                    message: 'Passwords do not match.'
+                },
+                {
+                    field: document.querySelector('input[name="role"]'),
+                    rule: 'radio',
+                    message: 'Role is required.'
+                }
+            ];
+            
+            // Validate all fields
+            const isValid = formValidation.validateFields(validations);
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Disable submit button and show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Creating User...';
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/create-user', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Show success message
+                    formValidation.clearAllValidation('createUserForm');
+                    formValidation.clearFormError('createUserForm');
+                    
+                    const successMessage = document.createElement('div');
+                    successMessage.className = 'form-success-message';
+                    successMessage.textContent = 'User created successfully! Redirecting...';
+                    document.getElementById('createUserForm').insertBefore(successMessage, document.getElementById('createUserForm').firstChild);
+                    
+                    setTimeout(() => {
+                        window.location.href = '/user-management';
+                    }, 1500);
+                } else {
+                    const data = await response.json();
+                    formValidation.showFormError('createUserForm', data.message || 'Failed to create user. Please try again.');
+                }
+            } catch (error) {
+                formValidation.showFormError('createUserForm', 'Network error. Please check your connection and try again.');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // Real-time validation
+        function addRealTimeValidation() {
+            // Username validation
+            document.getElementById('username').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    formValidation.showError(this, 'Username is required.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // Full Name validation
+            document.getElementById('fullName').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    formValidation.showError(this, 'Full Name is required.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // Email validation
+            document.getElementById('email').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    formValidation.showError(this, 'Email is required.');
+                } else if (!formValidation.isValidEmail(this.value)) {
+                    formValidation.showError(this, 'Please enter a valid email address.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // Phone Number validation
+            document.getElementById('phoneNumber').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    formValidation.showError(this, 'Phone number is required.');
+                } else if (!/^\d{10,15}$/.test(this.value.replace(/\D/g, ''))) {
+                    formValidation.showError(this, 'Phone number must be 10-15 digits.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // Password validation
+            document.getElementById('password').addEventListener('input', function() {
+                if (this.value.length > 0 && this.value.length < 8) {
+                    formValidation.showError(this, 'Password must be at least 8 characters long.');
+                } else if (this.value.length >= 8) {
+                    formValidation.clearValidation(this);
+                }
+                
+                // Re-validate confirm password if it has a value
+                const confirmPassword = document.getElementById('confirmPassword');
+                if (confirmPassword.value) {
+                    if (confirmPassword.value !== this.value) {
+                        formValidation.showError(confirmPassword, 'Passwords do not match.');
+                    } else {
+                        formValidation.clearValidation(confirmPassword);
+                    }
+                }
+            });
+
+            // Confirm Password validation
+            document.getElementById('confirmPassword').addEventListener('input', function() {
+                const password = document.getElementById('password').value;
+                if (this.value !== password) {
+                    formValidation.showError(this, 'Passwords do not match.');
+                } else if (this.value === password && this.value.length >= 8) {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // Country validation
+            document.getElementById('country').addEventListener('change', function() {
+                if (this.value === '') {
+                    formValidation.showError(this, 'Country is required.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // Address validation
+            document.getElementById('address').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    formValidation.showError(this, 'Address is required.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // City validation
+            document.getElementById('city').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    formValidation.showError(this, 'City is required.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // State validation
+            document.getElementById('state').addEventListener('change', function() {
+                if (this.value === '') {
+                    formValidation.showError(this, 'State is required.');
+                } else {
+                    formValidation.clearValidation(this);
+                }
+            });
+
+            // Role validation
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            roleRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // When any role is selected, clear the error
+                    formValidation.clearValidation(this);
+                });
+            });
+
+            // Clear form errors when user starts fixing issues
+            const formFields = document.querySelectorAll('#createUserForm input, #createUserForm select');
+            formFields.forEach(field => {
+                field.addEventListener('input', () => {
+                    // Clear form-level error when user starts making changes
+                    const formError = document.querySelector('.form-error-message');
+                    if (formError) {
+                        formError.remove();
+                    }
+                });
+            });
+        }
+
+        // Initialize real-time validation
+        addRealTimeValidation();
+
+        // Cancel button
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            window.location.href = '/user-management';
+        });
+    </script>
+</body>
+</html>

@@ -38,9 +38,7 @@
             <div class="search-filters-section">
                 <div class="search-container">
                     <div class="search-input-wrapper">
-                        <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
-                        </svg>
+                        <img src="/assets/images/search-icon.svg" class="search-icon" alt="Search">
                         <input type="text" placeholder="Search case ID, patient name" class="search-input" id="searchInput">
                     </div>
                 </div>
@@ -50,7 +48,7 @@
                     <div class="chip-select custom-dropdown" id="brandDropdown">
                         <button type="button" class="chip-button" id="brandButton">
                             <span class="chip-button-label">Treatment Brand</span>
-                            <span class="chip-caret">▾</span>
+                            <img src="/assets/images/select-icon.svg" class="chip-caret" alt="Select">
                         </button>
                         <div class="chip-menu" id="brandMenu">
                             <button class="chip-menu-item" data-value="dca-pro">DCA Pro</button>
@@ -71,7 +69,7 @@
                     <div class="chip-select date-dropdown" id="createdDropdown">
                         <button type="button" class="chip-button" id="createdButton">
                             <span class="chip-button-label">Created Date</span>
-                            <span class="chip-caret">▾</span>
+                            <img src="/assets/images/select-icon.svg" class="chip-caret" alt="Select">
                         </button>
                         <div class="date-menu" id="createdMenu" data-target="created">
                             <div class="date-header">
@@ -93,7 +91,7 @@
                     <div class="chip-select date-dropdown" id="updatedDropdown">
                         <button type="button" class="chip-button" id="updatedButton">
                             <span class="chip-button-label">Last Updated Date</span>
-                            <span class="chip-caret">▾</span>
+                            <img src="/assets/images/select-icon.svg" class="chip-caret" alt="Select">
                         </button>
                         <div class="date-menu" id="updatedMenu" data-target="updated">
                             <div class="date-header">
@@ -282,7 +280,7 @@
                 
                 <nav class="pagination-nav" aria-label="Pagination Navigation">
                     <button class="pagination-btn prev-btn" disabled>
-                        <span class="pagination-icon">←</span>
+                        <img src="/assets/images/left-arrow-pagination-inactive.svg" class="pagination-icon" alt="Previous">
                     </button>
                     
                     <div class="pagination-numbers">
@@ -293,7 +291,7 @@
                     </div>
                     
                     <button class="pagination-btn next-btn">
-                        <span class="pagination-icon">→</span>
+                        <img src="/assets/images/right-arrow-pagination-active.svg" class="pagination-icon" alt="Next">
                     </button>
                 </nav>
             </div>
@@ -314,7 +312,7 @@
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.html');
+            loadComponent('navRail', '/views/components/side-menu.ejs');
         });
 
         // Add new case button

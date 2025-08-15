@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Doctor Portal</title>
+    <title>User Details - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
-    <link rel="stylesheet" href="/assets/css/profile.css">
+    <link rel="stylesheet" href="/assets/css/user_details.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
@@ -21,23 +21,33 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item active">Profile</span>
+                <span class="breadcrumb-item">User Management</span>
+                <span class="breadcrumb-separator">
+                    <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
+                </span>
+                <span class="breadcrumb-item active">User Details</span>
             </nav>
 
             <!-- Page Header -->
             <div class="page-header">
-                <h1 class="page-title">Profile</h1>
-                <button class="btn btn-primary" id="changePasswordBtn">Change Password</button>
+                <h1 class="page-title">User Details</h1>
+                <div class="page-actions">
+                    <button class="btn btn-secondary" id="changePasswordBtn">Change Password</button>
+                    <button class="btn btn-primary" id="editUserBtn">Update Profile</button>
+                </div>
             </div>
 
             <!-- Profile Content -->
             <div class="profile-content">
                 <!-- User Info -->
                 <div class="user-info">
-                    <div class="user-avatar">K</div>
+                    <div class="user-avatar">C</div>
                     <div class="user-details">
-                        <h2 class="full-name">Kayley Chai Min Xuan</h2>
-                        <!-- <p class="user-id">User ID: 28930183</p> -->
+                        <div class="name-status-container">
+                            <h2 class="full-name">Chong Kai Wen</h2>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                        <p class="user-id">User ID: 28930183</p>
                     </div>
                 </div>
 
@@ -46,22 +56,22 @@
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Username</label>
-                            <span>minxuan001</span>
+                            <span>kaiwen001</span>
                         </div>
                         <div class="profile-field">
                             <label>Role</label>
-                            <span>Doctor</span>
+                            <span>Superadmin</span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Phone Number</label>
-                            <span>-</span>
+                            <span>0123231234</span>
                         </div>
                         <div class="profile-field">
                             <label>Email</label>
-                            <span>-</span>
+                            <span>kaiwen@gmail.com</span>
                         </div>
                     </div>
 

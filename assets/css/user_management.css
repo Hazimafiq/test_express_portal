@@ -392,7 +392,7 @@ body {
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .tab-button:hover {
@@ -425,26 +425,26 @@ body {
 }
 
 /* Cases Table */
-.cases-table-container {
+.users-table-container {
   background: white;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
   overflow: hidden;
 }
 
-.cases-table {
+.users-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
 /* Table Headers */
-.cases-table thead {
+.users-table thead {
   background: #0f2a4d;
   color: white;
 }
 
-.cases-table th {
+.users-table th {
   padding: 16px 20px;
   text-align: left;
   font-size: 14px;
@@ -456,12 +456,12 @@ body {
   position: relative;
 }
 
-.cases-table th.sortable {
+.users-table th.sortable {
   cursor: pointer;
   user-select: none;
 }
 
-.cases-table th.sortable:hover {
+.users-table th.sortable:hover {
   background: #475569;
 }
 
@@ -472,16 +472,16 @@ body {
 }
 
 /* Table Body */
-.cases-table tbody tr {
+.users-table tbody tr {
   border-bottom: 1px solid #eef2f7;
   transition: background-color 0.2s ease;
 }
 
-.cases-table tbody tr:hover {
+.users-table tbody tr:hover {
   background: #f8fafc;
 }
 
-.cases-table td {
+.users-table td {
   padding: 16px 20px;
   vertical-align: middle;
   font-size: 14px;
@@ -492,7 +492,7 @@ body {
   color: #282E34;
 }
 
-.td-case-id {
+.td-name {
   font-weight: 700 !important;
 }
 
@@ -506,12 +506,12 @@ body {
   text-transform: capitalize;
 }
 
-.status-draft {
+.status-active {
   background: #e9e9ea;
   color: #7b7b7c;
 }
 
-.status-submitted {
+.status-inactive {
   background: #d7f3e5;
   color: #1c8f63;
 }
@@ -646,7 +646,7 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .cases-grid {
+  .users-grid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 20px;
   }
@@ -688,11 +688,11 @@ body {
     align-items: stretch;
   }
 
-  .cases-table-container {
+  .users-table-container {
     overflow-x: auto;
   }
 
-  .cases-table {
+  .users-table {
     min-width: 800px;
   }
 

@@ -102,19 +102,21 @@ body {
 
 
 /* Form Layout */
-.add-case-form {
+.create-user-form {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 24px;
 }
 
 .form-section {
+    display: flex;
+    padding: 24px 325px 24px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+    align-self: stretch;
     border-radius: 16px;
-    background: var(--Colour-background-surface-container, rgba(255, 255, 255, 0.40));
-    border-radius: 12px;
-    padding: 2rem;
-    width: 100%;
-
+    background: rgba(255, 255, 255, 0.40);
 }
 
 /* Form Content Container - maintains 2/3 width for form elements */
@@ -478,23 +480,23 @@ body {
 .form-actions {
     /* Inherit form-section base styling */
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
     width: 100%;
     
     /* Sticky positioning */
-    position: sticky;
+    /* position: sticky;
     bottom: 2rem;
-    z-index: 1000;
+    z-index: 1000; */
     
     /* Form actions specific styling */
     display: flex;
     justify-content: flex-end;
     gap: 12px;
     margin-top: 0rem;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 1rem;
+    /* border-top: 1px solid #e5e7eb; */
+    /* padding-top: 1rem; */
 }
 
 /* Form Layout */
@@ -506,8 +508,8 @@ body {
 
 /* Button Styles */
 .btn {
-    padding: 12px 24px;
-    border-radius: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
     border: none;
@@ -563,6 +565,17 @@ body {
 .btn-secondary:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-deactivate {
+    color: #D4382B;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+    border-radius: 6px;
+    border: 1px solid #E27A71;
+    background: transparent;
 }
 
 /* IPR and Attachments */
@@ -668,7 +681,7 @@ select.field-error,
 textarea.field-error {
     border-color: #dc2626 !important;
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
-    background-color: #fef2f2;
+    /* background-color: #fef2f2; */
 }
 
 .form-field input.field-success,
@@ -822,4 +835,124 @@ textarea.field-error:hover {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-dialog {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modal-overlay.show .modal-dialog {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.modal-body {
+    margin-bottom: 24px;
+}
+
+.modal-message {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.modal-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+    height: 36px;
+}
+
+.modal-btn-cancel {
+    background: transparent;
+    color: #374151;
+    border: 1px solid transparent;
+}
+
+.modal-btn-cancel:hover {
+    background: #f3f4f6;
+}
+
+.modal-btn-confirm {
+    background: #003366;
+    color: white;
+}
+
+.modal-btn-confirm:hover {
+    background: #002244;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 51, 102, 0.2);
 }
