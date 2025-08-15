@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, changePassword, logout } = require('../controller/user');
+const { register, login, changePassword, logout, get_user_profile } = require('../controller/user');
 const path = require('path');
 
 const router = express.Router();
@@ -33,6 +33,9 @@ router.get('/profile', (req, res) => {
     res.render('profile');
 });
 
+// Profile route
+router.get('/get_profile', get_user_profile);
+
 // Aligners cases route (existing functionality)
 router.get('/aligners-cases', (req, res) => {
     // if (!req.session.user) {
@@ -51,6 +54,12 @@ router.get('/cases/:caseId', (req, res) => {
     res.render('case_details', {
         caseId,
     });
+});
+
+// Add treatment plan route
+router.get('/add-treatment-plan/:caseId', (req, res) => {
+    const { caseId } = req.params;
+    res.render('add_treatment_plan', { caseId });
 });
 
 // Add new case routes
@@ -93,6 +102,12 @@ router.post('/save-draft', (req, res) => {
 // Default route
 router.get('/', (req, res) => {
     res.send('Default endpoint');
+});
+
+
+// Default route
+router.get('/simulation', (req, res) => {
+    res.render('simulation');
 });
 
 module.exports = router;

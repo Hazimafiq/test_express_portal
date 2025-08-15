@@ -4,8 +4,8 @@ const CustomError = require('../errors/CustomError');
 // Register user
 exports.register = async (req, res) => {
     try {
-        const { username, fulleName, phoneNumber, email, country, password, confirmPassword, role } = req.body;
-        if (!username || !password || !confirmPassword || password !== confirmPassword || !role || !fulleName || !phoneNumber || !email || !country) {
+        const { username, fullName, phoneNumber, email, clinic, country, password, confirmPassword, role } = req.body;
+        if (!username || !password || !confirmPassword || !role || !fullName || !phoneNumber || !email || !country || !clinic) {
             return res.status(400).json({ message: 'All fields are required' });
         }
         if (password !== confirmPassword) {
@@ -43,13 +43,32 @@ exports.login = async (req, res) => {
     }
 };
 
+// Get one user details
+exports.get_user_profile = async (req, res) => {
+    try {
+        const { id } = req.query;
+        const user = await User.get_profile_data(id);
+        res.status(200).json({ user });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        } else {
+            console.error(err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+};
+
 // Change password
 exports.changePassword = async (req, res) => {
     try {
         const { username } = req.session.user; // Assume middleware sets req.session.user
-        const { oldPassword, newPassword } = req.body;
-        if (!oldPassword || !newPassword) {
-            return res.status(400).json({ message: 'Old and new passwords are required' });
+        const { oldPassword, newPassword, confirmNewPassword } = req.body;
+        if (!oldPassword || !newPassword || !confirmNewPassword) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+        if (newPassword !== confirmNewPassword) {
+            return res.status(400).json({ message: 'New passwords do not match' });
         }
         const message = await User.changePassword(username, oldPassword, newPassword);
         res.status(200).json({ message });
