@@ -1,0 +1,32 @@
+<!-- Toast Notification Component Template -->
+<!-- Include this in your layout or page where you want to use toasts -->
+
+<!-- Toast CSS - Include in your page head -->
+<link rel="stylesheet" href="/assets/css/toast.css">
+
+<!-- Toast JavaScript - Include before closing body tag -->
+<script src="/assets/js/toast.js"></script>
+
+<!-- Toast container will be automatically created by the JavaScript -->
+
+<!-- Example usage in your page scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toast is now available globally as window.Toast
+    
+    // Example: Show success toast
+    // Toast.success('User account has been deactivated.');
+    
+    // Example: Show toast with custom message
+    // Toast.success('Success!', 'User account has been deactivated.');
+    
+    // Example: Show toast with custom options
+    // Toast.show({
+    //     type: 'success',
+    //     title: 'User account has been deactivated.',
+    //     icon: '/assets/images/success.svg',
+    //     duration: 5000,
+    //     closable: true
+    // });
+});
+</script>

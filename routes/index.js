@@ -99,6 +99,38 @@ router.post('/save-draft', (req, res) => {
     res.json({ message: 'Draft saved successfully', id: Date.now() });
 });
 
+// User management route
+router.get('/user-management', (req, res) => {
+    res.render('user_management');
+});
+
+// Create user route
+router.get('/create-user', (req, res) => {
+    res.render('create_user');
+});
+
+// User details route
+router.get('/user-details/:userId', (req, res) => {
+    const { userId } = req.params;
+    res.render('user_details');
+});
+
+// Update user route
+router.get('/update-user/:userId', (req, res) => {
+    const { userId } = req.params;
+    res.render('update_user');
+});
+
+// Toast route
+router.get('/test-toast', (req, res) => {
+    res.render('test/test-toast');
+});
+
+// Validation route
+router.get('/test-validation', (req, res) => {
+    res.render('test/test-validation');
+});
+
 // Default route
 router.get('/', (req, res) => {
     res.send('Default endpoint');

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aligners Cases - Doctor Portal</title>
+    <link rel="stylesheet" href="/assets/css/side_menu.css">
+    <link rel="stylesheet" href="/assets/css/user_management.css">
+    <script src="/assets/js/components.js"></script>
+</head>
+<body>
+    <!-- Top header hidden for rail layout -->
+    <header class="header" aria-hidden="true"></header>
+
+    <!-- Navigation Rail Component -->
+    <div id="navRail"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">User Management</h1>
+                <div class="page-actions">
+                    <button class="btn btn-primary" id="createUserBtn">
+                        Create User
+                    </button>
+                </div>
+            </div>
+
+             <!-- Search and Filters -->
+             <div class="search-filters-section">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <img src="/assets/images/search-icon.svg" class="search-icon" alt="Search">
+                        <input type="text" placeholder="Search name" class="search-input" id="searchInput">
+                    </div>
+                </div>
+
+                <div class="filters-container">
+                    <!-- Custom styled dropdown to match design -->
+                    <div class="chip-select custom-dropdown" id="countryDropdown">
+                        <button type="button" class="chip-button" id="countryButton">
+                            <span class="chip-button-label">Country</span>
+                            <img src="/assets/images/select-icon.svg" class="chip-caret" alt="Select">
+                        </button>
+                        <div class="chip-menu" id="countryMenu">
+                            <button class="chip-menu-item" data-value="malaysia">Malaysia</button>
+                            <button class="chip-menu-item" data-value="singapore">Singapore</button>
+                        </div>
+                        <!-- hidden native select for value storage and keyboard fallback -->
+                        <select class="chip-input native-select" id="countryFilter" hidden>
+                            <option value="">Country</option>
+                            <option value="malaysia">Malaysia</option>
+                            <option value="singapore">Singapore</option>
+                        </select>
+                    </div>
+
+                    <!-- Custom styled dropdown to match design -->
+                    <div class="chip-select custom-dropdown" id="roleDropdown">
+                        <button type="button" class="chip-button" id="roleButton">
+                            <span class="chip-button-label">Role</span>
+                            <img src="/assets/images/select-icon.svg" class="chip-caret" alt="Select">
+                        </button>
+                        <div class="chip-menu" id="roleMenu">
+                            <button class="chip-menu-item" data-value="superadmin">Superadmin</button>
+                            <button class="chip-menu-item" data-value="doctor">Doctor</button>
+                            <button class="chip-menu-item" data-value="staff">Staff</button>
+                        </div>
+                        <!-- hidden native select for value storage and keyboard fallback -->
+                        <select class="chip-input native-select" id="roleFilter" hidden>
+                            <option value="">Role</option>
+                            <option value="superadmin">Superadmin</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="staff">Staff</option>
+                        </select>
+                    </div>
+                    <button class="filter-reset" id="resetFilters">Reset</button>
+                </div>
+            </div>
+
+            <!-- Status Tabs -->
+            <div class="status-tabs">
+                <div class="tab-list" role="tablist">
+                    <button class="tab-button active" data-status="all" role="tab">
+                        All <span class="tab-count">30</span>
+                    </button>
+                    <button class="tab-button" data-status="active" role="tab">
+                        Active <span class="tab-count">4</span>
+                    </button>
+                    <button class="tab-button" data-status="inactive" role="tab">
+                        Inactive <span class="tab-count">26</span>
+                    </button>
+                </div>
+            </div>
+
+             <!-- Users Table -->
+             <div class="users-table-container">
+                <table class="users-table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th class="th-name">Name</th>
+                            <th class="th-country">Country</th>
+                            <th class="th-role">Role</th>
+                            <th class="th-created-at sortable" data-sort="created">
+                                Created At 
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th class="th-last-login sortable" data-sort="last-login">
+                                Last Login 
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th class="th-status">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row" data-status="active" data-role="superadmin" data-country="malaysia">
+                            <td class="td-name">Siti Khadijah binti Amin</td>
+                            <td class="td-country">Malaysia</td>
+                            <td class="td-role">Superadmin</td>
+                            <td class="td-created-at">14/07/2025</td>
+                            <td class="td-last-login">18/07/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="doctor" data-country="singapore">
+                            <td class="td-name">Jennifer Tan Yi Wen</td>
+                            <td class="td-country">Singapore</td>
+                            <td class="td-role">Doctor</td>
+                            <td class="td-created-at">20/06/2025</td>
+                            <td class="td-last-login">22/06/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="malaysia">
+                            <td class="td-name">Low Zi Xuan</td>
+                            <td class="td-country">Malaysia</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">11/06/2025</td>
+                            <td class="td-last-login">12/06/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
+                            <td class="td-name">Lim Wei Jie</td>
+                            <td class="td-country">Singapore</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">25/05/2025</td>
+                            <td class="td-last-login">27/05/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
+                            <td class="td-name">Carol Chan Sin Yue</td>
+                            <td class="td-country">Malaysia</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">19/04/2025</td>
+                            <td class="td-last-login">20/04/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
+                            <td class="td-name">Lim Mei Shin</td>
+                            <td class="td-country">Singapore</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">10/04/2025</td>
+                            <td class="td-last-login">13/04/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="malaysia">
+                            <td class="td-name">Nur Hidayah binti Ismail</td>
+                            <td class="td-country">Malaysia</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">14/03/2025</td>
+                            <td class="td-last-login">16/03/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
+                            <td class="td-name">Avvinashravi</td>
+                            <td class="td-country">Singapore</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">09/12/2025</td>
+                            <td class="td-last-login">13/12/2025</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="malaysia">
+                            <td class="td-name">Nur Aqilah binti Shudin</td>
+                            <td class="td-country">Malaysia</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">01/11/2025</td>
+                            <td class="td-last-login">02/11/2024</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
+                            <td class="td-name">Chia Yu Xuan</td>
+                            <td class="td-country">Singapore</td>
+                            <td class="td-role">Staff</td>
+                            <td class="td-created-at">20/06/2024</td>
+                            <td class="td-last-login">20/06/2024</td>
+                            <td class="td-status">
+                                <span class="status-badge status-active">Active</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    <label class="entries-label">
+                        Show 
+                        <select class="entries-select" id="entriesPerPage">
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        entries
+                    </label>
+                </div>
+                
+                <nav class="pagination-nav" aria-label="Pagination Navigation">
+                    <button class="pagination-btn prev-btn" disabled>
+                        <img src="/assets/images/left-arrow-pagination-inactive.svg" class="pagination-icon" alt="Previous">
+                    </button>
+                    
+                    <div class="pagination-numbers">
+                        <button class="pagination-btn page-btn active" data-page="1">1</button>
+                        <button class="pagination-btn page-btn" data-page="2">2</button>
+                        <span class="pagination-ellipsis">...</span>
+                        <button class="pagination-btn page-btn" data-page="10">10</button>
+                    </div>
+                    
+                    <button class="pagination-btn next-btn">
+                        <img src="/assets/images/right-arrow-pagination-active.svg" class="pagination-icon" alt="Next">
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M9 11H15M9 15H15M17 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3H12.5858C12.851 3 13.1054 3.10536 13.2929 3.29289L19.7071 9.70711C19.8946 9.89464 20 10.149 20 10.4142V19C20 20.1046 19.1046 21 18 21H17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="empty-title">No users found</h3>
+                <p class="empty-description">Try adjusting your search or filter criteria</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load navigation rail component
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('navRail', '/views/components/side-menu.ejs');
+            
+             // Create user button
+            const createUserBtn = document.getElementById('createUserBtn');
+            createUserBtn.addEventListener('click', () => {
+                window.location.href = '/create-user';
+            });
+
+               // Search and filter functionality
+            const searchInput = document.getElementById('searchInput');
+            const countryFilter = document.getElementById('countryFilter');
+            const roleFilter = document.getElementById('roleFilter');
+            const resetFilters = document.getElementById('resetFilters');
+            const usersTable = document.getElementById('usersTable');
+            const emptyState = document.getElementById('emptyState');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            let currentTab = 'all';
+
+            function filterUsers() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const brandValue = treatmentBrandFilter.value;
+                
+                const rows = document.querySelectorAll('.table-row');
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+                    const name = row.querySelector('.td-name').textContent.toLowerCase();
+                    const country = row.querySelector('.td-country').textContent.toLowerCase();
+                    const role = row.getAttribute('data-role');
+                    const status = row.getAttribute('data-status');
+
+                    const matchesSearch = !searchTerm || name.includes(searchTerm) || country.includes(searchTerm);
+                    const matchesBrand = !brandValue || role === brandValue;
+                    const matchesTab = currentTab === 'all' || status === currentTab;
+
+                    if (matchesSearch && matchesBrand && matchesTab) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Show empty state if no cases visible
+                if (visibleCount === 0) {
+                    emptyState.style.display = 'flex';
+                    usersTable.parentElement.style.display = 'none';
+                } else {
+                    emptyState.style.display = 'none';
+                    usersTable.parentElement.style.display = 'block';
+                }
+            }
+
+            // Tab functionality
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    button.classList.add('active');
+                    
+                    // Update current tab
+                    currentTab = button.getAttribute('data-status');
+                    
+                    // Filter cases
+                    filterUsers();
+                });
+            });
+
+            // Event listeners
+            searchInput.addEventListener('input', filterUsers);
+            countryFilter.addEventListener('change', filterUsers);
+            roleFilter.addEventListener('change', filterUsers);
+
+            resetFilters.addEventListener('click', () => {
+                searchInput.value = '';
+                countryFilter.value = '';
+                roleFilter.value = '';
+                filterUsers();
+            });
+
+            // Custom dropdown (Treatment Brand)
+            const brandButton = document.getElementById('brandButton');
+            const brandMenu = document.getElementById('brandMenu');
+            const nativeBrandSelect = document.getElementById('countryFilter');
+            const brandLabel = brandButton.querySelector('.chip-button-label');
+            brandButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                brandMenu.classList.toggle('open');
+            });
+            document.addEventListener('click', () => brandMenu.classList.remove('open'));
+            brandMenu.querySelectorAll('.chip-menu-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const value = e.currentTarget.getAttribute('data-value');
+                    const text = e.currentTarget.textContent.trim();
+                    nativeBrandSelect.value = value;
+                    brandLabel.textContent = text || 'Treatment Brand';
+                    brandMenu.classList.remove('open');
+                    filterUsers();
+                });
+            });
+
+            // Floating language menu
+            const languageFab = document.getElementById('languageFab');
+            const languageMenu = document.getElementById('languageMenu');
+            languageFab.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
+            });
+            document.addEventListener('click', () => { languageMenu.style.display = 'none'; });
+            document.querySelectorAll('.lang-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.lang-item').forEach(b => b.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    languageMenu.style.display = 'none';
+                });
+            });
+
+            // Pagination functionality
+            const entriesSelect = document.getElementById('entriesPerPage');
+            const paginationBtns = document.querySelectorAll('.pagination-btn');
+            
+            entriesSelect.addEventListener('change', () => {
+                console.log('Entries per page changed to:', entriesSelect.value);
+                // Add pagination logic here
+            });
+
+            paginationBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.classList.contains('page-btn')) {
+                        // Remove active class from all page buttons
+                        document.querySelectorAll('.page-btn').forEach(pageBtn => {
+                            pageBtn.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked button
+                        btn.classList.add('active');
+                        
+                        console.log('Page changed to:', btn.getAttribute('data-page'));
+                        // Add page change logic here
+                    }
+                });
+            });
+
+            // Table row click handlers
+            document.addEventListener('click', (e) => {
+                const row = e.target.closest('.table-row');
+                if (row) {
+                    const name = row.querySelector('.td-name').textContent.trim();
+                    window.location.href = `/users/${encodeURIComponent(name)}`;
+                }
+            });
+
+            // Sorting functionality
+            document.querySelectorAll('.sortable').forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortType = header.getAttribute('data-sort');
+                    console.log('Sort by:', sortType);
+                    // Add sorting logic here
+                });
+            });
+
+        });
+      
+
+     
+    </script>
+</body>
+</html>
