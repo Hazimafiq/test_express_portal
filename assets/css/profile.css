@@ -117,13 +117,17 @@ body {
 .btn {
     display: inline-flex;
     align-items: center;
-    padding: 10px 16px;
+    padding: 8px 16px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     border: none;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
 }
 
 .btn-primary {
@@ -145,33 +149,62 @@ body {
     background: #e5e7eb;
 }
 
+.btn-cancel {
+    background: transparent;
+    color: var(--Colour-text-accent-grey, #767676);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
 /* Profile Content */
 .profile-content {
     background: white;
     border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px 325px 24px 24px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.40);
 }
 
 /* User Info */
 .user-info {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 24px;
+    margin-bottom: 24px;
 }
 
 .user-avatar {
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
     background: #003366;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
+    font-size: 14px;
+    font-style: normal;
     font-weight: 700;
-    font-size: 20px;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+}
+
+.user-details .full-name {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px; /* 125% */
+    letter-spacing: 0.32px;
+}
+
+.user-details .user-id {
+    margin-top: 8px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.28px;
 }
 
 .user-name {
@@ -183,37 +216,43 @@ body {
 
 .user-id {
     font-size: 14px;
-    color: #6b7280;
+    color: #767676;
 }
 
 /* Profile Grid */
 .profile-grid {
     display: grid;
+    padding-left: 56px;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-bottom: 2rem;
+    gap: 32px;
+    margin-bottom: 24px;
 }
 
 .profile-column {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 24px;
 }
 
 .profile-field {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
 }
 
 .profile-field label {
     font-size: 14px;
-    color: #6b7280;
+    color: #767676;
 }
 
 .profile-field span {
     font-size: 14px;
-    color: #1f2937;
+    color: #262626;
 }
 
 /* Delivery Address */
@@ -221,18 +260,17 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e5e7eb;
+    padding-left: 56px;
 }
 
 .delivery-address label {
     font-size: 14px;
-    color: #6b7280;
+    color: #767676;
 }
 
 .delivery-address span {
     font-size: 14px;
-    color: #1f2937;
+    color: #262626;
 }
 
 /* Modal */
@@ -261,39 +299,44 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 24px;
 }
 
 .modal-header h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.32px;
+    color: #333333;
 }
 
 .modal-close {
     background: none;
     border: none;
-    font-size: 24px;
-    color: #6b7280;
     cursor: pointer;
+    width: 16px;
+    height: 16px;
+    color: #767676;
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: 24px;
 }
 
 /* Form Fields */
 .form-field {
-    margin-bottom: 1rem;
+    margin-bottom: 24px;
 }
 
 .form-field label {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: #374151;
-    margin-bottom: 4px;
+    color: #767676;
+    margin-bottom: 8px;
+    line-height: 20px;
+    letter-spacing: 0.28px;
 }
 
 .password-strength-container {

@@ -37,7 +37,7 @@
                     <div class="user-avatar">K</div>
                     <div class="user-details">
                         <h2 class="full-name">Kayley Chai Min Xuan</h2>
-                        <!-- <p class="user-id">User ID: 28930183</p> -->
+                        <p class="user-id">User ID: 28930183</p>
                     </div>
                 </div>
 
@@ -91,7 +91,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Change Password</h3>
-                <button class="modal-close" id="closeModal">&times;</button>
+                <button class="modal-close" id="closeModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
             </div>
             <div class="modal-body">
                 <form id="changePasswordForm">
@@ -142,7 +144,7 @@
                         <div class="validation-message" id="confirmPasswordError"></div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="button" class="btn btn-cancel" id="cancelBtn">Cancel</button>
                         <button type="submit" class="btn btn-primary" id="confirmBtn">Confirm</button>
                     </div>
                 </form>
@@ -315,7 +317,7 @@
                 // Show validation errors or success messages
                 console.log('Password:', password, 'Errors:', errors, 'Strength:', strength); // Debug log
                 
-                if (errors.length > 0) {
+                if (errors.length > 0 && strength === 'weak') {
                     // Dynamic error message showing only missing requirements
                     const message = `Password need to be ${errors.join(', ')}.`;
                     showValidationError('newPassword', message);

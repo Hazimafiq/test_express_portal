@@ -6,18 +6,37 @@ async function loadComponent(elementId, componentPath) {
         document.getElementById(elementId).innerHTML = html;
 
         // Initialize component-specific functionality
-        initializeNavRail();
+        await initializeNavRail();
     } catch (error) {
         console.error('Error loading component:', error);
     }
 }
 
 // Navigation rail functionality
-function initializeNavRail() {
+async function initializeNavRail() {
     // Wait for DOM elements to be loaded
     const navRail = document.querySelector('.nav-rail');
     const sideMenuArrow = document.getElementById('sideMenuArrow');
     const arrowIcon = sideMenuArrow?.querySelector('.arrow-icon');
+    
+    // Fetch current user info and set role-based visibility
+    try {
+        const response = await fetch('/api/current-user');
+        if (response.ok) {
+            const data = await response.json();
+            const userRole = data.user.role;
+            
+            // Set user role on user management nav item
+            const userManagementNav = document.getElementById('userManagementNav');
+            if (userManagementNav) {
+                userManagementNav.setAttribute('data-user-role', userRole);
+            }
+            
+            console.log('[NavRail] User role:', userRole);
+        }
+    } catch (error) {
+        console.error('[NavRail] Error fetching user info:', error);
+    }
     
     // Set active nav item based on current path
     const currentPath = window.location.pathname;

@@ -101,22 +101,34 @@ router.post('/save-draft', (req, res) => {
 
 // User management route
 router.get('/user-management', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     res.render('user_management');
 });
 
 // Create user route
 router.get('/create-user', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     res.render('create_user');
 });
 
 // User details route
 router.get('/user-details/:userId', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     const { userId } = req.params;
     res.render('user_details');
 });
 
 // Update user route
 router.get('/update-user/:userId', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     const { userId } = req.params;
     res.render('update_user');
 });
@@ -129,6 +141,17 @@ router.get('/test-toast', (req, res) => {
 // Validation route
 router.get('/test-validation', (req, res) => {
     res.render('test/test-validation');
+});
+
+// Get current user info route
+router.get('/api/current-user', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ message: 'Not authenticated' });
+    }
+    
+    // Return user info without sensitive data like password
+    const { password, ...userInfo } = req.session.user;
+    res.json({ user: userInfo });
 });
 
 // Default route

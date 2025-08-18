@@ -688,3 +688,8 @@
 .logout-item:hover {
     background: #fee2e2;
 }
+
+/* Hide user management for doctor role */
+.nav-item[data-user-role="doctor"] {
+    display: none !important;
+}
