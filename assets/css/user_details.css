@@ -154,14 +154,23 @@ body {
 
 /* Profile Content */
 .profile-content {
-    display: flex;
+    background: white;
+    border-radius: 12px;
     padding: 24px 325px 24px 24px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-    align-self: stretch;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.40);
+}
+
+/* Label and Password Strength Row */
+.label-strength-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.label-strength-row label {
+    margin-bottom: 0;
 }
 
 /* User Info */
@@ -342,7 +351,6 @@ body {
 .password-strength-container {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 4px;
 }
 
 .password-strength {

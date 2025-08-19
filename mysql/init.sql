@@ -15,5 +15,11 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE sessions (
+    session_id VARCHAR(128) NOT NULL PRIMARY KEY,
+    expires INT UNSIGNED NOT NULL,
+    data MEDIUMTEXT
+);
+
 CREATE TABLE patient (
 );

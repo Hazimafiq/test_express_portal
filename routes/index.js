@@ -38,9 +38,9 @@ router.get('/get_profile', get_user_profile);
 
 // Aligners cases route (existing functionality)
 router.get('/aligners-cases', (req, res) => {
-    // if (!req.session.user) {
-    //     return res.redirect('/login');
-    // }
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     res.render('aligners_cases');
 });
 
@@ -101,26 +101,62 @@ router.post('/save-draft', (req, res) => {
 
 // User management route
 router.get('/user-management', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     res.render('user_management');
 });
 
 // Create user route
 router.get('/create-user', (req, res) => {
+    // if (!req.session.user) {
+    //     return res.redirect('/login');
+    // }
     res.render('create_user');
 });
 
 // User details route
 router.get('/user-details/:userId', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     const { userId } = req.params;
     res.render('user_details');
 });
 
 // Update user route
 router.get('/update-user/:userId', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     const { userId } = req.params;
     res.render('update_user');
 });
 
+// Get current user info route
+router.get('/api/current-user', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ message: 'Not authenticated' });
+    }
+    
+    // Return user info without sensitive data like password
+    const { password, ...userInfo } = req.session.user;
+    res.json({ user: userInfo });
+});
+
+// Default route
+router.get('/', (req, res) => {
+    //redirect to login
+    res.redirect('/login');
+});
+
+
+// Default route
+router.get('/simulation', (req, res) => {
+    res.render('simulation');
+});
+
+//testing ui routes
 // Toast route
 router.get('/test-toast', (req, res) => {
     res.render('test/test-toast');
@@ -131,15 +167,8 @@ router.get('/test-validation', (req, res) => {
     res.render('test/test-validation');
 });
 
-// Default route
-router.get('/', (req, res) => {
-    res.send('Default endpoint');
+// Select validation test route
+router.get('/test-select-validation', (req, res) => {
+    res.render('test/test-select-validation');
 });
-
-
-// Default route
-router.get('/simulation', (req, res) => {
-    res.render('simulation');
-});
-
 module.exports = router;

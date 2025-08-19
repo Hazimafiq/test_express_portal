@@ -12,8 +12,11 @@ body {
     min-height: 100vh;
     background: #f8fafc;
     color: #333333;
-    line-height: 1.6;
     display: flex;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px; /* 120% */
+    letter-spacing: 0.4px;
 }
 /* Breadcrumb */
 .breadcrumb {
@@ -113,7 +116,6 @@ body {
     padding: 24px 325px 24px 24px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 32px;
     align-self: stretch;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.40);
@@ -121,15 +123,14 @@ body {
 
 /* Form Content Container - maintains 2/3 width for form elements */
 .form-content {
-    width: 66.67%;
+    width: 100%;
 }
 
 .section-title {
     font-size: 18px;
     font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
+    color: #333333;
+    margin-bottom: 32px;
 }
 
 .subsection-title {
@@ -143,7 +144,7 @@ body {
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 32px;
 }
 
 .form-field {
@@ -183,8 +184,55 @@ body {
     color: #9ca3af;
 }
 
+/* Select wrapper container */
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
 .form-field select {
     cursor: pointer;
+    /* Custom select styling to replace default arrow */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: #f9fafb;
+    padding-right: 40px; /* Make room for the custom icon */
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+/* Custom arrow icon positioned on the wrapper */
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-image: url('/assets/images/select-icon.svg');
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: center;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+    z-index: 1;
+}
+
+/* Rotate icon when select is focused */
+.select-wrapper.select-focused::after,
+.select-wrapper:has(select:focus)::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Style the dropdown options container */
+.form-field select option {
+    border-radius: 8px;
+    background: var(--Colour-background-surface-overlay-default, #FCFCFD);
+    box-shadow: 0 4px 20px 0 rgba(209, 209, 209, 0.25);
+    padding: 10px 12px;
 }
 
 .form-field textarea {
@@ -479,7 +527,7 @@ body {
 /* Form Actions - Inherits form-section styling with sticky positioning */
 .form-actions {
     /* Inherit form-section base styling */
-    background: white;
+    background: #F7F8FA;
     border-radius: 16px;
     padding: 1rem;
     /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
@@ -509,7 +557,7 @@ body {
 /* Button Styles */
 .btn {
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
     border: none;
@@ -519,8 +567,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 120px;
-    height: 44px;
+    height: 36px;
 }
 
 .btn:focus {
@@ -586,6 +633,54 @@ body {
     margin-top: 1.5rem;
 }
 
+.password-input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+
+.form-input {
+    width: 100%;
+    /* height: 44px; */
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    transition: all 0.3s ease;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: #007BFF;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+  
+  .form-input::placeholder {
+    color: #999;
+  }
+  
+  /* Password Input */
+  .password-input {
+    padding-right: 48px;
+  }
+
+  .password-toggle {
+    position: absolute;
+    top: 2px;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
 /* Responsive Design */
 @media (max-width: 1024px) {
     .form-content {
@@ -672,141 +767,6 @@ body {
     }
 }
 
-/* Universal Form Validation States */
-.form-field input.error,
-.form-field select.error,
-.form-field textarea.error,
-input.field-error,
-select.field-error,
-textarea.field-error {
-    border-color: #dc2626 !important;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
-    /* background-color: #fef2f2; */
-}
-
-.form-field input.field-success,
-.form-field select.field-success,
-.form-field textarea.field-success,
-input.field-success,
-select.field-success,
-textarea.field-success {
-    border-color: #059669 !important;
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
-    background-color: #f0fdf4;
-}
-
-/* Error Message Styling */
-.validation-message,
-.field-error-message {
-    font-size: 12px;
-    color: #dc2626;
-    margin-top: 4px;
-    min-height: 16px;
-    font-weight: 500;
-    display: block;
-    line-height: 1.4;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    opacity: 0;
-    transform: translateY(-4px);
-}
-
-.validation-message.show,
-.field-error-message.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.validation-message.success,
-.field-error-message.field-success-message {
-    color: #059669;
-}
-
-.validation-message:empty,
-.field-error-message:empty {
-    display: none;
-}
-
-/* Form-level Error Message */
-.form-error-message {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-    color: #dc2626;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.form-error-message::before {
-    content: '⚠️';
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-/* Form Success Message */
-.form-success-message {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-    color: #059669;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.form-success-message::before {
-    content: '✅';
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-/* Focus states override error states temporarily */
-.form-field input.field-error:focus,
-.form-field select.field-error:focus,
-.form-field textarea.field-error:focus,
-input.field-error:focus,
-select.field-error:focus,
-textarea.field-error:focus {
-    border-color: #003366 !important;
-    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1) !important;
-    background-color: white;
-}
-
-/* Required field indicator styling */
-.form-field label.required::after,
-label.required::after {
-    content: ' *';
-    color: #dc2626;
-    font-weight: bold;
-}
-
-/* Enhanced hover states for error fields */
-.form-field input.field-error:hover,
-.form-field select.field-error:hover,
-.form-field textarea.field-error:hover,
-input.field-error:hover,
-select.field-error:hover,
-textarea.field-error:hover {
-    border-color: #b91c1c;
-}
-
-/* Radio button group error styling */
-.role-selection.field-error .radio-custom {
-    border-color: #dc2626;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-}
-
-.role-selection .field-error-message {
-    margin-top: 12px;
-}
 
 /* Loading States */
 .btn:disabled {
@@ -955,4 +915,93 @@ textarea.field-error:hover {
     background: #002244;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 51, 102, 0.2);
+}
+
+.required-asterisk
+{
+    color: #d4382b;
+}
+
+/* Label and Password Strength Row */
+.label-strength-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.label-strength-row label {
+    margin-bottom: 0;
+}
+
+/* Password Strength Styles */
+
+.password-strength-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.password-strength {
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+.password-strength.weak {
+    color: #D4382B;
+}
+
+.password-strength.good {
+    color: #14B27B;
+}
+
+.password-strength.strong {
+    color: #14B27B;
+}
+
+.password-strength-bars {
+    display: none;
+    gap: 4px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.password-strength-bars.visible {
+    display: flex;
+}
+
+.strength-bar {
+    height: 4px;
+    flex: 1;
+    background: #e5e7eb;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.password-strength-bars.weak .strength-bar:first-child {
+    background: #dc2626;
+}
+
+.password-strength-bars.good .strength-bar:nth-child(-n+2) {
+    background: #059669;
+}
+
+.password-strength-bars.strong .strength-bar {
+    background: #059669;
+}
+
+.custom-validation-message {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.28px;
+    color: #D4382B;
+}
+
+.custom-validation-message.success {
+    color: #059669;
+}
+
+.custom-validation-message:empty {
+    display: none;
 }
