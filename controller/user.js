@@ -62,16 +62,19 @@ exports.get_user_profile = async (req, res) => {
 // Change password
 exports.changePassword = async (req, res) => {
     try {
-        const { username } = req.session.user; // Assume middleware sets req.session.user
+        const { username } = req.session.user;
         const { oldPassword, newPassword, confirmNewPassword } = req.body;
+        
         if (!oldPassword || !newPassword || !confirmNewPassword) {
             return res.status(400).json({ message: 'All fields are required' });
         }
+        
         if (newPassword !== confirmNewPassword) {
             return res.status(400).json({ message: 'New passwords do not match' });
         }
-        const message = await User.changePassword(username, oldPassword, newPassword);
-        res.status(200).json({ message });
+        
+        const result = await User.changePassword(username, oldPassword, newPassword);
+        res.status(200).json({ message: result.message });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });
