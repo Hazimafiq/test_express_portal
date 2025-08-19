@@ -6,6 +6,8 @@
     <title>Create User - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/create_user.css">
+    <link rel="stylesheet" href="/assets/css/validation.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
@@ -40,36 +42,56 @@
                     <div class="form-content">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="username">* Username</label>
+                                <label for="username" class="form-label">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Username</span>
+                                </label>
                                 <input type="text" id="username" name="username" placeholder="Input here">
                             </div>
                             <div class="form-field">
-                                <label for="fullName">* Full Name</label>
+                                <label for="fullName" class="form-label">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Full Name</span>
+                                </label>
                                 <input type="text" id="fullName" name="fullName" placeholder="Input here">
                             </div>
                             <div class="form-field">
-                                <label for="email">* Email</label>
+                                <label for="email" class="form-label">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Email</span>
+                                </label>
                                 <input type="email" id="email" name="email" placeholder="Input here">
                             </div>
                             <div class="form-field">
-                                <label for="phoneNumber">* Phone Number</label>
+                                <label for="phoneNumber" class="form-label">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Phone Number</span>
+                                </label>
                                 <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Input here">
                             </div>
                             <div class="form-field">
-                                <label for="country">* Country</label>
-                                <select id="country" name="country">
-                                    <option value="">Select</option>
-                                    <option value="malaysia">Malaysia</option>
-                                    <option value="thailand">Thailand</option>
-                                    <option value="singapore">Singapore</option>
-                                    <option value="indonesia">Indonesia</option>
-                                    <option value="philippines">Philippines</option>
-                                    <option value="vietnam">Vietnam</option>
-                                    <option value="other">Other</option>
-                                </select>
+                                <label for="country" class="form-label">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Country</span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="country" name="country">
+                                        <option value="">Select</option>
+                                        <option value="malaysia">Malaysia</option>
+                                        <option value="thailand">Thailand</option>
+                                        <option value="singapore">Singapore</option>
+                                        <option value="indonesia">Indonesia</option>
+                                        <option value="philippines">Philippines</option>
+                                        <option value="vietnam">Vietnam</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-field">
-                                <label for="clinic">Clinic</label>
+                                <label for="clinic" class="form-label">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Clinic</span>
+                                </label>
                                 <input type="text" id="clinic" name="clinic" placeholder="Input here">
                             </div>
                         </div>
@@ -82,7 +104,7 @@
                     <div class="form-content">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="address">* Address</label>
+                                <label for="address">Address</label>
                                 <input type="text" id="address" name="address" placeholder="Input here">
                             </div>
                             <div class="form-field">
@@ -90,29 +112,31 @@
                                 <input type="text" id="postcode" name="postcode" placeholder="Input here">
                             </div>
                             <div class="form-field">
-                                <label for="city">* City</label>
+                                <label for="city">City</label>
                                 <input type="text" id="city" name="city" placeholder="Input here">
                             </div>
                             <div class="form-field">
-                                <label for="state">* State</label>
-                                <select id="state" name="state">
-                                    <option value="">Select</option>
-                                    <option value="selangor">Selangor</option>
-                                    <option value="kuala_lumpur">Kuala Lumpur</option>
-                                    <option value="penang">Penang</option>
-                                    <option value="johor">Johor</option>
-                                    <option value="perak">Perak</option>
-                                    <option value="kedah">Kedah</option>
-                                    <option value="kelantan">Kelantan</option>
-                                    <option value="terengganu">Terengganu</option>
-                                    <option value="pahang">Pahang</option>
-                                    <option value="negeri_sembilan">Negeri Sembilan</option>
-                                    <option value="melaka">Melaka</option>
-                                    <option value="perlis">Perlis</option>
-                                    <option value="sabah">Sabah</option>
-                                    <option value="sarawak">Sarawak</option>
-                                    <option value="other">Other</option>
-                                </select>
+                                <label for="state">State</label>
+                                <div class="select-wrapper">
+                                    <select id="state" name="state">
+                                        <option value="">Select</option>
+                                        <option value="selangor">Selangor</option>
+                                        <option value="kuala_lumpur">Kuala Lumpur</option>
+                                        <option value="penang">Penang</option>
+                                        <option value="johor">Johor</option>
+                                        <option value="perak">Perak</option>
+                                        <option value="kedah">Kedah</option>
+                                        <option value="kelantan">Kelantan</option>
+                                        <option value="terengganu">Terengganu</option>
+                                        <option value="pahang">Pahang</option>
+                                        <option value="negeri_sembilan">Negeri Sembilan</option>
+                                        <option value="melaka">Melaka</option>
+                                        <option value="perlis">Perlis</option>
+                                        <option value="sabah">Sabah</option>
+                                        <option value="sarawak">Sarawak</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,22 +148,41 @@
                     <div class="form-content">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="password">* Password</label>
+                                <div class="label-strength-row">
+                                    <label for="password" class="form-label">
+                                        <span class="required-asterisk">*</span>
+                                        <span class="label-text">Password</span>
+                                    </label>
+                                    <div class="password-strength-container">
+                                        <span class="password-strength" id="passwordStrength"></span>
+                                    </div>
+                                </div>
                                 <div class="password-input-container">
-                                    <input type="password" id="password" name="password" placeholder="************">
+                                    <input type="password" id="password" class="form-input password-input" name="password" placeholder="************">
                                     <button type="button" class="password-toggle" data-target="password">
                                         <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                                     </button>
                                 </div>
+                                <div class="password-strength-bars" id="passwordStrengthBars">
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                </div>
+                                <div class="custom-validation-message" id="passwordError"></div>
                             </div>
                             <div class="form-field">
-                                <label for="confirmPassword">* Confirm Password</label>
+                                <label for="confirmPassword" class="form-label">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Confirm Password</span>
+                                </label>
                                 <div class="password-input-container">
                                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="************">
                                     <button type="button" class="password-toggle" data-target="confirmPassword">
                                         <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                                     </button>
                                 </div>
+                                <!-- Confirm password validation message -->
+                                <div class="custom-validation-message" id="confirmPasswordError"></div>
                             </div>
                         </div>
                     </div>
@@ -150,7 +193,10 @@
                     <h2 class="section-title">Role Access</h2>
                     <div class="form-content">
                         <div class="form-field">
-                            <label>* Role</label>
+                            <label for="role" class="form-label">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Role</span>
+                            </label>
                             <div class="role-selection" id="roleSelection">
                                 <div class="role-option">
                                     <label class="radio-label">
@@ -186,7 +232,9 @@
             </form>
         </div>
     </main>
-
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
@@ -210,6 +258,203 @@
             });
         });
 
+        // Password validation functions
+        function validatePassword(password) {
+            const errors = [];
+            
+            if (password.length < 8) {
+                errors.push('at least 8 characters');
+            }
+            if (!/(?=.*[0-9])/.test(password)) {
+                errors.push('1 number');
+            }
+            if (!/(?=.*[!@#$%^&*])/.test(password)) {
+                errors.push('1 special character');
+            }
+            if (!/(?=.*[A-Z])/.test(password)) {
+                errors.push('1 uppercase');
+            }
+            if (!/(?=.*[a-z])/.test(password)) {
+                errors.push('1 lowercase character');
+            }
+            
+            return errors;
+        }
+
+        function getPasswordStrength(password) {
+            const errors = validatePassword(password);
+            
+            // Weak: Missing 3 or more requirements
+            if (errors.length >= 3) return 'weak';
+            
+            // Good: Missing 1-2 requirements OR all requirements met but less than 12 chars
+            if (errors.length >= 1) return 'good';
+            
+            // At this point errors.length === 0 (all requirements met)
+            if (password.length >= 12) return 'strong';
+            return 'good';
+        }
+
+        function showValidationError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            
+            input.classList.add('error');
+            if (errorElement) {
+                errorElement.className = 'custom-validation-message';
+                errorElement.textContent = message;
+            }
+        }
+
+        function clearValidationError(inputId) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            
+            input.classList.remove('error');
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.className = 'custom-validation-message';
+            }
+        }
+
+        function showValidationMessage(inputId, message, type) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            console.log('errorElement', errorElement)
+            input.classList.remove('error');
+            if (errorElement) {
+                console.log('errorElement2', errorElement)
+                errorElement.textContent = message;
+                errorElement.className = `custom-validation-message ${type}`;
+            }
+        }
+
+        function clearPasswordValidation() {
+            ['password', 'confirmPassword'].forEach(id => {
+                clearValidationError(id);
+            });
+            
+            // Clear password strength
+            const strengthElement = document.getElementById('passwordStrength');
+            const strengthBars = document.getElementById('passwordStrengthBars');
+            strengthElement.textContent = '';
+            strengthElement.className = 'password-strength';
+            strengthBars.className = 'password-strength-bars';
+            
+            // Reset focus state and strength tracking
+            isPasswordFocused = false;
+            currentPasswordStrength = '';
+        }
+
+        // Track password input focus state and strength
+        let isPasswordFocused = false;
+        let currentPasswordStrength = '';
+
+        // Real-time validation for password field
+        const passwordInput = document.getElementById('password');
+        
+        passwordInput.addEventListener('focus', () => {
+            isPasswordFocused = true;
+            // Show strength indicators when focused
+            updatePasswordStrengthVisibility();
+        });
+
+        passwordInput.addEventListener('blur', () => {
+            isPasswordFocused = false;
+            // Hide strength indicators if password is strong and unfocused
+            updatePasswordStrengthVisibility();
+        });
+
+        function updatePasswordStrengthVisibility() {
+            const strengthBars = document.getElementById('passwordStrengthBars');
+            const validationMessage = document.getElementById('passwordError');
+            
+            // Hide validation message and strength bars if password is strong and input is not focused
+            if (currentPasswordStrength === 'strong' && !isPasswordFocused) {
+                validationMessage.textContent = '';
+                validationMessage.className = 'custom-validation-message';
+                strengthBars.className = 'password-strength-bars';
+            } else if (currentPasswordStrength === 'strong' && isPasswordFocused) {
+                // Show validation message and strength bars when focused and password is strong
+                validationMessage.textContent = 'Your password is strongly secure and you are all set.';
+                validationMessage.className = 'validation-message success';
+                strengthBars.className = `password-strength-bars visible ${currentPasswordStrength}`;
+            }
+        }
+
+        passwordInput.addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strengthElement = document.getElementById('passwordStrength');
+            const strengthBars = document.getElementById('passwordStrengthBars');
+            
+            if (password.length > 0) {
+                const errors = validatePassword(password);
+                const strength = getPasswordStrength(password);
+                currentPasswordStrength = strength;
+                
+                // Always update strength indicator text
+                strengthElement.textContent = strength.charAt(0).toUpperCase() + strength.slice(1);
+                strengthElement.className = `password-strength ${strength}`;
+                
+                // Show strength bars normally, but they'll be hidden by updatePasswordStrengthVisibility if needed
+                strengthBars.className = `password-strength-bars visible ${strength}`;
+
+                // Show validation errors or success messages
+                console.log('Password:', password, 'Errors:', errors, 'Strength:', strength); // Debug log
+                
+                // Show validation errors or success messages
+                if (errors.length > 0 && strength === 'weak') {
+                    // Dynamic error message showing only missing requirements
+                    const message = `Password need to be ${errors.join(', ')}.`;
+                    showValidationError('password', message);
+                } else {
+                    // Show success messages for good and strong passwords
+                    if (strength === 'good') {
+                        showValidationMessage('password', 'Your password meets all the necessary requirements. You can optionally lengthen it to make it stronger.', 'success');
+                    } else if (strength === 'strong') {
+                        // Handle strong password validation message based on focus
+                        if (isPasswordFocused) {
+                            showValidationMessage('password', 'Your password is strongly secure and you are all set.', 'success');
+                        } else {
+                            // Hide validation message when unfocused and strong
+                            updatePasswordStrengthVisibility();
+                        }
+                    } else {
+                        clearValidationError('password');
+                    }
+                }
+            } else {
+                currentPasswordStrength = '';
+                strengthElement.textContent = '';
+                strengthElement.className = 'password-strength';
+                // Hide strength bars when password is empty
+                strengthBars.className = 'password-strength-bars';
+                clearValidationError('password');
+            }
+            
+            // Re-validate confirm password if it has a value
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (confirmPassword.length > 0) {
+                validateConfirmPassword();
+            }
+        });
+
+        function validateConfirmPassword() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (confirmPassword.length > 0) {
+                if (password !== confirmPassword) {
+                    showValidationError('confirmPassword', 'Passwords do not match.');
+                } else {
+                    clearValidationError('confirmPassword');
+                }
+            }
+        }
+
+        // Add confirm password validation on input
+        //document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+
         // Form submission with universal validation
         document.getElementById('createUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -217,6 +462,7 @@
             // Clear any existing validation errors
             formValidation.clearAllValidation('createUserForm');
             formValidation.clearFormError('createUserForm');
+            clearPasswordValidation();
             
             // Define validation rules
             const validations = [
@@ -246,29 +492,19 @@
                     message: 'Country is required.'
                 },
                 {
-                    field: 'address',
+                    field: 'clinic',
                     rule: 'required',
-                    message: 'Address is required.'
-                },
-                {
-                    field: 'city',
-                    rule: 'required',
-                    message: 'City is required.'
-                },
-                {
-                    field: 'state',
-                    rule: 'required',
-                    message: 'State is required.'
+                    message: 'Clinic is required.'
                 },
                 {
                     field: 'password',
-                    rule: (value) => value.length >= 8,
-                    message: 'Password must be at least 8 characters long.'
+                    rule: 'required',
+                    message: 'Password is required.'
                 },
                 {
                     field: 'confirmPassword',
-                    rule: (value) => value === document.getElementById('password').value,
-                    message: 'Passwords do not match.'
+                    rule: 'required',
+                    message: 'Confirm Password is required.'
                 },
                 {
                     field: document.querySelector('input[name="role"]'),
@@ -279,6 +515,22 @@
             
             // Validate all fields
             const isValid = formValidation.validateFields(validations);
+            
+            // Additional password validation
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showValidationError('confirmPassword', 'Passwords do not match.');
+                return;
+            }
+            
+            const passwordErrors = validatePassword(password);
+            if (passwordErrors.length > 0) {
+                const message = `Password need to be ${passwordErrors.join(', ')}.`;
+                showValidationError('password', message);
+                return;
+            }
             
             if (!isValid) {
                 return;
@@ -291,33 +543,34 @@
             submitBtn.classList.add('loading');
             submitBtn.textContent = 'Creating User...';
             
-            const formData = new FormData(e.target);
+            const formData = {
+                username: document.getElementById('username').value,
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                country: document.getElementById('country').value,
+                clinic: document.getElementById('clinic').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value,
+                role: document.querySelector('input[name="role"]:checked').value
+            };
             
             try {
-                const response = await fetch('/create-user', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
+                const response = await axios.post('/register', formData)
+                .then(response => {
                     // Show success message
                     formValidation.clearAllValidation('createUserForm');
                     formValidation.clearFormError('createUserForm');
-                    
-                    const successMessage = document.createElement('div');
-                    successMessage.className = 'form-success-message';
-                    successMessage.textContent = 'User created successfully! Redirecting...';
-                    document.getElementById('createUserForm').insertBefore(successMessage, document.getElementById('createUserForm').firstChild);
-                    
+                    Toast.success('User created successfully!');
                     setTimeout(() => {
                         window.location.href = '/user-management';
                     }, 1500);
-                } else {
-                    const data = await response.json();
-                    formValidation.showFormError('createUserForm', data.message || 'Failed to create user. Please try again.');
-                }
+                }).catch(error => {
+                    Toast.error('Failed to create user. Please try again.');
+                    return;
+                });
             } catch (error) {
-                formValidation.showFormError('createUserForm', 'Network error. Please check your connection and try again.');
+                Toast.error('Network error. Please check your connection and try again.');
             } finally {
                 // Reset button state
                 submitBtn.disabled = false;
@@ -326,142 +579,11 @@
             }
         });
 
-        // Real-time validation
-        function addRealTimeValidation() {
-            // Username validation
-            document.getElementById('username').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Username is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Full Name validation
-            document.getElementById('fullName').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Full Name is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Email validation
-            document.getElementById('email').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Email is required.');
-                } else if (!formValidation.isValidEmail(this.value)) {
-                    formValidation.showError(this, 'Please enter a valid email address.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Phone Number validation
-            document.getElementById('phoneNumber').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Phone number is required.');
-                } else if (!/^\d{10,15}$/.test(this.value.replace(/\D/g, ''))) {
-                    formValidation.showError(this, 'Phone number must be 10-15 digits.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Password validation
-            document.getElementById('password').addEventListener('input', function() {
-                if (this.value.length > 0 && this.value.length < 8) {
-                    formValidation.showError(this, 'Password must be at least 8 characters long.');
-                } else if (this.value.length >= 8) {
-                    formValidation.clearValidation(this);
-                }
-                
-                // Re-validate confirm password if it has a value
-                const confirmPassword = document.getElementById('confirmPassword');
-                if (confirmPassword.value) {
-                    if (confirmPassword.value !== this.value) {
-                        formValidation.showError(confirmPassword, 'Passwords do not match.');
-                    } else {
-                        formValidation.clearValidation(confirmPassword);
-                    }
-                }
-            });
-
-            // Confirm Password validation
-            document.getElementById('confirmPassword').addEventListener('input', function() {
-                const password = document.getElementById('password').value;
-                if (this.value !== password) {
-                    formValidation.showError(this, 'Passwords do not match.');
-                } else if (this.value === password && this.value.length >= 8) {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Country validation
-            document.getElementById('country').addEventListener('change', function() {
-                if (this.value === '') {
-                    formValidation.showError(this, 'Country is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Address validation
-            document.getElementById('address').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Address is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // City validation
-            document.getElementById('city').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'City is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // State validation
-            document.getElementById('state').addEventListener('change', function() {
-                if (this.value === '') {
-                    formValidation.showError(this, 'State is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Role validation
-            const roleRadios = document.querySelectorAll('input[name="role"]');
-            roleRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    // When any role is selected, clear the error
-                    formValidation.clearValidation(this);
-                });
-            });
-
-            // Clear form errors when user starts fixing issues
-            const formFields = document.querySelectorAll('#createUserForm input, #createUserForm select');
-            formFields.forEach(field => {
-                field.addEventListener('input', () => {
-                    // Clear form-level error when user starts making changes
-                    const formError = document.querySelector('.form-error-message');
-                    if (formError) {
-                        formError.remove();
-                    }
-                });
-            });
-        }
-
-        // Initialize real-time validation
-        addRealTimeValidation();
-
         // Cancel button
         document.getElementById('cancelBtn').addEventListener('click', () => {
             window.location.href = '/user-management';
         });
+
     </script>
 </body>
 </html>

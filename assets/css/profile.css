@@ -166,6 +166,18 @@ body {
     background: rgba(255, 255, 255, 0.40);
 }
 
+/* Label and Password Strength Row */
+.label-strength-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.label-strength-row label {
+    margin-bottom: 0;
+}
+
 /* User Info */
 .user-info {
     display: flex;
@@ -342,29 +354,24 @@ body {
 .password-strength-container {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 4px;
 }
 
 .password-strength {
     font-size: 12px;
     font-weight: 500;
-    padding: 2px 6px;
     border-radius: 4px;
 }
 
 .password-strength.weak {
-    color: #dc2626;
-    background: #fef2f2;
+    color: #D4382B;
 }
 
 .password-strength.good {
-    color: #059669;
-    background: #f0fdf4;
+    color: #14B27B;
 }
 
 .password-strength.strong {
-    color: #059669;
-    background: #f0fdf4;
+    color: #14B27B;
 }
 
 .password-strength-bars {
@@ -469,6 +476,9 @@ body {
     margin-top: 1.5rem;
 }
 
+.required-asterisk {
+    color: #D4382B;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     .content-container {

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal Validation System Test</title>
     <link rel="stylesheet" href="/assets/css/create_user.css">
+    <link rel="stylesheet" href="/assets/css/validation.css">
     <script src="/assets/js/components.js"></script>
     <style>
         body { padding: 2rem; max-width: 600px; margin: 0 auto; }
@@ -18,10 +19,13 @@
     <h1>Universal Form Validation System Demo</h1>
     
     <div class="demo-section">
-        <h2>Individual Field Testing</h2>
+        <h2>Individual Field Testing - Error Auto-Clear Demo</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 1rem;">
+            Click "Show Error" to add an error, then start typing in the field to see it automatically clear!
+        </p>
         <div class="form-field">
             <label for="testField">Test Field</label>
-            <input type="text" id="testField" placeholder="Type something...">
+            <input type="text" id="testField" placeholder="Type something to clear error...">
         </div>
         
         <div class="demo-buttons">
@@ -32,7 +36,10 @@
     </div>
 
     <div class="demo-section">
-        <h2>Complete Form Example</h2>
+        <h2>Complete Form Example - Auto-Clear Validation</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 1rem;">
+            Click "Validate All Required" to show errors, then interact with any field to see its error automatically clear!
+        </p>
         <form id="demoForm" class="create-user-form">
             <div class="form-section">
                 <h3 class="section-title">Demo Form</h3>

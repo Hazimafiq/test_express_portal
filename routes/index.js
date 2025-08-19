@@ -38,9 +38,9 @@ router.get('/get_profile', get_user_profile);
 
 // Aligners cases route (existing functionality)
 router.get('/aligners-cases', (req, res) => {
-    // if (!req.session.user) {
-    //     return res.redirect('/login');
-    // }
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     res.render('aligners_cases');
 });
 
@@ -109,9 +109,9 @@ router.get('/user-management', (req, res) => {
 
 // Create user route
 router.get('/create-user', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+    // if (!req.session.user) {
+    //     return res.redirect('/login');
+    // }
     res.render('create_user');
 });
 
@@ -133,16 +133,6 @@ router.get('/update-user/:userId', (req, res) => {
     res.render('update_user');
 });
 
-// Toast route
-router.get('/test-toast', (req, res) => {
-    res.render('test/test-toast');
-});
-
-// Validation route
-router.get('/test-validation', (req, res) => {
-    res.render('test/test-validation');
-});
-
 // Get current user info route
 router.get('/api/current-user', (req, res) => {
     if (!req.session.user) {
@@ -156,7 +146,8 @@ router.get('/api/current-user', (req, res) => {
 
 // Default route
 router.get('/', (req, res) => {
-    res.send('Default endpoint');
+    //redirect to login
+    res.redirect('/login');
 });
 
 
@@ -165,4 +156,19 @@ router.get('/simulation', (req, res) => {
     res.render('simulation');
 });
 
+//testing ui routes
+// Toast route
+router.get('/test-toast', (req, res) => {
+    res.render('test/test-toast');
+});
+
+// Validation route
+router.get('/test-validation', (req, res) => {
+    res.render('test/test-validation');
+});
+
+// Select validation test route
+router.get('/test-select-validation', (req, res) => {
+    res.render('test/test-select-validation');
+});
 module.exports = router;

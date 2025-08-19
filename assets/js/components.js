@@ -198,6 +198,7 @@ class FormValidation {
         this.errorColor = '#dc2626';
         this.successColor = '#059669';
         this.defaultBorderColor = '#d1d5db';
+        this.boundFields = new Set(); // Track fields with event listeners
     }
 
     /**
@@ -226,6 +227,9 @@ class FormValidation {
         // Add red border and shadow
         field.style.borderColor = this.errorColor;
         field.style.boxShadow = `0 0 0 3px rgba(220, 38, 38, 0.1)`;
+
+        // Bind event listeners to clear error on interaction
+        this.bindClearErrorEvents(field);
     }
 
     /**
@@ -305,6 +309,21 @@ class FormValidation {
         errorMessages.forEach(msg => {
             msg.textContent = '';
             msg.className = 'field-error-message';
+        });
+
+        // Reset bound fields tracking for this form
+        this.clearBoundFieldsForForm(form);
+    }
+
+    /**
+     * Clear bound fields tracking for a specific form
+     * @param {HTMLElement} form - The form element
+     */
+    clearBoundFieldsForForm(form) {
+        const formFields = form.querySelectorAll('input, select, textarea');
+        formFields.forEach(field => {
+            const fieldId = field.id || field.name || Math.random().toString(36).substr(2, 9);
+            this.boundFields.delete(fieldId);
         });
     }
 
@@ -447,6 +466,47 @@ class FormValidation {
     }
 
     /**
+     * Bind event listeners to clear validation errors on user interaction
+     * @param {HTMLElement} field - The form field element
+     */
+    bindClearErrorEvents(field) {
+        // Create a unique identifier for the field
+        const fieldId = field.id || field.name || Math.random().toString(36).substr(2, 9);
+        
+        // Skip if already bound
+        if (this.boundFields.has(fieldId)) return;
+        this.boundFields.add(fieldId);
+
+        // Handle different field types
+        if (field.type === 'radio') {
+            // For radio buttons, bind to all radios with the same name
+            const radioName = field.name;
+            const radioButtons = document.querySelectorAll(`input[name="${radioName}"]`);
+            
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    this.clearValidation(field);
+                });
+            });
+        } else if (field.type === 'checkbox') {
+            // For checkboxes
+            field.addEventListener('change', () => {
+                this.clearValidation(field);
+            });
+        } else if (field.tagName === 'SELECT') {
+            // For select dropdowns
+            field.addEventListener('change', () => {
+                this.clearValidation(field);
+            });
+        } else {
+            // For text inputs, textareas, etc.
+            field.addEventListener('input', () => {
+                this.clearValidation(field);
+            });
+        }
+    }
+
+    /**
      * Get or create error message element for a field
      * @param {HTMLElement} field - The form field element
      * @returns {HTMLElement} - The error message element
@@ -461,6 +521,20 @@ class FormValidation {
                 errorElement = document.createElement('div');
                 errorElement.className = 'field-error-message';
                 radioGroup.appendChild(errorElement);
+            }
+            
+            return errorElement;
+        }
+        
+        // Handle select fields - place error outside select-wrapper but inside form-field
+        if (field.tagName === 'SELECT') {
+            const formField = field.closest('.form-field');
+            let errorElement = formField.querySelector('.field-error-message');
+            
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'field-error-message';
+                formField.appendChild(errorElement);
             }
             
             return errorElement;
