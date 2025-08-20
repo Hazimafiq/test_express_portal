@@ -33,11 +33,12 @@
                     <div class="title-badges-row">
                         <h1 class="page-title">C0000<%= caseId %></h1>
                         <div class="page-badges">
-                            <span class="pill-badge badge-blue" id="badgeCategory">New Case</span>
+                            <span class="pill-badge badge-blue" id="badgeStatus">New Case</span>
                             <span class="pill-badge badge-green" id="badgeStatus">Submitted</span>
+                            <span class="pill-badge badge-grey" id="badgeStatus">Draft</span>
                         </div>
                     </div>
-                    <div class="subtitle" id="submittedSubtitle">Submitted on 20/6/2025</div>
+                    <div class="subtitle" id="submittedSubtitle">Last updated on 20/6/2025</div>
                 </div>
                 <div class="page-actions">
                     <button class="btn btn-outline" id="addPlanBtn">Add Treatment Plan</button>
@@ -61,7 +62,7 @@
                         <div class="avatar" id="patientAvatar">J</div>
                         <div class="identity">
                             <div class="name" id="patientName">Jennifer Tan Yi Wen</div>
-                            <div class="meta" id="patientId">Patient ID: 13989023001</div>
+                            <div class="patient-id" id="patientId">Patient ID: 13989023001</div>
                         </div>
                     </div>
                     
@@ -142,7 +143,15 @@
             <section class="tab-panel hidden" id="panel-simulations">
                 <div class="simulations-container">
                     <div class="simulation-plan">
-                        <h2 class="plan-title">Plan 1</h2>
+                        <div class="plan-header">
+                            <h2 class="plan-title">Plan 1</h2>
+                            <span class="pill-badge badge-green" id="badgeStatus">Approved</span>
+                        </div>
+                        <!-- Example without badge:
+                        <div class="plan-header no-badge">
+                            <h2 class="plan-title">Plan 2</h2>
+                        </div>
+                        -->
                         <div class="plan-divider"></div>
                         <p class="plan-instruction">Please click the box to view simulation or download document.</p>
                         
@@ -170,6 +179,46 @@
                         </div>
                     </div>
                 </div>
+                <div class="simulations-container">
+                    <div class="simulation-plan">
+                        <div class="plan-header">
+                            <h2 class="plan-title">Plan 2</h2>
+                            <button class="btn btn-approve" id="approveBtn">Approve</button>
+                        </div>
+                        <!-- Example without badge:
+                        <div class="plan-header no-badge">
+                            <h2 class="plan-title">Plan 2</h2>
+                        </div>
+                        -->
+                        <div class="plan-divider"></div>
+                        <p class="plan-instruction">Please click the box to view simulation or download document.</p>
+                        
+                        <div class="simulation-details">
+                            <div class="detail-item">
+                                <label>Date Uploaded</label>
+                                <span class="detail-value">23/07/2025</span>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <label>Simulation URL</label>
+                                <div class="url-field">
+                                    <img src="/assets/images/external-link-icon.svg" alt="External Link" class="field-icon">
+                                    <span class="url-text">https://dca.patientalignerplan.com/Viewer/show.html?mlink...</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <label>IPR (*PDF)</label>
+                                <div class="pdf-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="pdf-text">17350043-RKE-7808.pdf</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
             </section>
             <section class="tab-panel hidden" id="panel-comments">
                 <div class="comments-section">
@@ -211,8 +260,9 @@
 
                     <!-- Comment Input Section -->
                     <div class="comment-input-section">
+                        <label class="comment-label">Comment</label>
                         <div class="comment-input-container">
-                            <textarea class="comment-input" placeholder="Write a comment..."></textarea>
+                            <textarea class="comment-input" placeholder="Post a comment here"></textarea>
                             <button class="btn btn-primary comment-submit">Send</button>
                         </div>
                     </div>
@@ -223,40 +273,37 @@
                 <div class="attachments-container">
                     <div class="attachment-section">
                         <h3 class="attachment-section-title">Model</h3>
-                        <p class="attachment-section-subtitle">Please click <a href="#" class="link">here</a> to download all models.</p>
+                        <p class="attachment-section-subtitle-with-link">Please click <a href="#" class="link">here</a> to download all models.</p>
                         
-                        <div class="attachment-files">
+                        <div class="model-type-label">Model Type</div>
+                        <div class="model-type-value">Digital Model</div>
+                        
+                        <div class="attachment-fields">
                             <!-- Upper Scan -->
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
+                            <div class="attachment-field-group">
+                                <label class="attachment-field-label">Upper Scan</label>
+                                <div class="attachment-input-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="attachment-filename">1241228053-upperjaw.stl</span>
                                 </div>
-                                <div class="attachment-file-name">1241228053-upperjaw.stl</div>
-                                <div class="attachment-file-info">Upper Scan</div>
                             </div>
                             
                             <!-- Lower Scan -->
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
+                            <div class="attachment-field-group">
+                                <label class="attachment-field-label">Lower Scan</label>
+                                <div class="attachment-input-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="attachment-filename">2412280533-lowerjaw.stl</span>
                                 </div>
-                                <div class="attachment-file-name">2412280553-lowerjaw.stl</div>
-                                <div class="attachment-file-info">Lower Scan</div>
                             </div>
                             
                             <!-- Bite Scan -->
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
+                            <div class="attachment-field-group">
+                                <label class="attachment-field-label">Bite Scan</label>
+                                <div class="attachment-input-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="attachment-filename">2412280533-biteregister1.stl</span>
                                 </div>
-                                <div class="attachment-file-name">2412280553-biteregister1.stl</div>
-                                <div class="attachment-file-info">Bite Scan</div>
                             </div>
                         </div>
                     </div>
@@ -266,7 +313,7 @@
                 <div class="attachments-container">
                     <div class="attachment-section">
                         <h3 class="attachment-section-title">Clinical Photos</h3>
-                        <p class="attachment-section-subtitle">Please click <a href="#" class="link">here</a> to download all photos.</p>
+                        <p class="attachment-section-subtitle-with-link">Please click <a href="#" class="link">here</a> to download all photos.</p>
                         
                         <!-- First Row - Face Photos -->
                         <div class="attachment-files-row">
@@ -380,7 +427,9 @@
         <div class="photo-modal-content">
             <div class="photo-modal-header">
                 <h3 class="photo-modal-title">View Image(s)</h3>
-                <span class="photo-modal-close">&times;</span>
+                <span class="photo-modal-close">
+                    <img src="/assets/images/close-modal-icon.svg" alt="Close" style="width: 16px; height: 16px;">
+                </span>
             </div>
             <div class="photo-modal-body">
                 <div class="photo-modal-layout">
@@ -400,7 +449,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
 
             // Add treatment plan button
             const addPlanBtn = document.getElementById('addPlanBtn');
@@ -455,7 +504,8 @@
             // Get all clinical photos if section exists
             let clinicalPhotoFiles = [];
             if (clinicalPhotosSection) {
-                const clinicalPhotos = clinicalPhotosSection.querySelectorAll('.attachment-file img');
+                // Only select images that are direct children of .attachment-file, not the overlay icons
+                const clinicalPhotos = clinicalPhotosSection.querySelectorAll('.attachment-file > img');
                 clinicalPhotoFiles = Array.from(clinicalPhotos).map(img => {
                     return {
                         src: img.src,

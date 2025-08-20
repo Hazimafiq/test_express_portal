@@ -558,10 +558,14 @@
     margin-left: auto;
     width: 16px;
     height: 16px;
+    min-width: 16px;
+    min-height: 16px;
     background-image: url('/assets/images/chevron-arrow.svg');
-    background-size: contain;
+    background-size: 16px 16px;
     background-repeat: no-repeat;
     background-position: center;
+    display: block;
+    flex-shrink: 0;
 }
 
 /* Update dropdown positioning for expanded state */

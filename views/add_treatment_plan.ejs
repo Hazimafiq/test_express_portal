@@ -42,7 +42,8 @@
                         <div class="form-content">
                             <div class="form-field">
                                 <label for="simulationUrl" class="form-label">
-                                    Simulation URL <span class="required">*</span>
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Simulation URL</span>
                                 </label>
                                 <input 
                                     type="url" 
@@ -50,13 +51,13 @@
                                     name="simulationUrl" 
                                     class="form-input" 
                                     placeholder="http.domainname.com"
-                                    required
                                 >
                             </div>
 
                             <div class="form-field">
                                 <label for="iprFile" class="form-label">
-                                    IPR <span class="required">(*PDF)</span>
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">IPR <span class="pdf-required">(*PDF)</span></span>
                                 </label>
                                 <div class="file-upload-container">
                                     <input 
@@ -65,13 +66,13 @@
                                         name="iprFile" 
                                         class="file-input" 
                                         accept=".pdf"
-                                        required
                                     >
                                     <label for="iprFile" class="file-upload-label">
                                         <span class="file-placeholder">Choose File</span>
                                         <img src="/assets/images/document-icon.svg" alt="Document Icon" class="file-icon">
                                     </label>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -91,7 +92,7 @@
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
         });
 
         // File upload functionality

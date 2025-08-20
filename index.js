@@ -96,6 +96,14 @@ app.use(
     })
 );
 
+// Global middleware to make user session data available in all templates
+app.use((req, res, next) => {
+    // Make user data available in all templates
+    res.locals.user = req.session.user ? [req.session.user] : null;
+    res.locals.currentUser = req.session.user || null;
+    next();
+});
+
 // Static assets
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/assets/css', express.static(path.join(__dirname, '/assets/css')));

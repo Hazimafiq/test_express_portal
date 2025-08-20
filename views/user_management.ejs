@@ -267,7 +267,7 @@
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
             
              // Create user button
             const createUserBtn = document.getElementById('createUserBtn');
@@ -351,42 +351,27 @@
             });
 
             // Custom dropdown (Treatment Brand)
-            const brandButton = document.getElementById('brandButton');
-            const brandMenu = document.getElementById('brandMenu');
-            const nativeBrandSelect = document.getElementById('countryFilter');
-            const brandLabel = brandButton.querySelector('.chip-button-label');
-            brandButton.addEventListener('click', (e) => {
+            const countryButton = document.getElementById('countryButton');
+            const countryMenu = document.getElementById('countryMenu');
+            const nativeCountrySelect = document.getElementById('countryFilter');
+            const countryLabel = countryButton.querySelector('.chip-button-label');
+            countryButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                brandMenu.classList.toggle('open');
+                countryMenu.classList.toggle('open');
             });
-            document.addEventListener('click', () => brandMenu.classList.remove('open'));
-            brandMenu.querySelectorAll('.chip-menu-item').forEach(item => {
+            document.addEventListener('click', () => countryMenu.classList.remove('open'));
+            countryMenu.querySelectorAll('.chip-menu-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     const value = e.currentTarget.getAttribute('data-value');
                     const text = e.currentTarget.textContent.trim();
-                    nativeBrandSelect.value = value;
-                    brandLabel.textContent = text || 'Treatment Brand';
-                    brandMenu.classList.remove('open');
+                    nativeCountrySelect.value = value;
+                    countryLabel.textContent = text || 'Country';
+                    countryMenu.classList.remove('open');
                     filterUsers();
                 });
             });
 
-            // Floating language menu
-            const languageFab = document.getElementById('languageFab');
-            const languageMenu = document.getElementById('languageMenu');
-            languageFab.addEventListener('click', (e) => {
-                e.stopPropagation();
-                languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
-            });
-            document.addEventListener('click', () => { languageMenu.style.display = 'none'; });
-            document.querySelectorAll('.lang-item').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.lang-item').forEach(b => b.classList.remove('active'));
-                    e.currentTarget.classList.add('active');
-                    languageMenu.style.display = 'none';
-                });
-            });
-
+           
             // Pagination functionality
             const entriesSelect = document.getElementById('entriesPerPage');
             const paginationBtns = document.querySelectorAll('.pagination-btn');
@@ -418,7 +403,7 @@
                 const row = e.target.closest('.table-row');
                 if (row) {
                     const name = row.querySelector('.td-name').textContent.trim();
-                    window.location.href = `/users/${encodeURIComponent(name)}`;
+                    window.location.href = `/user-details/${encodeURIComponent(name)}`;
                 }
             });
 

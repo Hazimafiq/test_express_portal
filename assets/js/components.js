@@ -19,23 +19,12 @@ async function initializeNavRail() {
     const sideMenuArrow = document.getElementById('sideMenuArrow');
     const arrowIcon = sideMenuArrow?.querySelector('.arrow-icon');
     
-    // Fetch current user info and set role-based visibility
-    try {
-        const response = await fetch('/api/current-user');
-        if (response.ok) {
-            const data = await response.json();
-            const userRole = data.user.role;
-            
-            // Set user role on user management nav item
-            const userManagementNav = document.getElementById('userManagementNav');
-            if (userManagementNav) {
-                userManagementNav.setAttribute('data-user-role', userRole);
-            }
-            
-            console.log('[NavRail] User role:', userRole);
-        }
-    } catch (error) {
-        console.error('[NavRail] Error fetching user info:', error);
+    // User role is now available directly from the template via data attribute
+    const userManagementNav = document.getElementById('userManagementNav');
+    if (userManagementNav) {
+        const userRole = userManagementNav.getAttribute('data-user-role');
+        console.log('[NavRail] User role:', userRole);
+        // Role-based visibility logic can be added here if needed
     }
     
     // Set active nav item based on current path

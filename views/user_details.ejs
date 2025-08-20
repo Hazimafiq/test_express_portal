@@ -165,7 +165,7 @@
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
         });
 
         // Modal functionality
@@ -466,7 +466,9 @@
         };
         });
 
-        
+        editUserBtn.onclick = () => {
+            window.location.href = '/update-user/28930183';
+        };
     </script>
 </body>
 </html>

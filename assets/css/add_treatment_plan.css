@@ -12,7 +12,10 @@ body {
     font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: #f8fafc;
     color: #1f2937;
-    line-height: 1.5;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0.56px;
 }
 
 /* Main Content */
@@ -44,8 +47,13 @@ body {
 }
 
 .breadcrumb-item {
-    color: #6b7280;
     text-decoration: none;
+    color: var(--Colour-text-subtlest, #A1A1A1);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
     transition: color 0.2s ease;
 }
 
@@ -72,13 +80,13 @@ body {
 
 /* Page Header */
 .page-header {
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
 }
 
 .page-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #1f2937;
+    font-size: 28px;
+    font-weight: 500;
+    color: #333333;
 }
 
 /* Treatment Plan Form */
@@ -90,21 +98,25 @@ body {
 
 /* Form Container */
 .form-container {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-self: stretch;
+    border-radius: 16px;
+    background: var(--Colour-background-surface-container, rgba(255, 255, 255, 0.40));
+    padding: 24px;
 }
 
 .form-section {
     width: 100%;
+    padding: 24px 325px 24px 24px;
 }
 
 .section-title {
     font-size: 18px;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 1.5rem;
+    margin-bottom: 32px;
 }
 
 .form-content {
@@ -137,7 +149,7 @@ body {
 /* Form Inputs */
 .form-input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 8px 16px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
     font-size: 14px;
@@ -156,10 +168,30 @@ body {
     color: #9ca3af;
 }
 
+.label-text
+{
+    color: var(--Colour-text-accent-grey, #767676);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.28px;
+}
+
+.pdf-required
+{
+    color: var(--Colour-text-accent-grey, #767676);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+}
+
 /* File Upload Styling */
 .file-upload-container {
     position: relative;
-    width: 100%;
+    max-width: 50%;
 }
 
 .file-input {
@@ -176,7 +208,7 @@ body {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 12px 16px;
+    padding: 8px 16px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
     background: #ffffff;
@@ -194,8 +226,12 @@ body {
 }
 
 .file-placeholder {
-    color: #9ca3af;
+    color: var(--Colour-text-subtlest, #A1A1A1);
     font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.28px;
 }
 
 .file-icon {
@@ -253,6 +289,11 @@ body {
     border-color: #9ca3af;
 }
 
+.required-asterisk
+{
+    color: #d4382b;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .content-container {
@@ -276,6 +317,6 @@ body {
 .btn:focus,
 .form-input:focus,
 .file-input:focus + .file-upload-label {
-    outline: 2px solid #003366;
-    outline-offset: 2px;
+    outline: none;
+    border-color: #007BFF;
 }
