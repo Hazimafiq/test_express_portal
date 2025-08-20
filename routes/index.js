@@ -24,10 +24,9 @@ const requireAuthAPI = (req, res, next) => {
 };
 
 router.use((req, res, next) => {
-    //console.log('Session Info:', req.session);
+    res.locals.user = req.session.user ? [req.session.user] : null;
     next();
 });
-
 // Login route
 router.get('/login', (req, res) => {
     res.render('login');
@@ -126,6 +125,11 @@ router.get('/api/current-user', requireAuthAPI, (req, res) => {
     // Return user info without sensitive data like password
     const { password, ...userInfo } = req.session.user;
     res.json({ user: userInfo });
+});
+
+// Side menu component route - renders with user data
+router.get('/components/side-menu', requireAuth, (req, res) => {
+    res.render('components/side-menu');
 });
 
 // Default route

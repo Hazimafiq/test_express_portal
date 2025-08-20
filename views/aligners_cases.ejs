@@ -312,7 +312,7 @@
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
         });
 
         // Add new case button
@@ -420,21 +420,7 @@
             });
         });
 
-        // Floating language menu
-        const languageFab = document.getElementById('languageFab');
-        const languageMenu = document.getElementById('languageMenu');
-        languageFab.addEventListener('click', (e) => {
-            e.stopPropagation();
-            languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
-        });
-        document.addEventListener('click', () => { languageMenu.style.display = 'none'; });
-        document.querySelectorAll('.lang-item').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.lang-item').forEach(b => b.classList.remove('active'));
-                e.currentTarget.classList.add('active');
-                languageMenu.style.display = 'none';
-            });
-        });
+       
 
         // Pagination functionality
         const entriesSelect = document.getElementById('entriesPerPage');

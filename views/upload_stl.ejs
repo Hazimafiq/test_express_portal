@@ -113,7 +113,7 @@
                                 <input type="file" id="documents" name="documents" accept=".stl,.ply,.zip" required>
                                 <div class="upload-placeholder">
                                     <span>Choose File</span>
-                                    <img src="" alt="Upload Icon" class="file-upload-icon">
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
                                 </div>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
         });
 
         // File upload handling
