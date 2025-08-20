@@ -3,22 +3,22 @@ const pool = require('../utils/mysql');
 const CustomError = require('../errors/CustomError');
 
 class User {
-    static async register({ username, password, fullName, phoneNumber, email, clinic, country, role }) {
-        const existingUserQuery = 'SELECT * FROM users WHERE username = ?';
+    static async register({ username, password, fullName, phoneNumber, email, clinic, address, country, role }) {
+        const existingUserQuery = 'SELECT * FROM users_table WHERE username = ?';
         const existingUserValues = [username];
         const [existingUsers] = await pool.query(existingUserQuery, existingUserValues);
         if (existingUsers.length > 0) {
             throw new CustomError('User already exists', 400);
         }
         const hashedPassword = await argon2.hash(password);
-        const query = 'INSERT INTO users (username, password, fullName, phoneNumber, email, clinic, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [username.trim(), hashedPassword, fullName.trim(), phoneNumber.trim(), email.trim(), clinic.trim(), country.trim(), role.trim()];
+        const query = 'INSERT INTO users_table (username, password, fullName, phoneNumber, email, clinic, address, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const values = [username.trim(), hashedPassword, fullName.trim(), phoneNumber.trim(), email.trim(), clinic.trim(), address.trim(), country.trim(), role.trim()];
         const [results] = await pool.query(query, values);
         return results;
     }
 
     static async login(username, password) {
-        const query = 'SELECT * FROM users WHERE username = ? LIMIT 1';
+        const query = 'SELECT * FROM users_table WHERE username = ? LIMIT 1';
         const values = [username];
         const [results] = await pool.query(query, values);
         const user = results[0];
@@ -31,15 +31,14 @@ class User {
     static async changePassword(username, oldPassword, newPassword) {
         const user = await this.login(username, oldPassword);
         const hashedNewPassword = await argon2.hash(newPassword);
-        const query = 'UPDATE users SET password = ? WHERE id = ?';
+        const query = 'UPDATE users_table SET password = ? WHERE id = ?';
         const values = [hashedNewPassword, user.id];
         await pool.query(query, values);
         return { message: 'Password changed successfully' };
     }
 
     static async get_profile_data(id) {
-        // const query = 'SELECT username, phoneNumber, email, role, country, clinic FROM users WHERE id = ? LIMIT 1';
-        const query = 'SELECT username, phoneNumber, email, role, country FROM users WHERE id = ? LIMIT 1';
+        const query = 'SELECT username, phoneNumber, email, role, country, clinic, address FROM users_table WHERE id = ? LIMIT 1';
         const values = [id];
         const [results] = await pool.query(query, values);
         if(results.length == 0){
@@ -49,7 +48,7 @@ class User {
     }
 
     static async edit(username, fullName, phoneNumber, email, country, role ) {
-        const query = 'UPDATE users SET fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ? WHERE username = ? LIMIT 1';
+        const query = 'UPDATE users_table SET fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ? WHERE username = ? LIMIT 1';
         const values = [fullName, phoneNumber, email, country, role, username];
         const [results] = await pool.query(query, values);
         return results;

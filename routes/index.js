@@ -1,6 +1,7 @@
 const express = require('express');
 const { register, login, changePassword, logout, get_user_profile } = require('../controller/user');
 const path = require('path');
+const { update_case } = require('../controller/case');
 
 const router = express.Router();
 
@@ -70,16 +71,7 @@ router.get('/add-case', (req, res) => {
     res.render('add_case');
 });
 
-router.post('/add-case', (req, res) => {
-    if (!req.session.user) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-    
-    // TODO: Implement case creation logic
-    // For now, just return success
-    console.log('Case submission:', req.body);
-    res.json({ message: 'Case submitted successfully', id: Date.now() });
-});
+router.post('/add-case', update_case);
 
 router.get('/upload-stl', (req, res) => {
     // if (!req.session.user) {
