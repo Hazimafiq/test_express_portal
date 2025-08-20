@@ -38,7 +38,8 @@ class User {
     }
 
     static async get_profile_data(id) {
-        const query = 'SELECT username, phoneNumber, email, role, country, clinic, address FROM users_table WHERE id = ? LIMIT 1';
+        // const query = 'SELECT username, phoneNumber, email, role, country, clinic FROM users WHERE id = ? LIMIT 1';
+        const query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic FROM users WHERE id = ? LIMIT 1';
         const values = [id];
         const [results] = await pool.query(query, values);
         if(results.length == 0){

@@ -6,6 +6,7 @@
     <title>Profile - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/profile.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
@@ -34,10 +35,10 @@
             <div class="profile-content">
                 <!-- User Info -->
                 <div class="user-info">
-                    <div class="user-avatar">K</div>
+                    <div class="user-avatar"><%= user[0].fullName.charAt(0) %></div>
                     <div class="user-details">
-                        <h2 class="full-name">Kayley Chai Min Xuan</h2>
-                        <p class="user-id">User ID: 28930183</p>
+                        <h2 class="full-name"><%= user[0].fullName %></h2>
+                        <p class="user-id">User ID: <%= user[0].id %></p>
                     </div>
                 </div>
 
@@ -46,33 +47,33 @@
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Username</label>
-                            <span>minxuan001</span>
+                            <span><%= user[0].username %></span>
                         </div>
                         <div class="profile-field">
                             <label>Role</label>
-                            <span>Doctor</span>
+                            <span><%= user[0].role %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Phone Number</label>
-                            <span>-</span>
+                            <span><%= user[0].phoneNumber || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Email</label>
-                            <span>-</span>
+                            <span><%= user[0].email || '-' %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Clinic</label>
-                            <span>B2B Anna Dental Clinic - Subang Jaya</span>
+                            <span><%= user[0].clinic || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Country</label>
-                            <span>Malaysia</span>
+                            <span><%= user[0].country || '-' %></span>
                         </div>
                     </div>
                 </div>
@@ -80,7 +81,7 @@
                 <!-- Delivery Address -->
                 <div class="delivery-address">
                     <label>Delivery Address</label>
-                    <span>Level 1, Jalan SS 15/2A, SS 15, 47500 Subang Jaya, Selangor</span>
+                    <span><%= user[0].deliveryAddress || '-' %></span>
                 </div>
             </div>
         </div>
@@ -104,11 +105,8 @@
                         </label>
                         <div class="input-container">
                             <input type="password" id="currentPassword" placeholder="************">
-                            <button type="button" class="eye-toggle" data-target="currentPassword">
-                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                            <button type="button" class="password-toggle" data-target="currentPassword">
+                                <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                             </button>
                         </div>
                         <div class="validation-message" id="currentPasswordError"></div>
@@ -125,11 +123,8 @@
                         </div>
                         <div class="input-container">
                             <input type="password" id="newPassword" placeholder="************">
-                            <button type="button" class="eye-toggle" data-target="newPassword">
-                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                            <button type="button" class="password-toggle" data-target="newPassword">
+                                <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                             </button>
                         </div>
                         <div class="password-strength-bars" id="passwordStrengthBars">
@@ -146,11 +141,8 @@
                         </label>
                         <div class="input-container">
                             <input type="password" id="confirmPassword" placeholder="************">
-                            <button type="button" class="eye-toggle" data-target="confirmPassword">
-                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                            <button type="button" class="password-toggle" data-target="confirmPassword">
+                                <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                             </button>
                         </div>
                         <div class="validation-message" id="confirmPasswordError"></div>
@@ -164,6 +156,9 @@
         </div>
     </div>
 
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
@@ -199,27 +194,18 @@
         };
 
         // Password visibility toggle functionality
-        document.querySelectorAll('.eye-toggle').forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                const targetId = toggle.getAttribute('data-target');
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
                 const input = document.getElementById(targetId);
-                const isPassword = input.type === 'password';
+                const eyeIcon = this.querySelector('.eye-icon');
                 
-                input.type = isPassword ? 'text' : 'password';
-                
-                // Update icon
-                const eyeIcon = toggle.querySelector('.eye-icon');
-                if (isPassword) {
-                    eyeIcon.innerHTML = `
-                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94L17.94 17.94z"/>
-                        <line x1="1" y1="1" x2="23" y2="23"/>
-                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19l-6.95-6.95a3 3 0 0 0-4.24 0z"/>
-                    `;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    eyeIcon.src = '/assets/images/eye-closed-icon.svg';
                 } else {
-                    eyeIcon.innerHTML = `
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                    `;
+                    input.type = 'password';
+                    eyeIcon.src = '/assets/images/eye-icon.svg';
                 }
             });
         });
@@ -368,7 +354,7 @@
                 strengthBars.className = `password-strength-bars visible ${strength}`;
                 
                 // Show validation errors or success messages
-                console.log('Password:', password, 'Errors:', errors, 'Strength:', strength); // Debug log
+                //console.log('Password:', password, 'Errors:', errors, 'Strength:', strength); // Debug log
                 
                 if (errors.length > 0 && strength === 'weak') {
                     console.log(1)
@@ -456,36 +442,40 @@
                 showValidationError('confirmPassword', 'Confirm New Password is required.');
                 hasErrors = true;
             } else if (newPassword !== confirmPassword) {
-                showValidationError('confirmPassword', 'Confirm New Password is required.');
+                showValidationError('confirmPassword', 'Passwords do not match.');
                 hasErrors = true;
             }
 
             if (hasErrors) {
                 return;
             }
+            const formData = {
+                oldPassword: currentPassword,
+                newPassword: newPassword,
+                confirmNewPassword: confirmPassword
+            }
 
             try {
-                const response = await fetch('/change-password', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        oldPassword: currentPassword,
-                        newPassword: newPassword
-                    })
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    alert('Password changed successfully');
+                const response = await axios.post('/change-password', formData);
+                if (response.status === 200) {
+                    //close modal
                     modal.style.display = 'none';
+                    Toast.success('Password changed successfully');
                     clearValidation();
+                    // Clear form fields
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                    
                 } else {
-                    alert(data.message || 'Failed to change password');
+                    Toast.error(response.data.message || 'Failed to change password');
                 }
             } catch (error) {
-                alert('Network error. Please try again.');
+                if (error.response && error.response.data && error.response.data.message) {
+                    Toast.error(error.response.data.message);
+                } else {
+                    Toast.error('Network error. Please try again.');
+                }
             }
         };
 
@@ -516,7 +506,6 @@
             }
         };
         });
-
         
     </script>
 </body>
