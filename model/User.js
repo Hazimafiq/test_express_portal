@@ -41,9 +41,17 @@ class User {
         return { message: 'Password changed successfully' };
     }
 
+    static async changePasswordUser(userId, newPassword) {
+        const hashedNewPassword = await argon2.hash(newPassword);
+        const query = 'UPDATE users SET password = ? WHERE id = ?';
+        const values = [hashedNewPassword, userId];
+        await pool.query(query, values);
+        return { message: 'Password changed successfully' };
+    }
+
     static async get_profile_data(id) {
         // const query = 'SELECT username, phoneNumber, email, role, country, clinic FROM users WHERE id = ? LIMIT 1';
-        const query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic FROM users WHERE id = ? LIMIT 1';
+        const query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, status FROM users WHERE id = ? LIMIT 1';
         const values = [id];
         const [results] = await pool.query(query, values);
         if(results.length == 0){
@@ -52,17 +60,17 @@ class User {
         return results;
     }
 
-    static async edit(username, fullName, phoneNumber, email, country, role ) {
-        const query = 'UPDATE users SET fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ? WHERE username = ? LIMIT 1';
-        const values = [fullName, phoneNumber, email, country, role, username];
+    static async edit_user(userId, username, fullName, phoneNumber, email, country, role ) {
+        const query = 'UPDATE users SET username = ?, fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ? WHERE id = ? LIMIT 1';
+        const values = [username, fullName, phoneNumber, email, country, role, userId];
         const [results] = await pool.query(query, values);
         return results;
     }
 
     static async get_all_users(filters = {}) {
-        const { country, role, search, sortBy = 'created_at', sortOrder = 'DESC', limit, offset } = filters;
+        const { country, role, status, search, sortBy = 'created_at', sortOrder = 'DESC', limit, offset } = filters;
         
-        let query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, created_at, last_login FROM users';
+        let query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, status, created_at, last_login FROM users';
         let whereConditions = [];
         let queryParams = [];
         
@@ -76,6 +84,12 @@ class User {
         if (role && role.trim() !== '') {
             whereConditions.push('role = ?');
             queryParams.push(role.trim());
+        }
+        
+        // Add status filter
+        if (status && status.trim() !== '' && status !== 'all') {
+            whereConditions.push('status = ?');
+            queryParams.push(status.trim());
         }
         
         // Add search filter (searches in fullName, username, and email)
@@ -123,6 +137,7 @@ class User {
             let paramCount = 0;
             if (country && country.trim() !== '') paramCount++;
             if (role && role.trim() !== '') paramCount++;
+            if (status && status.trim() !== '' && status !== 'all') paramCount++;
             if (search && search.trim() !== '') paramCount += 3; // search uses 3 parameters
             
             countParams = queryParams.slice(0, paramCount);
@@ -136,6 +151,76 @@ class User {
             total: total,
             count: results.length
         };
+    }
+
+    static async getUserCounts(filters = {}) {
+        const { country, role, search } = filters;
+        
+        let baseQuery = 'SELECT status, COUNT(*) as count FROM users';
+        let whereConditions = [];
+        let queryParams = [];
+        
+        // Add country filter
+        if (country && country.trim() !== '') {
+            whereConditions.push('country = ?');
+            queryParams.push(country.trim());
+        }
+        
+        // Add role filter
+        if (role && role.trim() !== '') {
+            whereConditions.push('role = ?');
+            queryParams.push(role.trim());
+        }
+        
+        // Add search filter (searches in fullName, username, and email)
+        if (search && search.trim() !== '') {
+            whereConditions.push('(fullName LIKE ? OR username LIKE ? OR email LIKE ?)');
+            const searchPattern = `%${search.trim()}%`;
+            queryParams.push(searchPattern, searchPattern, searchPattern);
+        }
+        
+        // Add WHERE clause if there are conditions
+        if (whereConditions.length > 0) {
+            baseQuery += ' WHERE ' + whereConditions.join(' AND ');
+        }
+        
+        baseQuery += ' GROUP BY status';
+        
+        const [results] = await pool.query(baseQuery, queryParams);
+        
+        // Also get total count
+        let totalQuery = 'SELECT COUNT(*) as total FROM users';
+        if (whereConditions.length > 0) {
+            totalQuery += ' WHERE ' + whereConditions.join(' AND ');
+        }
+        const [totalResults] = await pool.query(totalQuery, queryParams);
+        
+        // Format the results
+        const counts = {
+            all: totalResults[0].total,
+            active: 0,
+            inactive: 0
+        };
+        
+        results.forEach(row => {
+            counts[row.status] = row.count;
+        });
+        
+        return counts;
+    }
+
+    static async activateUser(userId) {
+        const query = 'UPDATE users SET status = "active" WHERE id = ?';
+        const values = [userId];
+        await pool.query(query, values);
+        return { message: 'User account has been activated.' };
+    }
+
+    static async deactivateUser(userId) {
+        const query = 'UPDATE users SET status = "inactive" WHERE id = ?';
+        const values = [userId];
+        await pool.query(query, values);
+        return { message: 'User account has been deactivated.' };
     }
 }
 

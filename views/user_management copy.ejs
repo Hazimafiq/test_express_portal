@@ -102,14 +102,14 @@
                             <th class="th-name">Name</th>
                             <th class="th-country">Country</th>
                             <th class="th-role">Role</th>
-                            <th class="th-created-at sortable" data-sort="created">
-                                Created At 
-                                <span class="sort-icon">↕</span>
-                            </th>
-                            <th class="th-last-login sortable" data-sort="last-login">
-                                Last Login 
-                                <span class="sort-icon">↕</span>
-                            </th>
+                                                           <th class="th-created-at sortable" data-sort="created">
+                                   Created At 
+                                   <img src="/assets/images/sort-unsorted.svg" alt="Sort" class="sort-icon">
+                               </th>
+                               <th class="th-last-login sortable" data-sort="last-login">
+                                   Last Login 
+                                   <img src="/assets/images/sort-unsorted.svg" alt="Sort" class="sort-icon">
+                               </th>
                             <th class="th-status">Status</th>
                         </tr>
                     </thead>
@@ -462,11 +462,11 @@
                     
                     // Update sort icons
                     document.querySelectorAll('.sortable .sort-icon').forEach(icon => {
-                        icon.textContent = '↕';
+                        icon.src = '/assets/images/sort-unsorted.svg';
                     });
                     
                     const sortIcon = header.querySelector('.sort-icon');
-                    sortIcon.textContent = currentFilters.sortOrder === 'ASC' ? '↑' : '↓';
+                    sortIcon.src = currentFilters.sortOrder === 'ASC' ? '/assets/images/sort-asc.svg' : '/assets/images/sort-desc.svg';
                     
                     applyFilters();
                 });

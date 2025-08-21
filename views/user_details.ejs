@@ -6,6 +6,7 @@
     <title>User Details - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/user_details.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
@@ -21,7 +22,7 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item">User Management</span>
+                <a href="/user-management" class="breadcrumb-item">User Management</a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
@@ -33,7 +34,10 @@
                 <h1 class="page-title">User Details</h1>
                 <div class="page-actions">
                     <button class="btn btn-secondary" id="changePasswordBtn">Change Password</button>
-                    <button class="btn btn-primary" id="editUserBtn">Update Profile</button>
+                    <button class="btn <%= user[0].status === 'inactive' ? 'btn-secondary' : 'btn-primary' %>" id="editUserBtn">Update Profile</button>
+                    <% if (user[0].status === 'inactive') { %>
+                        <button class="btn btn-primary" id="activateUserBtn">Activate User</button>
+                    <% } %>
                 </div>
             </div>
 
@@ -44,10 +48,10 @@
                     <div class="user-avatar">C</div>
                     <div class="user-details">
                         <div class="name-status-container">
-                            <h2 class="full-name">Chong Kai Wen</h2>
-                            <span class="status-badge active">Active</span>
+                            <h2 class="full-name"><%= user[0].fullName %></h2>
+                            <span class="status-badge <%= user[0].status === 'active' ? 'active' : 'inactive' %>"><%= user[0].status === 'active' ? 'Active' : 'Inactive' %></span>
                         </div>
-                        <p class="user-id">User ID: 28930183</p>
+                        <p class="user-id">User ID: <%= user[0].id %></p>
                     </div>
                 </div>
 
@@ -56,33 +60,33 @@
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Username</label>
-                            <span>kaiwen001</span>
+                            <span><%= user[0].username || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Role</label>
-                            <span>Superadmin</span>
+                            <span><%= user[0].role || '-' %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Phone Number</label>
-                            <span>0123231234</span>
+                            <span><%= user[0].phoneNumber || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Email</label>
-                            <span>kaiwen@gmail.com</span>
+                            <span><%= user[0].email || '-' %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Clinic</label>
-                            <span>B2B Anna Dental Clinic - Subang Jaya</span>
+                            <span><%= user[0].clinic || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Country</label>
-                            <span>Malaysia</span>
+                            <span><%= user[0].country || '-' %></span>
                         </div>
                     </div>
                 </div>
@@ -90,47 +94,49 @@
                 <!-- Delivery Address -->
                 <div class="delivery-address">
                     <label>Delivery Address</label>
-                    <span>Level 1, Jalan SS 15/2A, SS 15, 47500 Subang Jaya, Selangor</span>
+                    <span><%= user[0].deliveryAddress || '-' %></span>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Change Password Modal -->
-    <div class="modal" id="passwordModal" style="display: none;">
+    <div class="modal" id="passwordModal">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header password-modal-header">
                 <h3>Change Password</h3>
-                <button class="modal-close" id="closeModal">&times;</button>
+                <button class="modal-close" id="closeModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
             </div>
             <div class="modal-body">
                 <form id="changePasswordForm">
                     <div class="form-field">
-                        <label for="currentPassword">* Current Password</label>
+                        <label for="currentPassword">
+                            <span class="required-asterisk">*</span>
+                            <span class="label-text">Current Password</span>
+                        </label>
                         <div class="input-container">
                             <input type="password" id="currentPassword" placeholder="************" required>
-                            <button type="button" class="eye-toggle" data-target="currentPassword">
-                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                            <button type="button" class="password-toggle" data-target="currentPassword">
+                                <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                             </button>
                         </div>
                     </div>
                     <div class="form-field">
                         <div class="label-strength-row">
-                            <label for="newPassword">* New Password</label>
+                            <label for="newPassword">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">New Password</span>
+                            </label>
                             <div class="password-strength-container">
                                 <span class="password-strength" id="passwordStrength"></span>
                             </div>
                         </div>
                         <div class="input-container">
-                            <input type="password" id="newPassword" placeholder="************" required>
-                            <button type="button" class="eye-toggle" data-target="newPassword">
-                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                            <input type="password" id="newPassword" placeholder="************">
+                            <button type="button" class="password-toggle" data-target="newPassword">
+                                <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                             </button>
                         </div>
                         <div class="password-strength-bars" id="passwordStrengthBars">
@@ -141,27 +147,48 @@
                         <div class="validation-message" id="newPasswordError"></div>
                     </div>
                     <div class="form-field">
-                        <label for="confirmPassword">* Confirm New Password</label>
+                        <label for="confirmPassword">
+                            <span class="required-asterisk">*</span>
+                            <span class="label-text">Confirm New Password</span>
+                        </label>
                         <div class="input-container">
-                            <input type="password" id="confirmPassword" placeholder="************" required>
-                            <button type="button" class="eye-toggle" data-target="confirmPassword">
-                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                            <input type="password" id="confirmPassword" placeholder="************">
+                            <button type="button" class="password-toggle" data-target="confirmPassword">
+                                <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
                             </button>
                         </div>
                         <div class="validation-message" id="confirmPasswordError"></div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="confirmBtn">Confirm</button>
+                        <button type="button" class="modal-btn modal-btn-cancel" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="modal-btn modal-btn-confirm" id="confirmBtn">Confirm</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+     <!-- Activate User Modal -->
+     <div class="modal-overlay" id="activateModal">
+        <div class="modal-dialog">
+            <div class="modal-header activate-modal-header">
+                <h3 class="modal-title">Confirm to Activate?</h3>
+                <button class="modal-close" id="closeActivateModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">User will be able to access the features again.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="cancelActivate">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmActivate">Yes, Activate</button>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
@@ -173,51 +200,70 @@
         const changePasswordBtn = document.getElementById('changePasswordBtn');
         const closeModal = document.getElementById('closeModal');
         const cancelBtn = document.getElementById('cancelBtn');
+        const activateModal = document.getElementById('activateModal');
+        const activateUserBtn = document.getElementById('activateUserBtn');
+        const cancelActivate = document.getElementById('cancelActivate');
+        const confirmActivate = document.getElementById('confirmActivate');
+        const closeActivateModal = document.getElementById('closeActivateModal');
 
-        changePasswordBtn.onclick = () => {
-            modal.style.display = 'flex';
+        changePasswordBtn.addEventListener('click', () => {
+            modal.classList.add('show');
             clearValidation();
-        };
+        });
         
-        closeModal.onclick = () => {
-            modal.style.display = 'none';
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('show');
             clearValidation();
-        };
+        });
         
-        cancelBtn.onclick = () => {
-            modal.style.display = 'none';
+        cancelBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
             clearValidation();
-        };
+        });
         
         window.onclick = (e) => {
             if (e.target == modal) {
-                modal.style.display = 'none';
+                modal.classList.remove('show');
                 clearValidation();
             }
         };
 
+        if ('<%= user[0].status %>' === 'inactive') {
+
+            activateUserBtn.addEventListener('click', () => {
+                activateModal.classList.add('show');
+            });
+
+            // Close modal functions
+            function closeModalDialog() {
+                activateModal.classList.remove('show');
+            }
+            
+            cancelActivate.addEventListener('click', closeModalDialog);
+            
+            confirmActivate.addEventListener('click', closeModalDialog);
+            activateModal.addEventListener('click', (e) => {
+                if (e.target === activateModal) {
+                    closeModalDialog();
+                }
+            });
+
+            closeActivateModal.addEventListener('click', closeModalDialog);
+        }
+
         // Password visibility toggle functionality
-        document.querySelectorAll('.eye-toggle').forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                const targetId = toggle.getAttribute('data-target');
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
                 const input = document.getElementById(targetId);
-                const isPassword = input.type === 'password';
+                const eyeIcon = this.querySelector('.eye-icon');
                 
-                input.type = isPassword ? 'text' : 'password';
-                
-                // Update icon
-                const eyeIcon = toggle.querySelector('.eye-icon');
-                if (isPassword) {
-                    eyeIcon.innerHTML = `
-                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94L17.94 17.94z"/>
-                        <line x1="1" y1="1" x2="23" y2="23"/>
-                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19l-6.95-6.95a3 3 0 0 0-4.24 0z"/>
-                    `;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    eyeIcon.src = '/assets/images/eye-closed-icon.svg';
                 } else {
-                    eyeIcon.innerHTML = `
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                    `;
+                    input.type = 'password';
+                    eyeIcon.src = '/assets/images/eye-icon.svg';
                 }
             });
         });
@@ -265,6 +311,7 @@
             
             input.classList.add('error');
             if (errorElement) {
+                errorElement.className = 'validation-message';
                 errorElement.textContent = message;
             }
         }
@@ -303,12 +350,51 @@
             strengthElement.className = 'password-strength';
             strengthBars.className = 'password-strength-bars';
             
+            // Reset focus state and strength tracking
+            isPasswordFocused = false;
+            currentPasswordStrength = '';
+            
             // Reset form
             document.getElementById('changePasswordForm').reset();
         }
 
+        // Track password input focus state and strength
+        let isPasswordFocused = false;
+        let currentPasswordStrength = '';
+
         // Real-time validation
-        document.getElementById('newPassword').addEventListener('input', (e) => {
+        const newPasswordInput = document.getElementById('newPassword');
+        
+        newPasswordInput.addEventListener('focus', () => {
+            isPasswordFocused = true;
+            // Show strength indicators when focused
+            updatePasswordStrengthVisibility();
+        });
+
+        newPasswordInput.addEventListener('blur', () => {
+            isPasswordFocused = false;
+            // Hide strength indicators if password is strong and unfocused
+            updatePasswordStrengthVisibility();
+        });
+
+        function updatePasswordStrengthVisibility() {
+            const strengthBars = document.getElementById('passwordStrengthBars');
+            const validationMessage = document.getElementById('newPasswordError');
+            
+            // Hide validation message and strength bars if password is strong and input is not focused
+            if (currentPasswordStrength === 'strong' && !isPasswordFocused) {
+                validationMessage.textContent = '';
+                validationMessage.className = 'validation-message';
+                strengthBars.className = 'password-strength-bars';
+            } else if (currentPasswordStrength === 'strong' && isPasswordFocused) {
+                // Show validation message and strength bars when focused and password is strong
+                validationMessage.textContent = 'Your password is strongly secure and you are all set.';
+                validationMessage.className = 'validation-message success';
+                strengthBars.className = `password-strength-bars visible ${currentPasswordStrength}`;
+            }
+        }
+
+        newPasswordInput.addEventListener('input', (e) => {
             const password = e.target.value;
             const strengthElement = document.getElementById('passwordStrength');
             const strengthBars = document.getElementById('passwordStrengthBars');
@@ -316,18 +402,20 @@
             if (password.length > 0) {
                 const errors = validatePassword(password);
                 const strength = getPasswordStrength(password);
+                currentPasswordStrength = strength;
                 
-                // Update strength indicator text
+                // Always update strength indicator text
                 strengthElement.textContent = strength.charAt(0).toUpperCase() + strength.slice(1);
                 strengthElement.className = `password-strength ${strength}`;
                 
-                // Show and update strength bars
+                // Show strength bars normally, but they'll be hidden by updatePasswordStrengthVisibility if needed
                 strengthBars.className = `password-strength-bars visible ${strength}`;
                 
                 // Show validation errors or success messages
-                console.log('Password:', password, 'Errors:', errors, 'Strength:', strength); // Debug log
+                //console.log('Password:', password, 'Errors:', errors, 'Strength:', strength); // Debug log
                 
-                if (errors.length > 0) {
+                if (errors.length > 0 && strength === 'weak') {
+                    console.log(1)
                     // Dynamic error message showing only missing requirements
                     const message = `Password need to be ${errors.join(', ')}.`;
                     showValidationError('newPassword', message);
@@ -336,12 +424,19 @@
                     if (strength === 'good') {
                         showValidationMessage('newPassword', 'Your password meets all the necessary requirements. You can optionally lengthen it to make it stronger.', 'success');
                     } else if (strength === 'strong') {
-                        showValidationMessage('newPassword', 'Your password is strongly secure and you are all set.', 'success');
+                        // Handle strong password validation message based on focus
+                        if (isPasswordFocused) {
+                            showValidationMessage('newPassword', 'Your password is strongly secure and you are all set.', 'success');
+                        } else {
+                            // Hide validation message when unfocused and strong
+                            updatePasswordStrengthVisibility();
+                        }
                     } else {
                         clearValidationError('newPassword');
                     }
                 }
             } else {
+                currentPasswordStrength = '';
                 strengthElement.textContent = '';
                 strengthElement.className = 'password-strength';
                 // Hide strength bars when password is empty
@@ -369,9 +464,8 @@
             }
         }
 
-        document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+        //document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
 
-        // Enhanced form submission
         document.getElementById('changePasswordForm').onsubmit = async (e) => {
             e.preventDefault();
             
@@ -413,61 +507,80 @@
                 return;
             }
 
-            try {
-                const response = await fetch('/change-password', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        oldPassword: currentPassword,
-                        newPassword: newPassword
-                    })
-                });
+            const formData = {
+                userId: '<%= user[0].id %>',
+                oldPassword: currentPassword,
+                newPassword: newPassword,
+                confirmNewPassword: confirmPassword
+            }
 
-                const data = await response.json();
-                if (response.ok) {
-                    alert('Password changed successfully');
-                    modal.style.display = 'none';
+            try {
+                const response = await axios.post('/change-password-user', formData);
+                if (response.status === 200) {
+                    //close modal
+                    modal.classList.remove('show');
+                    Toast.success('Password changed successfully');
                     clearValidation();
+                    // Clear form fields
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                    
                 } else {
-                    alert(data.message || 'Failed to change password');
+                    Toast.error(response.data.message || 'Failed to change password');
                 }
             } catch (error) {
-                alert('Network error. Please try again.');
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const languageFab = document.getElementById('languageFab');
-            if (!languageFab) return;
-            languageFab.addEventListener('click', () => console.log('Language selection clicked'));
-
-            // User button click handler
-        document.getElementById('userBtn').onclick = async () => {
-            if (confirm('Are you sure you want to logout?')) {
-                try {
-                    const response = await fetch('/logout', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    });
-
-                    if (response.ok) {
-                        window.location.href = '/login';
-                    } else {
-                        alert('Failed to logout');
-                    }
-                } catch (error) {
-                    alert('Network error. Please try again.');
+                if (error.response && error.response.data && error.response.data.message) {
+                    Toast.error(error.response.data.message);
+                } else {
+                    Toast.error('Network error. Please try again.');
                 }
             }
         };
+
+        // Activate user
+        confirmActivate.addEventListener('click', async () => {
+            const formData = {
+                userId: '<%= user[0].id %>'
+            }
+            try {
+                const response = await axios.post('/activate-user', formData);
+                if (response.status === 200) {
+                    Toast.success(response.data.message);
+                    closeModalDialog();
+                    
+                    // Update the user status in the user details page
+                    const userStatus = document.querySelector('.status-badge');
+                    userStatus.textContent = 'Active';
+                    userStatus.classList.remove('inactive');
+                    userStatus.classList.add('active');
+                    
+                    // Update button visibility and styling
+                    const activateUserBtn = document.getElementById('activateUserBtn');
+                    const editUserBtn = document.getElementById('editUserBtn');
+                    
+                    if (activateUserBtn) {
+                        activateUserBtn.style.display = 'none'; // Hide activate button
+                    }
+                    
+                    if (editUserBtn) {
+                        editUserBtn.classList.remove('btn-secondary');
+                        editUserBtn.classList.add('btn-primary'); // Change to primary style
+                    }
+                } else {
+                    Toast.error(response.data.message || 'Failed to activate user');
+                }
+            } catch (error) {
+                if (error.response && error.response.data && error.response.data.message) {
+                    Toast.error(error.response.data.message);
+                } else {
+                    Toast.error('Network error. Please try again.');
+                }
+            }
         });
 
         editUserBtn.onclick = () => {
-            window.location.href = '/update-user/28930183';
+            window.location.href = '/update-user/<%= user[0].id %>';
         };
     </script>
 </body>

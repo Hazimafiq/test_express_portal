@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, changePassword, logout, get_user_profile, getAllUsers } = require('../controller/user');
+const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user } = require('../controller/user');
 const path = require('path');
 const axios = require('axios');
 
@@ -113,26 +113,57 @@ router.get('/create-user', requireAuth, (req, res) => {
 });
 
 // User details route
-router.get('/user-details/:userId', requireAuth, (req, res) => {
+router.get('/user-details/:userId', requireAuth, async (req, res) => {
     const { userId } = req.params;
-    res.render('user_details');
+    try {
+        const userProfile = await axios.get(`${baseURL}/get_profile?id=${userId}`);       
+        res.render('user_details', {
+            user: userProfile.data.user
+        });
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 // Update user route
-router.get('/update-user/:userId', requireAuth, (req, res) => {
+router.get('/update-user/:userId', requireAuth, async (req, res) => {
     const { userId } = req.params;
-    res.render('update_user');
+    try {
+        const userProfile = await axios.get(`${baseURL}/get_profile?id=${userId}`);       
+        res.render('update_user', {
+            user: userProfile.data.user
+        });
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
+// Update user route
+router.put('/update-user', requireAuth, edit_user);
+
 // Get current user info route
-router.get('/api/current-user', requireAuthAPI, (req, res) => {
+router.get('/api/current-user', requireAuth, (req, res) => {
     // Return user info without sensitive data like password
     const { password, ...userInfo } = req.session.user;
     res.json({ user: userInfo });
 });
 
 // Get all users with filtering, searching, and sorting
-router.get('/api/users', requireAuthAPI, getAllUsers);
+router.get('/get-users', requireAuth, getAllUsers);
+
+// Get user counts by status
+router.get('/get-user-counts', requireAuth, getUserCounts);
+
+// Change password for user
+router.post('/change-password-user', requireAuth, changePasswordUser);
+
+// Activate user
+router.post('/activate-user', requireAuth, activateUser);
+
+// Deactivate user
+router.post('/deactivate-user', requireAuth, deactivateUser);
 
 // Side menu component route - renders with user data
 router.get('/components/side-menu', requireAuth, (req, res) => {
