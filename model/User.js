@@ -25,6 +25,10 @@ class User {
         if (!user || !(await argon2.verify(user.password, password))) {
             throw new CustomError('Invalid credentials', 401);
         }
+        
+        const updateLoginQuery = 'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?';
+        await pool.query(updateLoginQuery, [user.id]);
+        
         return user;
     }
 
@@ -53,6 +57,85 @@ class User {
         const values = [fullName, phoneNumber, email, country, role, username];
         const [results] = await pool.query(query, values);
         return results;
+    }
+
+    static async get_all_users(filters = {}) {
+        const { country, role, search, sortBy = 'created_at', sortOrder = 'DESC', limit, offset } = filters;
+        
+        let query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, created_at, last_login FROM users';
+        let whereConditions = [];
+        let queryParams = [];
+        
+        // Add country filter
+        if (country && country.trim() !== '') {
+            whereConditions.push('country = ?');
+            queryParams.push(country.trim());
+        }
+        
+        // Add role filter
+        if (role && role.trim() !== '') {
+            whereConditions.push('role = ?');
+            queryParams.push(role.trim());
+        }
+        
+        // Add search filter (searches in fullName, username, and email)
+        if (search && search.trim() !== '') {
+            whereConditions.push('(fullName LIKE ? OR username LIKE ? OR email LIKE ?)');
+            const searchPattern = `%${search.trim()}%`;
+            queryParams.push(searchPattern, searchPattern, searchPattern);
+        }
+        
+        // Add WHERE clause if there are conditions
+        if (whereConditions.length > 0) {
+            query += ' WHERE ' + whereConditions.join(' AND ');
+        }
+        
+        // Add sorting
+        const validSortColumns = ['created_at', 'last_login', 'fullName', 'username', 'country', 'role'];
+        const validSortOrders = ['ASC', 'DESC'];
+        
+        if (validSortColumns.includes(sortBy) && validSortOrders.includes(sortOrder.toUpperCase())) {
+            query += ` ORDER BY ${sortBy} ${sortOrder.toUpperCase()}`;
+        } else {
+            query += ' ORDER BY created_at DESC'; // Default sorting
+        }
+        
+        // Add pagination
+        if (limit && Number.isInteger(parseInt(limit)) && parseInt(limit) > 0) {
+            query += ' LIMIT ?';
+            queryParams.push(parseInt(limit));
+            
+            if (offset && Number.isInteger(parseInt(offset)) && parseInt(offset) >= 0) {
+                query += ' OFFSET ?';
+                queryParams.push(parseInt(offset));
+            }
+        }
+        
+        const [results] = await pool.query(query, queryParams);
+        
+        // Get total count for pagination (without limit/offset)
+        let countQuery = 'SELECT COUNT(*) as total FROM users';
+        let countParams = [];
+        
+        if (whereConditions.length > 0) {
+            countQuery += ' WHERE ' + whereConditions.join(' AND ');
+            // For count query, we only need the filter parameters, not limit/offset
+            let paramCount = 0;
+            if (country && country.trim() !== '') paramCount++;
+            if (role && role.trim() !== '') paramCount++;
+            if (search && search.trim() !== '') paramCount += 3; // search uses 3 parameters
+            
+            countParams = queryParams.slice(0, paramCount);
+        }
+        
+        const [countResults] = await pool.query(countQuery, countParams);
+        const total = countResults[0].total;
+        
+        return {
+            users: results,
+            total: total,
+            count: results.length
+        };
     }
 }
 

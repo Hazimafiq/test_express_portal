@@ -12,7 +12,8 @@ CREATE TABLE users (
     country VARCHAR(50) NOT NULL,
     clinic VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP NULL
 );
 
 CREATE TABLE sessions (
