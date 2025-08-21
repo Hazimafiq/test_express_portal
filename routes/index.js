@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, changePassword, logout, get_user_profile } = require('../controller/user');
+const { register, login, changePassword, logout, get_user_profile, getAllUsers } = require('../controller/user');
 const path = require('path');
 const { update_case } = require('../controller/case');
 const axios = require('axios');
@@ -126,6 +126,9 @@ router.get('/api/current-user', requireAuthAPI, (req, res) => {
     const { password, ...userInfo } = req.session.user;
     res.json({ user: userInfo });
 });
+
+// Get all users with filtering, searching, and sorting
+router.get('/api/users', requireAuthAPI, getAllUsers);
 
 // Side menu component route - renders with user data
 router.get('/components/side-menu', requireAuth, (req, res) => {

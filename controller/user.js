@@ -94,3 +94,24 @@ exports.logout = (req, res) => {
         res.json({ message: 'Logged out successfully' });
     });
 };
+
+// Get all users with filtering, searching, and sorting
+exports.getAllUsers = async (req, res) => {
+    try {
+        const filters = {
+            country: req.query.country,
+            role: req.query.role,
+            search: req.query.search,
+            sortBy: req.query.sortBy || 'created_at',
+            sortOrder: req.query.sortOrder || 'DESC',
+            limit: req.query.limit,
+            offset: req.query.offset
+        };
+        
+        const result = await User.get_all_users(filters);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
