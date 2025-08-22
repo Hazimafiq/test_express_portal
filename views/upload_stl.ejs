@@ -148,6 +148,35 @@
                         } else {
                             firstSpan.textContent = `${this.files.length} files selected`;
                         }
+                        
+                        // Add cancel button for uploaded file
+                        let cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
+                        if (!cancelBtn) {
+                            cancelBtn = document.createElement('button');
+                            cancelBtn.className = 'cancel-upload';
+                            cancelBtn.type = 'button';
+                            cancelBtn.innerHTML = '<img src="/assets/images/cancel-file-upload.svg" alt="Remove file">';
+                            uploadPlaceholder.appendChild(cancelBtn);
+                            
+                            // Add click handler to remove file
+                            cancelBtn.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                
+                                // Clear the file input
+                                this.value = '';
+                                
+                                // Reset the UI
+                                firstSpan.textContent = 'Choose File';
+                                this.parentNode.classList.remove('has-file');
+                                cancelBtn.remove();
+                                
+                                // Clear any validation state
+                                if (window.formValidation) {
+                                    window.formValidation.clearValidation(this);
+                                }
+                            });
+                        }
                     } else {
                         firstSpan.textContent = this.files[0].name;
                     }
@@ -155,6 +184,12 @@
                 } else {
                     firstSpan.textContent = 'Choose File';
                     this.parentNode.classList.remove('has-file');
+                    
+                    // Remove cancel button if it exists
+                    const cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
+                    if (cancelBtn) {
+                        cancelBtn.remove();
+                    }
                 }
             });
         });
