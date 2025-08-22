@@ -6,6 +6,8 @@
     <title>Create User - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/create_user.css">
+    <link rel="stylesheet" href="/assets/css/validation.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
@@ -20,11 +22,11 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item">User Management</span>
+                <a href="/user-management" class="breadcrumb-item">User Management</a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item">User Details</span>
+                <a href="/user-details/<%= user[0].id %>" class="breadcrumb-item">User Details</a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
@@ -35,49 +37,73 @@
             <div class="page-header">
                 <h1 class="page-title">Update Profile</h1>
                 <div class="page-actions">
-                    <button class="btn btn-deactivate" id="deactivateBtn">Deactivate User</button>
+                    <% if (user[0].status === 'active') { %>
+                        <button class="btn btn-deactivate" id="deactivateBtn">Deactivate User</button>
+                    <% } else { %>
+                        <button class="btn btn-deactivate" id="deleteBtn">Delete User</button>
+                    <% } %>
                 </div>
             </div>
 
             <!-- Create User Form -->
-            <form class="create-user-form" id="createUserForm">
+            <form class="create-user-form" id="updateUserForm">
                 <!-- Personal Details Section -->
                 <div class="form-section">
                     <h2 class="section-title">Personal Details</h2>
                     <div class="form-content">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="username">* Username</label>
-                                <input type="text" id="username" name="username" placeholder="Input here">
+                                <label for="username">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Username</span>
+                                </label>
+                                <input type="text" id="username" name="username" placeholder="Input here" value="<%= user[0].username %>">
                             </div>
                             <div class="form-field">
-                                <label for="fullName">* Full Name</label>
-                                <input type="text" id="fullName" name="fullName" placeholder="Input here">
+                                <label for="fullName">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Full Name</span>
+                                </label>
+                                <input type="text" id="fullName" name="fullName" placeholder="Input here" value="<%= user[0].fullName %>">
                             </div>
                             <div class="form-field">
-                                <label for="email">* Email</label>
-                                <input type="email" id="email" name="email" placeholder="Input here">
+                                <label for="email">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Email</span>
+                                </label>
+                                <input type="email" id="email" name="email" placeholder="Input here" value="<%= user[0].email %>">
                             </div>
                             <div class="form-field">
-                                <label for="phoneNumber">* Phone Number</label>
-                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Input here">
+                                <label for="phoneNumber">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Phone Number</span>
+                                </label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Input here" value="<%= user[0].phoneNumber %>">
                             </div>
                             <div class="form-field">
-                                <label for="country">* Country</label>
-                                <select id="country" name="country">
-                                    <option value="">Select</option>
-                                    <option value="malaysia">Malaysia</option>
-                                    <option value="thailand">Thailand</option>
-                                    <option value="singapore">Singapore</option>
-                                    <option value="indonesia">Indonesia</option>
-                                    <option value="philippines">Philippines</option>
-                                    <option value="vietnam">Vietnam</option>
-                                    <option value="other">Other</option>
-                                </select>
+                                <label for="country">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Country</span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="country" name="country">
+                                        <option value="">Select</option>
+                                        <option value="malaysia" <%= user[0].country === 'malaysia' ? 'selected' : '' %>>Malaysia</option>
+                                        <option value="thailand" <%= user[0].country === 'thailand' ? 'selected' : '' %>>Thailand</option>
+                                        <option value="singapore" <%= user[0].country === 'singapore' ? 'selected' : '' %>>Singapore</option>
+                                        <option value="indonesia" <%= user[0].country === 'indonesia' ? 'selected' : '' %>>Indonesia</option>
+                                        <option value="philippines" <%= user[0].country === 'philippines' ? 'selected' : '' %>>Philippines</option>
+                                        <option value="vietnam" <%= user[0].country === 'vietnam' ? 'selected' : '' %>>Vietnam</option>
+                                        <option value="other" <%= user[0].country === 'other' ? 'selected' : '' %>>Other</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-field">
-                                <label for="clinic">Clinic</label>
-                                <input type="text" id="clinic" name="clinic" placeholder="Input here">
+                                <label for="clinic">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Clinic</span>
+                                </label>
+                                <input type="text" id="clinic" name="clinic" placeholder="Input here" value="<%= user[0].clinic %>">
                             </div>
                         </div>
                     </div>
@@ -89,63 +115,38 @@
                     <div class="form-content">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="address">* Address</label>
-                                <input type="text" id="address" name="address" placeholder="Input here">
+                                <label for="address">Address</label>
+                                <input type="text" id="address" name="address" placeholder="Input here" value="<%= user[0].address %>">
                             </div>
                             <div class="form-field">
                                 <label for="postcode">Postcode</label>
-                                <input type="text" id="postcode" name="postcode" placeholder="Input here">
+                                <input type="text" id="postcode" name="postcode" placeholder="Input here" value="<%= user[0].postcode %>">
                             </div>
                             <div class="form-field">
-                                <label for="city">* City</label>
-                                <input type="text" id="city" name="city" placeholder="Input here">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" placeholder="Input here" value="<%= user[0].city %>">
                             </div>
                             <div class="form-field">
-                                <label for="state">* State</label>
-                                <select id="state" name="state">
-                                    <option value="">Select</option>
-                                    <option value="selangor">Selangor</option>
-                                    <option value="kuala_lumpur">Kuala Lumpur</option>
-                                    <option value="penang">Penang</option>
-                                    <option value="johor">Johor</option>
-                                    <option value="perak">Perak</option>
-                                    <option value="kedah">Kedah</option>
-                                    <option value="kelantan">Kelantan</option>
-                                    <option value="terengganu">Terengganu</option>
-                                    <option value="pahang">Pahang</option>
-                                    <option value="negeri_sembilan">Negeri Sembilan</option>
-                                    <option value="melaka">Melaka</option>
-                                    <option value="perlis">Perlis</option>
-                                    <option value="sabah">Sabah</option>
-                                    <option value="sarawak">Sarawak</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Password Section -->
-                <div class="form-section">
-                    <h2 class="section-title">Password</h2>
-                    <div class="form-content">
-                        <div class="form-grid">
-                            <div class="form-field">
-                                <label for="password">* Password</label>
-                                <div class="password-input-container">
-                                    <input type="password" id="password" name="password" placeholder="************">
-                                    <button type="button" class="password-toggle" data-target="password">
-                                        <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="form-field">
-                                <label for="confirmPassword">* Confirm Password</label>
-                                <div class="password-input-container">
-                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="************">
-                                    <button type="button" class="password-toggle" data-target="confirmPassword">
-                                        <img src="/assets/images/eye-icon.svg" alt="Toggle Password" class="eye-icon">
-                                    </button>
+                                <label for="state">State</label>
+                                <div class="select-wrapper">
+                                    <select id="state" name="state">
+                                        <option value="">Select</option>
+                                        <option value="selangor" <%= user[0].state === 'selangor' ? 'selected' : '' %>>Selangor</option>
+                                        <option value="kuala_lumpur" <%= user[0].state === 'kuala_lumpur' ? 'selected' : '' %>>Kuala Lumpur</option>
+                                        <option value="penang" <%= user[0].state === 'penang' ? 'selected' : '' %>>Penang</option>
+                                        <option value="johor" <%= user[0].state === 'johor' ? 'selected' : '' %>>Johor</option>
+                                        <option value="perak" <%= user[0].state === 'perak' ? 'selected' : '' %>>Perak</option>
+                                        <option value="kedah" <%= user[0].state === 'kedah' ? 'selected' : '' %>>Kedah</option>
+                                        <option value="kelantan" <%= user[0].state === 'kelantan' ? 'selected' : '' %>>Kelantan</option>
+                                        <option value="terengganu" <%= user[0].state === 'terengganu' ? 'selected' : '' %>>Terengganu</option>
+                                        <option value="pahang" <%= user[0].state === 'pahang' ? 'selected' : '' %>>Pahang</option>
+                                        <option value="negeri_sembilan" <%= user[0].state === 'negeri_sembilan' ? 'selected' : '' %>>Negeri Sembilan</option>
+                                        <option value="melaka" <%= user[0].state === 'melaka' ? 'selected' : '' %>>Melaka</option>
+                                        <option value="perlis" <%= user[0].state === 'perlis' ? 'selected' : '' %>>Perlis</option>
+                                        <option value="sabah" <%= user[0].state === 'sabah' ? 'selected' : '' %>>Sabah</option>
+                                        <option value="sarawak" <%= user[0].state === 'sarawak' ? 'selected' : '' %>>Sarawak</option>
+                                        <option value="other" <%= user[0].state === 'other' ? 'selected' : '' %>>Other</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -157,25 +158,28 @@
                     <h2 class="section-title">Role Access</h2>
                     <div class="form-content">
                         <div class="form-field">
-                            <label>* Role</label>
+                            <label for="role">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Role</span>
+                            </label>
                             <div class="role-selection" id="roleSelection">
                                 <div class="role-option">
                                     <label class="radio-label">
-                                        <input type="radio" name="role" value="doctor">
+                                        <input type="radio" name="role" value="doctor" <%= user[0].role === 'doctor' ? 'checked' : '' %>>
                                         <span class="radio-custom"></span>
                                         Doctor
                                     </label>
                                 </div>
                                 <div class="role-option">
                                     <label class="radio-label">
-                                        <input type="radio" name="role" value="staff">
+                                        <input type="radio" name="role" value="staff" <%= user[0].role === 'staff' ? 'checked' : '' %>>
                                         <span class="radio-custom"></span>
                                         Staff
                                     </label>
                                 </div>
                                 <div class="role-option">
                                     <label class="radio-label">
-                                        <input type="radio" name="role" value="superadmin">
+                                        <input type="radio" name="role" value="superadmin" <%= user[0].role === 'superadmin' ? 'checked' : '' %>>
                                         <span class="radio-custom"></span>
                                         Superadmin
                                     </label>
@@ -188,7 +192,7 @@
                 <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Save</button>
                 </div>
             </form>
         </div>
@@ -199,7 +203,9 @@
         <div class="modal-dialog">
             <div class="modal-header">
                 <h3 class="modal-title">Confirm to Deactivate?</h3>
-                <button class="modal-close" id="closeModal">&times;</button>
+                <button class="modal-close" id="closeModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
             </div>
             <div class="modal-body">
                 <p class="modal-message">User will not be able to access the features once the account is deactivated.</p>
@@ -211,10 +217,31 @@
         </div>
     </div>
 
+    <!-- Delete User Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm to Delete?</h3>
+                <button class="modal-close" id="closeModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">You will not be able to recover this user once it is deleted.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="cancelDelete">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmDelete">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
         });
 
         // Password toggle functionality
@@ -235,12 +262,12 @@
         });
 
         // Form submission with universal validation
-        document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+        document.getElementById('updateUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             // Clear any existing validation errors
-            formValidation.clearAllValidation('createUserForm');
-            formValidation.clearFormError('createUserForm');
+            formValidation.clearAllValidation('updateUserForm');
+            formValidation.clearFormError('updateUserForm');
             
             // Define validation rules
             const validations = [
@@ -270,29 +297,9 @@
                     message: 'Country is required.'
                 },
                 {
-                    field: 'address',
+                    field: 'clinic',
                     rule: 'required',
-                    message: 'Address is required.'
-                },
-                {
-                    field: 'city',
-                    rule: 'required',
-                    message: 'City is required.'
-                },
-                {
-                    field: 'state',
-                    rule: 'required',
-                    message: 'State is required.'
-                },
-                {
-                    field: 'password',
-                    rule: (value) => value.length >= 8,
-                    message: 'Password must be at least 8 characters long.'
-                },
-                {
-                    field: 'confirmPassword',
-                    rule: (value) => value === document.getElementById('password').value,
-                    message: 'Passwords do not match.'
+                    message: 'Clinic is required.'
                 },
                 {
                     field: document.querySelector('input[name="role"]'),
@@ -313,35 +320,36 @@
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
             submitBtn.classList.add('loading');
-            submitBtn.textContent = 'Creating User...';
-            
-            const formData = new FormData(e.target);
+            submitBtn.textContent = 'Updating User...';
+
+            const formData = {
+                userId: '<%= user[0].id %>',
+                username: document.getElementById('username').value,
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                country: document.getElementById('country').value,
+                clinic: document.getElementById('clinic').value,
+                address: document.getElementById('address').value,
+                postcode: document.getElementById('postcode').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                role: document.querySelector('input[name="role"]:checked').value
+            };
             
             try {
-                const response = await fetch('/create-user', {
-                    method: 'POST',
-                    body: formData
+                const response = await axios.put('/update-user', formData)
+                .then(response => {
+                    if (response.status === 200) {
+                        // Redirect to user details page with success message
+                        window.location.href = `/user-details/${formData.userId}?success=${encodeURIComponent(response.data.message)}`;
+                    } else {
+                        Toast.error(response.data.message || 'Failed to update user');
+                    }
                 });
-
-                if (response.ok) {
-                    // Show success message
-                    formValidation.clearAllValidation('createUserForm');
-                    formValidation.clearFormError('createUserForm');
-                    
-                    const successMessage = document.createElement('div');
-                    successMessage.className = 'form-success-message';
-                    successMessage.textContent = 'User created successfully! Redirecting...';
-                    document.getElementById('createUserForm').insertBefore(successMessage, document.getElementById('createUserForm').firstChild);
-                    
-                    setTimeout(() => {
-                        window.location.href = '/user-management';
-                    }, 1500);
-                } else {
-                    const data = await response.json();
-                    formValidation.showFormError('createUserForm', data.message || 'Failed to create user. Please try again.');
-                }
             } catch (error) {
-                formValidation.showFormError('createUserForm', 'Network error. Please check your connection and try again.');
+                console.error('Error updating user:', error);
+               Toast.error('Network error. Please check your connection and try again.');
             } finally {
                 // Reset button state
                 submitBtn.disabled = false;
@@ -350,141 +358,9 @@
             }
         });
 
-        // Real-time validation
-        function addRealTimeValidation() {
-            // Username validation
-            document.getElementById('username').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Username is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Full Name validation
-            document.getElementById('fullName').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Full Name is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Email validation
-            document.getElementById('email').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Email is required.');
-                } else if (!formValidation.isValidEmail(this.value)) {
-                    formValidation.showError(this, 'Please enter a valid email address.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Phone Number validation
-            document.getElementById('phoneNumber').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Phone number is required.');
-                } else if (!/^\d{10,15}$/.test(this.value.replace(/\D/g, ''))) {
-                    formValidation.showError(this, 'Phone number must be 10-15 digits.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Password validation
-            document.getElementById('password').addEventListener('input', function() {
-                if (this.value.length > 0 && this.value.length < 8) {
-                    formValidation.showError(this, 'Password must be at least 8 characters long.');
-                } else if (this.value.length >= 8) {
-                    formValidation.clearValidation(this);
-                }
-                
-                // Re-validate confirm password if it has a value
-                const confirmPassword = document.getElementById('confirmPassword');
-                if (confirmPassword.value) {
-                    if (confirmPassword.value !== this.value) {
-                        formValidation.showError(confirmPassword, 'Passwords do not match.');
-                    } else {
-                        formValidation.clearValidation(confirmPassword);
-                    }
-                }
-            });
-
-            // Confirm Password validation
-            document.getElementById('confirmPassword').addEventListener('input', function() {
-                const password = document.getElementById('password').value;
-                if (this.value !== password) {
-                    formValidation.showError(this, 'Passwords do not match.');
-                } else if (this.value === password && this.value.length >= 8) {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Country validation
-            document.getElementById('country').addEventListener('change', function() {
-                if (this.value === '') {
-                    formValidation.showError(this, 'Country is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Address validation
-            document.getElementById('address').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'Address is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // City validation
-            document.getElementById('city').addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    formValidation.showError(this, 'City is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // State validation
-            document.getElementById('state').addEventListener('change', function() {
-                if (this.value === '') {
-                    formValidation.showError(this, 'State is required.');
-                } else {
-                    formValidation.clearValidation(this);
-                }
-            });
-
-            // Role validation
-            const roleRadios = document.querySelectorAll('input[name="role"]');
-            roleRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    // When any role is selected, clear the error
-                    formValidation.clearValidation(this);
-                });
-            });
-
-            // Clear form errors when user starts fixing issues
-            const formFields = document.querySelectorAll('#createUserForm input, #createUserForm select');
-            formFields.forEach(field => {
-                field.addEventListener('input', () => {
-                    // Clear form-level error when user starts making changes
-                    const formError = document.querySelector('.form-error-message');
-                    if (formError) {
-                        formError.remove();
-                    }
-                });
-            });
-        }
-
-        // Initialize real-time validation
-        addRealTimeValidation();
-
         // Cancel button
         document.getElementById('cancelBtn').addEventListener('click', () => {
-            window.location.href = '/user-management';
+            window.location.href = `/user-details/<%= user[0].id %>`;
         });
 
         // Modal functionality
@@ -493,53 +369,110 @@
         const closeModal = document.getElementById('closeModal');
         const cancelDeactivate = document.getElementById('cancelDeactivate');
         const confirmDeactivate = document.getElementById('confirmDeactivate');
+        const deleteBtn = document.getElementById('deleteBtn');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const confirmDelete = document.getElementById('confirmDelete');
 
-        // Show modal when deactivate button is clicked
-        deactivateBtn.addEventListener('click', () => {
-            modal.classList.add('show');
-        });
+        if('<%= user[0].status %>' === 'active') {
+            // Show modal when deactivate button is clicked
+            deactivateBtn.addEventListener('click', () => {
+                modal.classList.add('show');
+            });
 
-        // Close modal functions
-        function closeModalDialog() {
-            modal.classList.remove('show');
+             // Close modal functions
+            function closeModalDialog() {
+                modal.classList.remove('show');
+            }
+
+            // Close modal when clicking close button, cancel button, or outside modal
+            closeModal.addEventListener('click', closeModalDialog);
+            cancelDeactivate.addEventListener('click', closeModalDialog);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModalDialog();
+                }
+            });
+
+            // Handle deactivate confirmation
+            confirmDeactivate.addEventListener('click', async () => {
+                try {
+                    const formData = {
+                        userId: '<%= user[0].id %>'
+                    }
+                    const response = await axios.post('/deactivate-user', formData);
+                    if (response.status === 200) {
+                        // Redirect to user details page with success message
+                        window.location.href = `/user-details/${formData.userId}?success=${encodeURIComponent(response.data.message)}`;
+                    } else {
+                        Toast.error(response.data.message || 'Failed to deactivate user');
+                    }
+                } catch (error) {
+                    if (error.response && error.response.data && error.response.data.message) {
+                        Toast.error(error.response.data.message);
+                    } else {
+                        Toast.error('Network error. Please try again.');
+                    }
+                }
+            });
+
+             // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('show')) {
+                    closeModalDialog();
+                }
+            });
         }
 
-        // Close modal when clicking close button, cancel button, or outside modal
-        closeModal.addEventListener('click', closeModalDialog);
-        cancelDeactivate.addEventListener('click', closeModalDialog);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModalDialog();
-            }
-        });
+        if('<%= user[0].status %>' === 'inactive') {
+            // Handle delete confirmation
+            confirmDelete.addEventListener('click', async () => {
+                try {
+                    const formData = {
+                        userId: '<%= user[0].id %>'
+                    }
+                    const response = await axios.post('/delete-user', formData);
+                    if (response.status === 200) {
+                        // Redirect to user management page with success message
+                        window.location.href = `/user-management?success=${encodeURIComponent(response.data.message)}`;
+                    } else {
+                        Toast.error(response.data.message || 'Failed to delete user');
+                    }   
+                } catch (error) {
+                    console.error(error);
+                    if (error.response && error.response.data && error.response.data.message) {
+                        Toast.error(error.response.data.message);
+                    } else {
+                        Toast.error('Network error. Please try again.');
+                    }
+                }
+            });
 
-        // Close modal with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('show')) {
-                closeModalDialog();
-            }
-        });
+            // Show modal when delete button is clicked
+            deleteBtn.addEventListener('click', () => {
+                deleteModal.classList.add('show');
+            });
 
-        // Handle deactivate confirmation
-        confirmDeactivate.addEventListener('click', async () => {
-            try {
-                // Here you would typically make an API call to deactivate the user
-                // For now, we'll just show a success message and redirect
-                console.log('User deactivated');
-                
-                // Close the modal
-                closeModalDialog();
-                
-                // Show success message (you can customize this)
-                alert('User has been deactivated successfully.');
-                
-                // Redirect to user management page
-                window.location.href = '/user-management';
-            } catch (error) {
-                console.error('Error deactivating user:', error);
-                alert('Failed to deactivate user. Please try again.');
+            // Close modal functions
+            function closeDeleteModalDialog() {
+                deleteModal.classList.remove('show');
             }
-        });
+
+            // Close modal when clicking close button, cancel button, or outside modal
+            closeModal.addEventListener('click', closeModalDialog);
+            cancelDelete.addEventListener('click', closeModalDialog);
+            deleteModal.addEventListener('click', (e) => {
+                if (e.target === deleteModal) {
+                    closeDeleteModalDialog();
+                }
+            });
+
+             // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && deleteModal.classList.contains('show')) {
+                    closeDeleteModalDialog();
+                }
+            });
+        }
     </script>
 </body>
 </html>

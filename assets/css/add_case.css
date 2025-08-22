@@ -477,23 +477,22 @@ body {
 /* Form Actions - Inherits form-section styling with sticky positioning */
 .form-actions {
     /* Inherit form-section base styling */
-    background: white;
     border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 16px 24px;
+    border-radius: 16px;
+    background: var(--Colour-background-surface-overlay-sticky-bar, #F7F8FA);
     width: 100%;
     
     /* Sticky positioning */
-    position: sticky;
+    /* position: sticky;
     bottom: 2rem;
-    z-index: 1000;
+    z-index: 1000; */
     
     /* Form actions specific styling */
     display: flex;
     justify-content: flex-end;
     gap: 12px;
     margin-top: 0rem;
-    border-top: 1px solid #e5e7eb;
     padding-top: 1rem;
 }
 
@@ -506,7 +505,7 @@ body {
 
 /* Button Styles */
 .btn {
-    padding: 12px 24px;
+    padding: 8px 16px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
@@ -517,8 +516,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 120px;
-    height: 44px;
+    height: 36px;
 }
 
 .btn:focus {

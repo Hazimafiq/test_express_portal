@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aligners Cases - Doctor Portal</title>
+    <title>User Management - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/user_management.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
+    <!-- Hidden success message element -->
+    <% if (successMessage) { %>
+        <div id="success-message" data-message="<%= successMessage %>" style="display: none;"></div>
+    <% } %>
+    
     <!-- Top header hidden for rail layout -->
     <header class="header" aria-hidden="true"></header>
 
@@ -47,6 +53,7 @@
                         <div class="chip-menu" id="countryMenu">
                             <button class="chip-menu-item" data-value="malaysia">Malaysia</button>
                             <button class="chip-menu-item" data-value="singapore">Singapore</button>
+                            <button class="chip-menu-item" data-value="thailand">Thailand</button>
                         </div>
                         <!-- hidden native select for value storage and keyboard fallback -->
                         <select class="chip-input native-select" id="countryFilter" hidden>
@@ -83,13 +90,13 @@
             <div class="status-tabs">
                 <div class="tab-list" role="tablist">
                     <button class="tab-button active" data-status="all" role="tab">
-                        All <span class="tab-count">30</span>
+                        All <span class="tab-count">0</span>
                     </button>
                     <button class="tab-button" data-status="active" role="tab">
-                        Active <span class="tab-count">4</span>
+                        Active <span class="tab-count">0</span>
                     </button>
                     <button class="tab-button" data-status="inactive" role="tab">
-                        Inactive <span class="tab-count">26</span>
+                        Inactive <span class="tab-count">0</span>
                     </button>
                 </div>
             </div>
@@ -104,116 +111,17 @@
                             <th class="th-role">Role</th>
                             <th class="th-created-at sortable" data-sort="created">
                                 Created At 
-                                <span class="sort-icon">↕</span>
+                                <img src="/assets/images/sort-unsorted.svg" alt="Sort" class="sort-icon">
                             </th>
                             <th class="th-last-login sortable" data-sort="last-login">
                                 Last Login 
-                                <span class="sort-icon">↕</span>
+                               <img src="/assets/images/sort-unsorted.svg" alt="Sort" class="sort-icon">
                             </th>
                             <th class="th-status">Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="table-row" data-status="active" data-role="superadmin" data-country="malaysia">
-                            <td class="td-name">Siti Khadijah binti Amin</td>
-                            <td class="td-country">Malaysia</td>
-                            <td class="td-role">Superadmin</td>
-                            <td class="td-created-at">14/07/2025</td>
-                            <td class="td-last-login">18/07/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="doctor" data-country="singapore">
-                            <td class="td-name">Jennifer Tan Yi Wen</td>
-                            <td class="td-country">Singapore</td>
-                            <td class="td-role">Doctor</td>
-                            <td class="td-created-at">20/06/2025</td>
-                            <td class="td-last-login">22/06/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="malaysia">
-                            <td class="td-name">Low Zi Xuan</td>
-                            <td class="td-country">Malaysia</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">11/06/2025</td>
-                            <td class="td-last-login">12/06/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
-                            <td class="td-name">Lim Wei Jie</td>
-                            <td class="td-country">Singapore</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">25/05/2025</td>
-                            <td class="td-last-login">27/05/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
-                            <td class="td-name">Carol Chan Sin Yue</td>
-                            <td class="td-country">Malaysia</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">19/04/2025</td>
-                            <td class="td-last-login">20/04/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
-                            <td class="td-name">Lim Mei Shin</td>
-                            <td class="td-country">Singapore</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">10/04/2025</td>
-                            <td class="td-last-login">13/04/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="malaysia">
-                            <td class="td-name">Nur Hidayah binti Ismail</td>
-                            <td class="td-country">Malaysia</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">14/03/2025</td>
-                            <td class="td-last-login">16/03/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
-                            <td class="td-name">Avvinashravi</td>
-                            <td class="td-country">Singapore</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">09/12/2025</td>
-                            <td class="td-last-login">13/12/2025</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="malaysia">
-                            <td class="td-name">Nur Aqilah binti Shudin</td>
-                            <td class="td-country">Malaysia</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">01/11/2025</td>
-                            <td class="td-last-login">02/11/2024</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
-                        <tr class="table-row" data-status="active" data-role="staff" data-country="singapore">
-                            <td class="td-name">Chia Yu Xuan</td>
-                            <td class="td-country">Singapore</td>
-                            <td class="td-role">Staff</td>
-                            <td class="td-created-at">20/06/2024</td>
-                            <td class="td-last-login">20/06/2024</td>
-                            <td class="td-status">
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                        </tr>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded dynamically via JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -233,183 +141,473 @@
                     </label>
                 </div>
                 
-                <nav class="pagination-nav" aria-label="Pagination Navigation">
-                    <button class="pagination-btn prev-btn" disabled>
-                        <img src="/assets/images/left-arrow-pagination-inactive.svg" class="pagination-icon" alt="Previous">
-                    </button>
-                    
-                    <div class="pagination-numbers">
-                        <button class="pagination-btn page-btn active" data-page="1">1</button>
-                        <button class="pagination-btn page-btn" data-page="2">2</button>
-                        <span class="pagination-ellipsis">...</span>
-                        <button class="pagination-btn page-btn" data-page="10">10</button>
-                    </div>
-                    
-                    <button class="pagination-btn next-btn">
-                        <img src="/assets/images/right-arrow-pagination-active.svg" class="pagination-icon" alt="Next">
-                    </button>
+                <nav class="pagination-nav" aria-label="Pagination Navigation" id="paginationNav">
+                    <!-- Pagination buttons will be generated dynamically -->
                 </nav>
             </div>
 
-            <!-- Empty State -->
-            <div class="empty-state" id="emptyState" style="display: none;">
-                <div class="empty-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M9 11H15M9 15H15M17 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3H12.5858C12.851 3 13.1054 3.10536 13.2929 3.29289L19.7071 9.70711C19.8946 9.89464 20 10.149 20 10.4142V19C20 20.1046 19.1046 21 18 21H17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <h3 class="empty-title">No users found</h3>
-                <p class="empty-description">Try adjusting your search or filter criteria</p>
+
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState" style="display: none; text-align: center; padding: 2rem;">
+                <p>Loading users...</p>
             </div>
         </div>
     </main>
-
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
-            loadComponent('navRail', '/views/components/side-menu.ejs');
+            loadComponent('navRail', '/components/side-menu');
             
-             // Create user button
+            // User management functionality
+            let currentFilters = {
+                search: '',
+                country: '',
+                role: '',
+                status: 'all',
+                sortBy: 'created_at',
+                sortOrder: 'DESC',
+                limit: 10,
+                offset: 0
+            };
+            
+            let currentPage = 1;
+            let totalUsers = 0;
+
+            // Create user button
             const createUserBtn = document.getElementById('createUserBtn');
             createUserBtn.addEventListener('click', () => {
                 window.location.href = '/create-user';
             });
 
-               // Search and filter functionality
             const searchInput = document.getElementById('searchInput');
             const countryFilter = document.getElementById('countryFilter');
             const roleFilter = document.getElementById('roleFilter');
             const resetFilters = document.getElementById('resetFilters');
-            const usersTable = document.getElementById('usersTable');
-            const emptyState = document.getElementById('emptyState');
-            const tabButtons = document.querySelectorAll('.tab-button');
+            const usersTableBody = document.getElementById('usersTableBody');
+            const loadingState = document.getElementById('loadingState');
+            const entriesPerPage = document.getElementById('entriesPerPage');
+            const paginationNav = document.getElementById('paginationNav');
 
-            let currentTab = 'all';
+            // Load users from API
+            async function loadUsers() {
+                try {
+                    loadingState.style.display = 'block';
 
-            function filterUsers() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const brandValue = treatmentBrandFilter.value;
-                
-                const rows = document.querySelectorAll('.table-row');
-                let visibleCount = 0;
+                    const params = new URLSearchParams();
+                    Object.keys(currentFilters).forEach(key => {
+                        if (currentFilters[key]) {
+                            params.append(key, currentFilters[key]);
+                        }
+                    });
 
-                rows.forEach(row => {
-                    const name = row.querySelector('.td-name').textContent.toLowerCase();
-                    const country = row.querySelector('.td-country').textContent.toLowerCase();
-                    const role = row.getAttribute('data-role');
-                    const status = row.getAttribute('data-status');
-
-                    const matchesSearch = !searchTerm || name.includes(searchTerm) || country.includes(searchTerm);
-                    const matchesBrand = !brandValue || role === brandValue;
-                    const matchesTab = currentTab === 'all' || status === currentTab;
-
-                    if (matchesSearch && matchesBrand && matchesTab) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-
-                // Show empty state if no cases visible
-                if (visibleCount === 0) {
-                    emptyState.style.display = 'flex';
-                    usersTable.parentElement.style.display = 'none';
-                } else {
-                    emptyState.style.display = 'none';
-                    usersTable.parentElement.style.display = 'block';
+                    const response = await axios.get(`/get-users?${params.toString()}`)
+                    .then(response => {
+                        const data = response.data;
+                        totalUsers = data.total;
+                        
+                        renderUsers(data.users);
+                        updatePagination();
+                    })
+                    .catch(error => {
+                        Toast.error('Failed to load users');
+                        return;
+                    });
+                    
+                } catch (error) {
+                    console.error('Error loading users:', error);
+                    Toast.error('Failed to load users');
+                } finally {
+                    loadingState.style.display = 'none';
                 }
             }
 
-            // Tab functionality
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active class from all tabs
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
+            // Load and update tab counts
+            async function updateTabCounts() {
+                try {
+                    const params = new URLSearchParams();
+                    // Only include filters that affect counts (not status, limit, offset, sortBy, sortOrder)
+                    if (currentFilters.search) params.append('search', currentFilters.search);
+                    if (currentFilters.country) params.append('country', currentFilters.country);
+                    if (currentFilters.role) params.append('role', currentFilters.role);
+
+                    const response = await axios.get(`/get-user-counts?${params.toString()}`);
+                    const counts = response.data;
                     
-                    // Add active class to clicked tab
-                    button.classList.add('active');
+                    // Update tab counts
+                    document.querySelector('[data-status="all"] .tab-count').textContent = counts.all;
+                    document.querySelector('[data-status="active"] .tab-count').textContent = counts.active;
+                    document.querySelector('[data-status="inactive"] .tab-count').textContent = counts.inactive;
+                } catch (error) {
+                    console.error('Error loading user counts:', error);
+                }
+            }
+
+            // Render users in table
+            function renderUsers(users) {
+                usersTableBody.innerHTML = '';
+                
+                if (users.length === 0) {
+                    // Show empty state row within table
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `
+                        <td colspan="6" class="empty-state-cell">
+                            <div class="empty-state-content">
+                                <div class="empty-icon">
+                                    <img src="/assets/images/no-record-icon.svg" alt="No record found" class="no-record-icon">
+                                </div>
+                                <p class="empty-message">No record found.</p>
+                            </div>
+                        </td>
+                    `;
+                    usersTableBody.appendChild(emptyRow);
+                    return;
+                }
+
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.className = 'table-row';
+                    row.setAttribute('data-user-id', user.id);
                     
-                    // Update current tab
-                    currentTab = button.getAttribute('data-status');
+                    const formatDate = (dateString) => {
+                        if (!dateString) return 'Never';
+                        return new Date(dateString).toLocaleDateString('en-GB');
+                    };
+
+                    row.innerHTML = `
+                        <td class="td-name">${escapeHtml(user.fullName)}</td>
+                        <td class="td-country">${escapeHtml(user.country)}</td>
+                        <td class="td-role">${escapeHtml(user.role)}</td>
+                        <td class="td-created-at">${formatDate(user.created_at)}</td>
+                        <td class="td-last-login">${formatDate(user.last_login)}</td>
+                        <td class="td-status">
+                            <span class="status-badge status-${user.status}">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span>
+                        </td>
+                    `;
                     
-                    // Filter cases
-                    filterUsers();
+                    usersTableBody.appendChild(row);
                 });
+            }
+
+            // Escape HTML to prevent XSS
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Update pagination controls
+            function updatePagination() {
+                const totalPages = Math.ceil(totalUsers / currentFilters.limit);
+                paginationNav.innerHTML = '';
+
+                //if (totalPages <= 1) return;
+
+                // Previous button
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'pagination-btn prev-btn';
+                prevBtn.disabled = currentPage === 1;
+                prevBtn.innerHTML = '<img src="/assets/images/left-arrow-pagination-inactive.svg" class="pagination-icon" alt="Previous">';
+                prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
+                paginationNav.appendChild(prevBtn);
+
+                // Page numbers container
+                const numbersDiv = document.createElement('div');
+                numbersDiv.className = 'pagination-numbers';
+
+                if (totalPages <= 1) {
+                    // Show only page 1 if there's only one page
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = 'pagination-btn page-btn active';
+                    pageBtn.textContent = '1';
+                    pageBtn.setAttribute('data-page', '1');
+                    pageBtn.addEventListener('click', () => goToPage(1));
+                    numbersDiv.appendChild(pageBtn);
+                } else if (totalPages <= 5) {
+                    // Show all pages if 5 or fewer
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pageBtn = document.createElement('button');
+                        pageBtn.className = 'pagination-btn page-btn';
+                        pageBtn.textContent = i;
+                        pageBtn.setAttribute('data-page', i);
+                        
+                        if (i === currentPage) {
+                            pageBtn.classList.add('active');
+                        }
+                        
+                        pageBtn.addEventListener('click', () => goToPage(i));
+                        numbersDiv.appendChild(pageBtn);
+                    }
+                } else {
+                    
+                    // Always show first page
+                    const firstBtn = document.createElement('button');
+                    firstBtn.className = 'pagination-btn page-btn';
+                    firstBtn.textContent = '1';
+                    firstBtn.setAttribute('data-page', '1');
+                    if (currentPage === 1) {
+                        firstBtn.classList.add('active');
+                    }
+                    firstBtn.addEventListener('click', () => goToPage(1));
+                    numbersDiv.appendChild(firstBtn);
+                    
+                    // Show current page if it's not first or last and not adjacent to first
+                    if (currentPage > 3) {
+                        const ellipsis1 = document.createElement('span');
+                        ellipsis1.className = 'pagination-ellipsis';
+                        ellipsis1.textContent = '...';
+                        numbersDiv.appendChild(ellipsis1);
+                    }
+                    
+                    // Show current page and adjacent pages (if not first or last)
+                    const startPage = Math.max(2, currentPage - 1);
+                    const endPage = Math.min(totalPages - 1, currentPage + 1);
+                    
+                    for (let i = startPage; i <= endPage; i++) {
+                        if (i !== 1 && i !== totalPages) {
+                            const pageBtn = document.createElement('button');
+                            pageBtn.className = 'pagination-btn page-btn';
+                            pageBtn.textContent = i;
+                            pageBtn.setAttribute('data-page', i);
+                            
+                            if (i === currentPage) {
+                                pageBtn.classList.add('active');
+                            }
+                            
+                            pageBtn.addEventListener('click', () => goToPage(i));
+                            numbersDiv.appendChild(pageBtn);
+                        }
+                    }
+                    
+                    // Show ellipsis before last page if needed
+                    if (currentPage < totalPages - 2) {
+                        const ellipsis2 = document.createElement('span');
+                        ellipsis2.className = 'pagination-ellipsis';
+                        ellipsis2.textContent = '...';
+                        numbersDiv.appendChild(ellipsis2);
+                    }
+                    
+                    // Always show last page (if more than 1 page)
+                    if (totalPages > 1) {
+                        const lastBtn = document.createElement('button');
+                        lastBtn.className = 'pagination-btn page-btn';
+                        lastBtn.textContent = totalPages;
+                        lastBtn.setAttribute('data-page', totalPages);
+                        if (currentPage === totalPages) {
+                            lastBtn.classList.add('active');
+                        }
+                        lastBtn.addEventListener('click', () => goToPage(totalPages));
+                        numbersDiv.appendChild(lastBtn);
+                    }
+                }
+
+                paginationNav.appendChild(numbersDiv);
+
+                // Next button
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'pagination-btn next-btn';
+                nextBtn.disabled = currentPage === totalPages;
+                nextBtn.innerHTML = '<img src="/assets/images/right-arrow-pagination-active.svg" class="pagination-icon" alt="Next">';
+                nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
+                paginationNav.appendChild(nextBtn);
+            }
+
+
+            function goToPage(page) {
+                const totalPages = Math.ceil(totalUsers / currentFilters.limit);
+                if (page < 1 || page > totalPages) return;
+                
+                currentPage = page;
+                currentFilters.offset = (page - 1) * currentFilters.limit;
+                loadUsers();
+            }
+
+            // Debounce function for search input
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            function applyFilters() {
+                currentPage = 1;
+                currentFilters.offset = 0;
+                loadUsers();
+                updateTabCounts();
+            }
+
+            function performSearch() {
+                currentFilters.search = searchInput.value.trim();
+                applyFilters();
+            }
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
             });
 
-            // Event listeners
-            searchInput.addEventListener('input', filterUsers);
-            countryFilter.addEventListener('change', filterUsers);
-            roleFilter.addEventListener('change', filterUsers);
-
-            resetFilters.addEventListener('click', () => {
-                searchInput.value = '';
-                countryFilter.value = '';
-                roleFilter.value = '';
-                filterUsers();
+            // Search on search icon click
+            const searchIcon = document.querySelector('.search-icon');
+            searchIcon.addEventListener('click', () => {
+                performSearch();
             });
 
-            // Custom dropdown (Treatment Brand)
-            const brandButton = document.getElementById('brandButton');
-            const brandMenu = document.getElementById('brandMenu');
-            const nativeBrandSelect = document.getElementById('countryFilter');
-            const brandLabel = brandButton.querySelector('.chip-button-label');
-            brandButton.addEventListener('click', (e) => {
+            // Make search icon clickable
+            searchIcon.style.cursor = 'pointer';
+
+            // Custom dropdown (Country)
+            const countryButton = document.getElementById('countryButton');
+            const countryMenu = document.getElementById('countryMenu');
+            const nativeCountrySelect = document.getElementById('countryFilter');
+            const countryLabel = countryButton.querySelector('.chip-button-label');
+            
+            countryButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                brandMenu.classList.toggle('open');
+                countryMenu.classList.toggle('open');
             });
-            document.addEventListener('click', () => brandMenu.classList.remove('open'));
-            brandMenu.querySelectorAll('.chip-menu-item').forEach(item => {
+            
+            document.addEventListener('click', () => countryMenu.classList.remove('open'));
+            
+            countryMenu.querySelectorAll('.chip-menu-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     const value = e.currentTarget.getAttribute('data-value');
                     const text = e.currentTarget.textContent.trim();
-                    nativeBrandSelect.value = value;
-                    brandLabel.textContent = text || 'Treatment Brand';
-                    brandMenu.classList.remove('open');
-                    filterUsers();
+                    
+                    // Remove selected class from all items
+                    countryMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked item
+                    e.currentTarget.classList.add('selected');
+                    
+                    nativeCountrySelect.value = value;
+                    countryLabel.textContent = text || 'Country';
+                    countryMenu.classList.remove('open');
+                    
+                    currentFilters.country = value;
+                    applyFilters();
                 });
             });
 
-            // Floating language menu
-            const languageFab = document.getElementById('languageFab');
-            const languageMenu = document.getElementById('languageMenu');
-            languageFab.addEventListener('click', (e) => {
-                e.stopPropagation();
-                languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
-            });
-            document.addEventListener('click', () => { languageMenu.style.display = 'none'; });
-            document.querySelectorAll('.lang-item').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.lang-item').forEach(b => b.classList.remove('active'));
-                    e.currentTarget.classList.add('active');
-                    languageMenu.style.display = 'none';
-                });
-            });
-
-            // Pagination functionality
-            const entriesSelect = document.getElementById('entriesPerPage');
-            const paginationBtns = document.querySelectorAll('.pagination-btn');
+            // Custom dropdown (Role)
+            const roleButton = document.getElementById('roleButton');
+            const roleMenu = document.getElementById('roleMenu');
+            const nativeRoleSelect = document.getElementById('roleFilter');
+            const roleLabel = roleButton.querySelector('.chip-button-label');
             
-            entriesSelect.addEventListener('change', () => {
-                console.log('Entries per page changed to:', entriesSelect.value);
-                // Add pagination logic here
+            roleButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                roleMenu.classList.toggle('open');
+            });
+            
+            document.addEventListener('click', () => roleMenu.classList.remove('open'));
+            
+            roleMenu.querySelectorAll('.chip-menu-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const value = e.currentTarget.getAttribute('data-value');
+                    const text = e.currentTarget.textContent.trim();
+                    
+                    // Remove selected class from all items
+                    roleMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked item
+                    e.currentTarget.classList.add('selected');
+                    
+                    nativeRoleSelect.value = value;
+                    roleLabel.textContent = text || 'Role';
+                    roleMenu.classList.remove('open');
+                    
+                    currentFilters.role = value;
+                    applyFilters();
+                });
             });
 
-            paginationBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (btn.classList.contains('page-btn')) {
-                        // Remove active class from all page buttons
-                        document.querySelectorAll('.page-btn').forEach(pageBtn => {
-                            pageBtn.classList.remove('active');
-                        });
-                        
-                        // Add active class to clicked button
-                        btn.classList.add('active');
-                        
-                        console.log('Page changed to:', btn.getAttribute('data-page'));
-                        // Add page change logic here
+            // Reset filters
+            resetFilters.addEventListener('click', () => {
+                searchInput.value = '';
+                nativeCountrySelect.value = '';
+                nativeRoleSelect.value = '';
+                countryLabel.textContent = 'Country';
+                roleLabel.textContent = 'Role';
+                
+                // Remove selected class from all chip menu items
+                countryMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                    menuItem.classList.remove('selected');
+                });
+                roleMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                    menuItem.classList.remove('selected');
+                });
+                
+                currentFilters.search = '';
+                currentFilters.country = '';
+                currentFilters.role = '';
+                applyFilters();
+            });
+
+            // Status tabs functionality
+            const statusTabs = document.querySelectorAll('.tab-button');
+            statusTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    statusTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Update filter
+                    currentFilters.status = tab.getAttribute('data-status');
+                    applyFilters();
+                });
+            });
+
+            // Entries per page
+            entriesPerPage.addEventListener('change', () => {
+                currentFilters.limit = parseInt(entriesPerPage.value);
+                currentPage = 1;
+                currentFilters.offset = 0;
+                loadUsers();
+            });
+
+            // Sorting functionality
+            document.querySelectorAll('.sortable').forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortType = header.getAttribute('data-sort');
+                    let newSortBy = sortType;
+                    
+                    // Map frontend sort types to backend column names
+                    if (sortType === 'created') newSortBy = 'created_at';
+                    if (sortType === 'last-login') newSortBy = 'last_login';
+                    
+                    // Toggle sort order if same column
+                    if (currentFilters.sortBy === newSortBy) {
+                        currentFilters.sortOrder = currentFilters.sortOrder === 'ASC' ? 'DESC' : 'ASC';
+                    } else {
+                        currentFilters.sortBy = newSortBy;
+                        currentFilters.sortOrder = 'DESC';
                     }
+                    
+                    // Update sort icons
+                    document.querySelectorAll('.sortable .sort-icon').forEach(icon => {
+                        icon.src = '/assets/images/sort-unsorted.svg';
+                    });
+                    
+                    const sortIcon = header.querySelector('.sort-icon');
+                    sortIcon.src = currentFilters.sortOrder === 'ASC' ? '/assets/images/sort-asc.svg' : '/assets/images/sort-desc.svg';
+                    
+                    applyFilters();
                 });
             });
 
@@ -417,24 +615,23 @@
             document.addEventListener('click', (e) => {
                 const row = e.target.closest('.table-row');
                 if (row) {
-                    const name = row.querySelector('.td-name').textContent.trim();
-                    window.location.href = `/users/${encodeURIComponent(name)}`;
+                    const userId = row.getAttribute('data-user-id');
+                    window.location.href = `/user-details/${userId}`;
                 }
             });
 
-            // Sorting functionality
-            document.querySelectorAll('.sortable').forEach(header => {
-                header.addEventListener('click', () => {
-                    const sortType = header.getAttribute('data-sort');
-                    console.log('Sort by:', sortType);
-                    // Add sorting logic here
-                });
-            });
+            // Initial load
+            loadUsers();
+            updateTabCounts();
 
+            // Show success toast if message is passed via URL parameter
+            const successMessageElement = document.getElementById('success-message');
+            if (successMessageElement && successMessageElement.dataset.message) {
+                const message = successMessageElement.dataset.message;
+                Toast.success(message);
+                window.history.replaceState({}, '', window.location.pathname);
+            }
         });
-      
-
-     
     </script>
 </body>
 </html>
