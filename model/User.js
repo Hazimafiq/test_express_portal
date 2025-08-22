@@ -3,22 +3,22 @@ const pool = require('../utils/mysql');
 const CustomError = require('../errors/CustomError');
 
 class User {
-    static async register({ username, password, fullName, phoneNumber, email, clinic, country, role, address, postcode, city, state }) {
-        const existingUserQuery = 'SELECT * FROM users WHERE username = ?';
+    static async register({ username, password, fullName, phoneNumber, email, clinic, address, country, role, postcode, city, state }) {
+        const existingUserQuery = 'SELECT * FROM users_table WHERE username = ?';
         const existingUserValues = [username];
         const [existingUsers] = await pool.query(existingUserQuery, existingUserValues);
         if (existingUsers.length > 0) {
             throw new CustomError('User already exists', 400);
         }
         const hashedPassword = await argon2.hash(password);
-        const query = 'INSERT INTO users (username, password, fullName, phoneNumber, email, clinic, country, role, address, postcode, city, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [username.trim(), hashedPassword, fullName.trim(), phoneNumber.trim(), email.trim(), clinic.trim(), country.trim(), role.trim(), address.trim(), postcode.trim(), city.trim(), state.trim()];
+        const query = 'INSERT INTO users_table (username, password, fullName, phoneNumber, email, clinic, address, country, role, address, postcode, city, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const values = [username.trim(), hashedPassword, fullName.trim(), phoneNumber.trim(), email.trim(), clinic.trim(), address.trim(), country.trim(), role.trim(), address.trim(), postcode.trim(), city.trim(), state.trim()];
         const [results] = await pool.query(query, values);
         return {results, message: 'User created.'};
     }
 
     static async login(username, password) {
-        const query = 'SELECT * FROM users WHERE username = ? LIMIT 1';
+        const query = 'SELECT * FROM users_table WHERE username = ? LIMIT 1';
         const values = [username];
         const [results] = await pool.query(query, values);
         const user = results[0];
@@ -26,7 +26,7 @@ class User {
             throw new CustomError('Invalid credentials', 401);
         }
         
-        const updateLoginQuery = 'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?';
+        const updateLoginQuery = 'UPDATE users_table SET last_login = CURRENT_TIMESTAMP WHERE id = ?';
         await pool.query(updateLoginQuery, [user.id]);
         
         return user;
@@ -35,7 +35,7 @@ class User {
     static async changePassword(username, oldPassword, newPassword) {
         const user = await this.login(username, oldPassword);
         const hashedNewPassword = await argon2.hash(newPassword);
-        const query = 'UPDATE users SET password = ? WHERE id = ?';
+        const query = 'UPDATE users_table SET password = ? WHERE id = ?';
         const values = [hashedNewPassword, user.id];
         await pool.query(query, values);
         return { message: 'Password changed.' };
@@ -43,7 +43,7 @@ class User {
 
     static async changePasswordUser(userId, newPassword) {
         const hashedNewPassword = await argon2.hash(newPassword);
-        const query = 'UPDATE users SET password = ? WHERE id = ?';
+        const query = 'UPDATE users_table SET password = ? WHERE id = ?';
         const values = [hashedNewPassword, userId];
         await pool.query(query, values);
         return { message: 'Password changed.' };
@@ -51,7 +51,7 @@ class User {
 
     static async get_profile_data(id) {
         // const query = 'SELECT username, phoneNumber, email, role, country, clinic FROM users WHERE id = ? LIMIT 1';
-        const query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, status, address, postcode, city, state FROM users WHERE id = ? LIMIT 1';
+        const query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, status, address, postcode, city, state FROM users_table WHERE id = ? LIMIT 1';
         const values = [id];
         const [results] = await pool.query(query, values);
         if(results.length == 0){
@@ -61,7 +61,7 @@ class User {
     }
 
     static async edit_user(userId, username, fullName, phoneNumber, email, country, role, address, postcode, city, state ) {
-        const query = 'UPDATE users SET username = ?, fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ?, address = ?, postcode = ?, city = ?, state = ? WHERE id = ? LIMIT 1';
+        const query = 'UPDATE users_table SET username = ?, fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ?, address = ?, postcode = ?, city = ?, state = ? WHERE id = ? LIMIT 1';
         const values = [username, fullName, phoneNumber, email, country, role, address, postcode, city, state, userId];
         const [results] = await pool.query(query, values);
         return {results, message: 'Profile updated.'};
@@ -70,7 +70,7 @@ class User {
     static async get_all_users(filters = {}) {
         const { country, role, status, search, sortBy = 'created_at', sortOrder = 'DESC', limit, offset } = filters;
         
-        let query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, status, created_at, last_login FROM users';
+        let query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, status, created_at, last_login FROM users_table';
         let whereConditions = ['deleted_at IS NULL'];
         let queryParams = [];
         
@@ -128,7 +128,7 @@ class User {
         const [results] = await pool.query(query, queryParams);
         
         // Get total count for pagination (without limit/offset)
-        let countQuery = 'SELECT COUNT(*) as total FROM users';
+        let countQuery = 'SELECT COUNT(*) as total FROM users_table';
         let countParams = [];
         
         if (whereConditions.length > 0) {
@@ -156,7 +156,7 @@ class User {
     static async getUserCounts(filters = {}) {
         const { country, role, search } = filters;
         
-        let baseQuery = 'SELECT status, COUNT(*) as count FROM users';
+        let baseQuery = 'SELECT status, COUNT(*) as count FROM users_table';
         let whereConditions = ['deleted_at IS NULL'];
         let queryParams = [];
         
@@ -189,7 +189,7 @@ class User {
         const [results] = await pool.query(baseQuery, queryParams);
         
         // Also get total count
-        let totalQuery = 'SELECT COUNT(*) as total FROM users';
+        let totalQuery = 'SELECT COUNT(*) as total FROM users_table';
         if (whereConditions.length > 0) {
             totalQuery += ' WHERE ' + whereConditions.join(' AND ');
         }
@@ -210,21 +210,21 @@ class User {
     }
 
     static async activateUser(userId) {
-        const query = 'UPDATE users SET status = "active" WHERE id = ?';
+        const query = 'UPDATE users_table SET status = "active" WHERE id = ?';
         const values = [userId];
         await pool.query(query, values);
         return { message: 'User account has been activated.' };
     }
 
     static async deactivateUser(userId) {
-        const query = 'UPDATE users SET status = "inactive" WHERE id = ?';
+        const query = 'UPDATE users_table SET status = "inactive" WHERE id = ?';
         const values = [userId];
         await pool.query(query, values);
         return { message: 'User account has been deactivated.' };
     }
 
     static async deleteUser(userId) {
-        const query = 'UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?';
+        const query = 'UPDATE users_table SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?';
         const values = [userId];
         await pool.query(query, values);
         return { message: 'User deleted.' };
