@@ -137,14 +137,14 @@
                             <th class="th-patient-name">Patient Name</th>
                             <th class="th-category">Category</th>
                             <th class="th-treatment-brand">Treatment Brand</th>
-                            <th class="th-created-at sortable" data-sort="created">
-                                Created At 
-                                <span class="sort-icon">↕</span>
-                            </th>
-                            <th class="th-last-updated sortable" data-sort="updated">
-                                Last Updated 
-                                <span class="sort-icon">↕</span>
-                            </th>
+                                                           <th class="th-created-at sortable" data-sort="created">
+                                   Created At 
+                                   <img src="/assets/images/sort-unsorted.svg" alt="Sort" class="sort-icon">
+                               </th>
+                               <th class="th-last-updated sortable" data-sort="updated">
+                                   Last Updated 
+                                   <img src="/assets/images/sort-unsorted.svg" alt="Sort" class="sort-icon">
+                               </th>
                             <th class="th-status">Status</th>
                         </tr>
                     </thead>
@@ -462,7 +462,23 @@
             header.addEventListener('click', () => {
                 const sortType = header.getAttribute('data-sort');
                 console.log('Sort by:', sortType);
-                // Add sorting logic here
+                
+                // Update sort icons
+                document.querySelectorAll('.sortable .sort-icon').forEach(icon => {
+                    icon.src = '/assets/images/sort-unsorted.svg';
+                });
+                
+                const sortIcon = header.querySelector('.sort-icon');
+                // For now, just toggle between ascending and descending
+                // You can implement actual sorting logic here
+                const currentSrc = sortIcon.src;
+                if (currentSrc.includes('sort-asc.svg')) {
+                    sortIcon.src = '/assets/images/sort-desc.svg';
+                } else if (currentSrc.includes('sort-desc.svg')) {
+                    sortIcon.src = '/assets/images/sort-unsorted.svg';
+                } else {
+                    sortIcon.src = '/assets/images/sort-asc.svg';
+                }
             });
         });
 

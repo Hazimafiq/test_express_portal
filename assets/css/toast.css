@@ -20,8 +20,8 @@
     border-radius: 6px;
     padding: 8px 16px;
     margin-bottom: 12px;
-    min-width: 320px;
-    max-width: 400px;
+    /* min-width: 320px;
+    max-width: 400px; */
     box-shadow: 0 4px 20px 0 rgba(209, 209, 209, 0.25);
     pointer-events: auto;
     transform: translateY(-100%);
