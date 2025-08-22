@@ -10,6 +10,11 @@
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
+    <!-- Hidden success message element -->
+    <% if (successMessage) { %>
+        <div id="success-message" data-message="<%= successMessage %>" style="display: none;"></div>
+    <% } %>
+    
     <!-- Top header hidden for rail layout -->
     <header class="header" aria-hidden="true"></header>
 
@@ -313,19 +318,90 @@
                 const numbersDiv = document.createElement('div');
                 numbersDiv.className = 'pagination-numbers';
 
-                // Generate page buttons (simplified logic)
-                for (let i = 1; i <= Math.min(totalPages, 10); i++) {
+                if (totalPages <= 1) {
+                    // Show only page 1 if there's only one page
                     const pageBtn = document.createElement('button');
-                    pageBtn.className = 'pagination-btn page-btn';
-                    pageBtn.textContent = i;
-                    pageBtn.setAttribute('data-page', i);
+                    pageBtn.className = 'pagination-btn page-btn active';
+                    pageBtn.textContent = '1';
+                    pageBtn.setAttribute('data-page', '1');
+                    pageBtn.addEventListener('click', () => goToPage(1));
+                    numbersDiv.appendChild(pageBtn);
+                } else if (totalPages <= 5) {
+                    // Show all pages if 5 or fewer
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pageBtn = document.createElement('button');
+                        pageBtn.className = 'pagination-btn page-btn';
+                        pageBtn.textContent = i;
+                        pageBtn.setAttribute('data-page', i);
+                        
+                        if (i === currentPage) {
+                            pageBtn.classList.add('active');
+                        }
+                        
+                        pageBtn.addEventListener('click', () => goToPage(i));
+                        numbersDiv.appendChild(pageBtn);
+                    }
+                } else {
                     
-                    if (i === currentPage) {
-                        pageBtn.classList.add('active');
+                    // Always show first page
+                    const firstBtn = document.createElement('button');
+                    firstBtn.className = 'pagination-btn page-btn';
+                    firstBtn.textContent = '1';
+                    firstBtn.setAttribute('data-page', '1');
+                    if (currentPage === 1) {
+                        firstBtn.classList.add('active');
+                    }
+                    firstBtn.addEventListener('click', () => goToPage(1));
+                    numbersDiv.appendChild(firstBtn);
+                    
+                    // Show current page if it's not first or last and not adjacent to first
+                    if (currentPage > 3) {
+                        const ellipsis1 = document.createElement('span');
+                        ellipsis1.className = 'pagination-ellipsis';
+                        ellipsis1.textContent = '...';
+                        numbersDiv.appendChild(ellipsis1);
                     }
                     
-                    pageBtn.addEventListener('click', () => goToPage(i));
-                    numbersDiv.appendChild(pageBtn);
+                    // Show current page and adjacent pages (if not first or last)
+                    const startPage = Math.max(2, currentPage - 1);
+                    const endPage = Math.min(totalPages - 1, currentPage + 1);
+                    
+                    for (let i = startPage; i <= endPage; i++) {
+                        if (i !== 1 && i !== totalPages) {
+                            const pageBtn = document.createElement('button');
+                            pageBtn.className = 'pagination-btn page-btn';
+                            pageBtn.textContent = i;
+                            pageBtn.setAttribute('data-page', i);
+                            
+                            if (i === currentPage) {
+                                pageBtn.classList.add('active');
+                            }
+                            
+                            pageBtn.addEventListener('click', () => goToPage(i));
+                            numbersDiv.appendChild(pageBtn);
+                        }
+                    }
+                    
+                    // Show ellipsis before last page if needed
+                    if (currentPage < totalPages - 2) {
+                        const ellipsis2 = document.createElement('span');
+                        ellipsis2.className = 'pagination-ellipsis';
+                        ellipsis2.textContent = '...';
+                        numbersDiv.appendChild(ellipsis2);
+                    }
+                    
+                    // Always show last page (if more than 1 page)
+                    if (totalPages > 1) {
+                        const lastBtn = document.createElement('button');
+                        lastBtn.className = 'pagination-btn page-btn';
+                        lastBtn.textContent = totalPages;
+                        lastBtn.setAttribute('data-page', totalPages);
+                        if (currentPage === totalPages) {
+                            lastBtn.classList.add('active');
+                        }
+                        lastBtn.addEventListener('click', () => goToPage(totalPages));
+                        numbersDiv.appendChild(lastBtn);
+                    }
                 }
 
                 paginationNav.appendChild(numbersDiv);
@@ -406,6 +482,15 @@
                 item.addEventListener('click', (e) => {
                     const value = e.currentTarget.getAttribute('data-value');
                     const text = e.currentTarget.textContent.trim();
+                    
+                    // Remove selected class from all items
+                    countryMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked item
+                    e.currentTarget.classList.add('selected');
+                    
                     nativeCountrySelect.value = value;
                     countryLabel.textContent = text || 'Country';
                     countryMenu.classList.remove('open');
@@ -432,6 +517,15 @@
                 item.addEventListener('click', (e) => {
                     const value = e.currentTarget.getAttribute('data-value');
                     const text = e.currentTarget.textContent.trim();
+                    
+                    // Remove selected class from all items
+                    roleMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked item
+                    e.currentTarget.classList.add('selected');
+                    
                     nativeRoleSelect.value = value;
                     roleLabel.textContent = text || 'Role';
                     roleMenu.classList.remove('open');
@@ -448,6 +542,14 @@
                 nativeRoleSelect.value = '';
                 countryLabel.textContent = 'Country';
                 roleLabel.textContent = 'Role';
+                
+                // Remove selected class from all chip menu items
+                countryMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                    menuItem.classList.remove('selected');
+                });
+                roleMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                    menuItem.classList.remove('selected');
+                });
                 
                 currentFilters.search = '';
                 currentFilters.country = '';
@@ -521,6 +623,14 @@
             // Initial load
             loadUsers();
             updateTabCounts();
+
+            // Show success toast if message is passed via URL parameter
+            const successMessageElement = document.getElementById('success-message');
+            if (successMessageElement && successMessageElement.dataset.message) {
+                const message = successMessageElement.dataset.message;
+                Toast.success(message);
+                window.history.replaceState({}, '', window.location.pathname);
+            }
         });
     </script>
 </body>

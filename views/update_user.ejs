@@ -22,11 +22,11 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item">User Management</span>
+                <a href="/user-management" class="breadcrumb-item">User Management</a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item">User Details</span>
+                <a href="/user-details/<%= user[0].id %>" class="breadcrumb-item">User Details</a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
@@ -37,7 +37,11 @@
             <div class="page-header">
                 <h1 class="page-title">Update Profile</h1>
                 <div class="page-actions">
-                    <button class="btn btn-deactivate" id="deactivateBtn">Deactivate User</button>
+                    <% if (user[0].status === 'active') { %>
+                        <button class="btn btn-deactivate" id="deactivateBtn">Deactivate User</button>
+                    <% } else { %>
+                        <button class="btn btn-deactivate" id="deleteBtn">Delete User</button>
+                    <% } %>
                 </div>
             </div>
 
@@ -49,36 +53,56 @@
                     <div class="form-content">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="username">* Username</label>
+                                <label for="username">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Username</span>
+                                </label>
                                 <input type="text" id="username" name="username" placeholder="Input here" value="<%= user[0].username %>">
                             </div>
                             <div class="form-field">
-                                <label for="fullName">* Full Name</label>
+                                <label for="fullName">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Full Name</span>
+                                </label>
                                 <input type="text" id="fullName" name="fullName" placeholder="Input here" value="<%= user[0].fullName %>">
                             </div>
                             <div class="form-field">
-                                <label for="email">* Email</label>
+                                <label for="email">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Email</span>
+                                </label>
                                 <input type="email" id="email" name="email" placeholder="Input here" value="<%= user[0].email %>">
                             </div>
                             <div class="form-field">
-                                <label for="phoneNumber">* Phone Number</label>
+                                <label for="phoneNumber">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Phone Number</span>
+                                </label>
                                 <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Input here" value="<%= user[0].phoneNumber %>">
                             </div>
                             <div class="form-field">
-                                <label for="country">* Country</label>
-                                <select id="country" name="country">
-                                    <option value="">Select</option>
-                                    <option value="malaysia" <%= user[0].country === 'malaysia' ? 'selected' : '' %>>Malaysia</option>
-                                    <option value="thailand" <%= user[0].country === 'thailand' ? 'selected' : '' %>>Thailand</option>
-                                    <option value="singapore" <%= user[0].country === 'singapore' ? 'selected' : '' %>>Singapore</option>
-                                    <option value="indonesia" <%= user[0].country === 'indonesia' ? 'selected' : '' %>>Indonesia</option>
-                                    <option value="philippines" <%= user[0].country === 'philippines' ? 'selected' : '' %>>Philippines</option>
-                                    <option value="vietnam" <%= user[0].country === 'vietnam' ? 'selected' : '' %>>Vietnam</option>
-                                    <option value="other" <%= user[0].country === 'other' ? 'selected' : '' %>>Other</option>
-                                </select>
+                                <label for="country">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Country</span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="country" name="country">
+                                        <option value="">Select</option>
+                                        <option value="malaysia" <%= user[0].country === 'malaysia' ? 'selected' : '' %>>Malaysia</option>
+                                        <option value="thailand" <%= user[0].country === 'thailand' ? 'selected' : '' %>>Thailand</option>
+                                        <option value="singapore" <%= user[0].country === 'singapore' ? 'selected' : '' %>>Singapore</option>
+                                        <option value="indonesia" <%= user[0].country === 'indonesia' ? 'selected' : '' %>>Indonesia</option>
+                                        <option value="philippines" <%= user[0].country === 'philippines' ? 'selected' : '' %>>Philippines</option>
+                                        <option value="vietnam" <%= user[0].country === 'vietnam' ? 'selected' : '' %>>Vietnam</option>
+                                        <option value="other" <%= user[0].country === 'other' ? 'selected' : '' %>>Other</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-field">
-                                <label for="clinic">Clinic</label>
+                                <label for="clinic">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Clinic</span>
+                                </label>
                                 <input type="text" id="clinic" name="clinic" placeholder="Input here" value="<%= user[0].clinic %>">
                             </div>
                         </div>
@@ -91,7 +115,7 @@
                     <div class="form-content">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label for="address">* Address</label>
+                                <label for="address">Address</label>
                                 <input type="text" id="address" name="address" placeholder="Input here" value="<%= user[0].address %>">
                             </div>
                             <div class="form-field">
@@ -99,29 +123,31 @@
                                 <input type="text" id="postcode" name="postcode" placeholder="Input here" value="<%= user[0].postcode %>">
                             </div>
                             <div class="form-field">
-                                <label for="city">* City</label>
+                                <label for="city">City</label>
                                 <input type="text" id="city" name="city" placeholder="Input here" value="<%= user[0].city %>">
                             </div>
                             <div class="form-field">
-                                <label for="state">* State</label>
-                                <select id="state" name="state">
-                                    <option value="">Select</option>
-                                    <option value="selangor" <%= user[0].state === 'selangor' ? 'selected' : '' %>>Selangor</option>
-                                    <option value="kuala_lumpur" <%= user[0].state === 'kuala_lumpur' ? 'selected' : '' %>>Kuala Lumpur</option>
-                                    <option value="penang" <%= user[0].state === 'penang' ? 'selected' : '' %>>Penang</option>
-                                    <option value="johor" <%= user[0].state === 'johor' ? 'selected' : '' %>>Johor</option>
-                                    <option value="perak" <%= user[0].state === 'perak' ? 'selected' : '' %>>Perak</option>
-                                    <option value="kedah" <%= user[0].state === 'kedah' ? 'selected' : '' %>>Kedah</option>
-                                    <option value="kelantan" <%= user[0].state === 'kelantan' ? 'selected' : '' %>>Kelantan</option>
-                                    <option value="terengganu" <%= user[0].state === 'terengganu' ? 'selected' : '' %>>Terengganu</option>
-                                    <option value="pahang" <%= user[0].state === 'pahang' ? 'selected' : '' %>>Pahang</option>
-                                    <option value="negeri_sembilan" <%= user[0].state === 'negeri_sembilan' ? 'selected' : '' %>>Negeri Sembilan</option>
-                                    <option value="melaka" <%= user[0].state === 'melaka' ? 'selected' : '' %>>Melaka</option>
-                                    <option value="perlis" <%= user[0].state === 'perlis' ? 'selected' : '' %>>Perlis</option>
-                                    <option value="sabah" <%= user[0].state === 'sabah' ? 'selected' : '' %>>Sabah</option>
-                                    <option value="sarawak" <%= user[0].state === 'sarawak' ? 'selected' : '' %>>Sarawak</option>
-                                    <option value="other" <%= user[0].state === 'other' ? 'selected' : '' %>>Other</option>
-                                </select>
+                                <label for="state">State</label>
+                                <div class="select-wrapper">
+                                    <select id="state" name="state">
+                                        <option value="">Select</option>
+                                        <option value="selangor" <%= user[0].state === 'selangor' ? 'selected' : '' %>>Selangor</option>
+                                        <option value="kuala_lumpur" <%= user[0].state === 'kuala_lumpur' ? 'selected' : '' %>>Kuala Lumpur</option>
+                                        <option value="penang" <%= user[0].state === 'penang' ? 'selected' : '' %>>Penang</option>
+                                        <option value="johor" <%= user[0].state === 'johor' ? 'selected' : '' %>>Johor</option>
+                                        <option value="perak" <%= user[0].state === 'perak' ? 'selected' : '' %>>Perak</option>
+                                        <option value="kedah" <%= user[0].state === 'kedah' ? 'selected' : '' %>>Kedah</option>
+                                        <option value="kelantan" <%= user[0].state === 'kelantan' ? 'selected' : '' %>>Kelantan</option>
+                                        <option value="terengganu" <%= user[0].state === 'terengganu' ? 'selected' : '' %>>Terengganu</option>
+                                        <option value="pahang" <%= user[0].state === 'pahang' ? 'selected' : '' %>>Pahang</option>
+                                        <option value="negeri_sembilan" <%= user[0].state === 'negeri_sembilan' ? 'selected' : '' %>>Negeri Sembilan</option>
+                                        <option value="melaka" <%= user[0].state === 'melaka' ? 'selected' : '' %>>Melaka</option>
+                                        <option value="perlis" <%= user[0].state === 'perlis' ? 'selected' : '' %>>Perlis</option>
+                                        <option value="sabah" <%= user[0].state === 'sabah' ? 'selected' : '' %>>Sabah</option>
+                                        <option value="sarawak" <%= user[0].state === 'sarawak' ? 'selected' : '' %>>Sarawak</option>
+                                        <option value="other" <%= user[0].state === 'other' ? 'selected' : '' %>>Other</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -132,7 +158,10 @@
                     <h2 class="section-title">Role Access</h2>
                     <div class="form-content">
                         <div class="form-field">
-                            <label>* Role</label>
+                            <label for="role">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Role</span>
+                            </label>
                             <div class="role-selection" id="roleSelection">
                                 <div class="role-option">
                                     <label class="radio-label">
@@ -184,6 +213,25 @@
             <div class="modal-actions">
                 <button class="modal-btn modal-btn-cancel" id="cancelDeactivate">Cancel</button>
                 <button class="modal-btn modal-btn-confirm" id="confirmDeactivate">Yes, Deactivate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm to Delete?</h3>
+                <button class="modal-close" id="closeModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">You will not be able to recover this user once it is deleted.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="cancelDelete">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmDelete">Yes, Delete</button>
             </div>
         </div>
     </div>
@@ -282,6 +330,10 @@
                 phoneNumber: document.getElementById('phoneNumber').value,
                 country: document.getElementById('country').value,
                 clinic: document.getElementById('clinic').value,
+                address: document.getElementById('address').value,
+                postcode: document.getElementById('postcode').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
                 role: document.querySelector('input[name="role"]:checked').value
             };
             
@@ -289,9 +341,8 @@
                 const response = await axios.put('/update-user', formData)
                 .then(response => {
                     if (response.status === 200) {
-                        Toast.success(response.data.message);
-                        //redirect to user details page
-                        window.location.href = `/user-details/${formData.userId}`;
+                        // Redirect to user details page with success message
+                        window.location.href = `/user-details/${formData.userId}?success=${encodeURIComponent(response.data.message)}`;
                     } else {
                         Toast.error(response.data.message || 'Failed to update user');
                     }
@@ -309,7 +360,7 @@
 
         // Cancel button
         document.getElementById('cancelBtn').addEventListener('click', () => {
-            window.location.href = '/user-management';
+            window.location.href = `/user-details/<%= user[0].id %>`;
         });
 
         // Modal functionality
@@ -318,56 +369,110 @@
         const closeModal = document.getElementById('closeModal');
         const cancelDeactivate = document.getElementById('cancelDeactivate');
         const confirmDeactivate = document.getElementById('confirmDeactivate');
+        const deleteBtn = document.getElementById('deleteBtn');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const confirmDelete = document.getElementById('confirmDelete');
 
-        // Show modal when deactivate button is clicked
-        deactivateBtn.addEventListener('click', () => {
-            modal.classList.add('show');
-        });
+        if('<%= user[0].status %>' === 'active') {
+            // Show modal when deactivate button is clicked
+            deactivateBtn.addEventListener('click', () => {
+                modal.classList.add('show');
+            });
 
-        // Close modal functions
-        function closeModalDialog() {
-            modal.classList.remove('show');
+             // Close modal functions
+            function closeModalDialog() {
+                modal.classList.remove('show');
+            }
+
+            // Close modal when clicking close button, cancel button, or outside modal
+            closeModal.addEventListener('click', closeModalDialog);
+            cancelDeactivate.addEventListener('click', closeModalDialog);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModalDialog();
+                }
+            });
+
+            // Handle deactivate confirmation
+            confirmDeactivate.addEventListener('click', async () => {
+                try {
+                    const formData = {
+                        userId: '<%= user[0].id %>'
+                    }
+                    const response = await axios.post('/deactivate-user', formData);
+                    if (response.status === 200) {
+                        // Redirect to user details page with success message
+                        window.location.href = `/user-details/${formData.userId}?success=${encodeURIComponent(response.data.message)}`;
+                    } else {
+                        Toast.error(response.data.message || 'Failed to deactivate user');
+                    }
+                } catch (error) {
+                    if (error.response && error.response.data && error.response.data.message) {
+                        Toast.error(error.response.data.message);
+                    } else {
+                        Toast.error('Network error. Please try again.');
+                    }
+                }
+            });
+
+             // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('show')) {
+                    closeModalDialog();
+                }
+            });
         }
 
-        // Close modal when clicking close button, cancel button, or outside modal
-        closeModal.addEventListener('click', closeModalDialog);
-        cancelDeactivate.addEventListener('click', closeModalDialog);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModalDialog();
-            }
-        });
+        if('<%= user[0].status %>' === 'inactive') {
+            // Handle delete confirmation
+            confirmDelete.addEventListener('click', async () => {
+                try {
+                    const formData = {
+                        userId: '<%= user[0].id %>'
+                    }
+                    const response = await axios.post('/delete-user', formData);
+                    if (response.status === 200) {
+                        // Redirect to user management page with success message
+                        window.location.href = `/user-management?success=${encodeURIComponent(response.data.message)}`;
+                    } else {
+                        Toast.error(response.data.message || 'Failed to delete user');
+                    }   
+                } catch (error) {
+                    console.error(error);
+                    if (error.response && error.response.data && error.response.data.message) {
+                        Toast.error(error.response.data.message);
+                    } else {
+                        Toast.error('Network error. Please try again.');
+                    }
+                }
+            });
 
-        // Close modal with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('show')) {
-                closeModalDialog();
-            }
-        });
+            // Show modal when delete button is clicked
+            deleteBtn.addEventListener('click', () => {
+                deleteModal.classList.add('show');
+            });
 
-        // Handle deactivate confirmation
-        confirmDeactivate.addEventListener('click', async () => {
-            try {
-                const formData = {
-                    userId: '<%= user[0].id %>'
-                }
-                const response = await axios.post('/deactivate-user', formData);
-                if (response.status === 200) {
-                    Toast.success(response.data.message);
-                    closeModalDialog();
-                    //redirect to user details page
-                    window.location.href = `/user-details/${formData.userId}`;
-                } else {
-                    Toast.error(response.data.message || 'Failed to deactivate user');
-                }
-            } catch (error) {
-                if (error.response && error.response.data && error.response.data.message) {
-                    Toast.error(error.response.data.message);
-                } else {
-                    Toast.error('Network error. Please try again.');
-                }
+            // Close modal functions
+            function closeDeleteModalDialog() {
+                deleteModal.classList.remove('show');
             }
-        });
+
+            // Close modal when clicking close button, cancel button, or outside modal
+            closeModal.addEventListener('click', closeModalDialog);
+            cancelDelete.addEventListener('click', closeModalDialog);
+            deleteModal.addEventListener('click', (e) => {
+                if (e.target === deleteModal) {
+                    closeDeleteModalDialog();
+                }
+            });
+
+             // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && deleteModal.classList.contains('show')) {
+                    closeDeleteModalDialog();
+                }
+            });
+        }
     </script>
 </body>
 </html>

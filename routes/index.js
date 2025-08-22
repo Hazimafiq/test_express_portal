@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user } = require('../controller/user');
+const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
 const axios = require('axios');
 
@@ -101,9 +101,11 @@ router.post('/save-draft', requireAuth, (req, res) => {
 });
 
 // User management route
-router.get('/user-management', requireAuth, (req, res) => {
+router.get('/user-management', requireAuth, async (req, res) => {
+    const { success } = req.query; 
     res.render('user_management', {
-        user: req.session.user
+        user: req.session.user,
+        successMessage: success || null
     });
 });
 
@@ -115,10 +117,12 @@ router.get('/create-user', requireAuth, (req, res) => {
 // User details route
 router.get('/user-details/:userId', requireAuth, async (req, res) => {
     const { userId } = req.params;
+    const { success } = req.query; 
     try {
         const userProfile = await axios.get(`${baseURL}/get_profile?id=${userId}`);       
         res.render('user_details', {
-            user: userProfile.data.user
+            user: userProfile.data.user,
+            successMessage: success || null
         });
     } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -164,6 +168,9 @@ router.post('/activate-user', requireAuth, activateUser);
 
 // Deactivate user
 router.post('/deactivate-user', requireAuth, deactivateUser);
+
+// Delete user
+router.post('/delete-user', requireAuth, deleteUser);
 
 // Side menu component route - renders with user data
 router.get('/components/side-menu', requireAuth, (req, res) => {

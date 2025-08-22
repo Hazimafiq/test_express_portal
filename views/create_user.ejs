@@ -22,7 +22,7 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item">User Management</span>
+                <a href="/user-management" class="breadcrumb-item">User Management</a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
@@ -546,6 +546,10 @@
                 phoneNumber: document.getElementById('phoneNumber').value,
                 country: document.getElementById('country').value,
                 clinic: document.getElementById('clinic').value,
+                address: document.getElementById('address').value,
+                postcode: document.getElementById('postcode').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
                 password: document.getElementById('password').value,
                 confirmPassword: document.getElementById('confirmPassword').value,
                 role: document.querySelector('input[name="role"]:checked').value
@@ -557,10 +561,8 @@
                     // Show success message
                     formValidation.clearAllValidation('createUserForm');
                     formValidation.clearFormError('createUserForm');
-                    Toast.success('User created successfully!');
-                    setTimeout(() => {
-                        window.location.href = '/user-management';
-                    }, 1500);
+                    // Redirect to user management page with success message
+                    window.location.href = `/user-management?success=${encodeURIComponent(response.data.message)}`;
                 }).catch(error => {
                     Toast.error('Failed to create user. Please try again.');
                     return;

@@ -81,7 +81,11 @@
                 <!-- Delivery Address -->
                 <div class="delivery-address">
                     <label>Delivery Address</label>
-                    <span><%= user[0].deliveryAddress || '-' %></span>
+                    <% if (user[0].address) { %>
+                        <span><%= user[0].address %>, <%= user[0].postcode %>, <%= user[0].city %>, <%= user[0].state %></span>
+                    <% } else { %>
+                        <span>-</span>
+                    <% } %>
                 </div>
             </div>
         </div>

@@ -10,6 +10,11 @@
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
+    <!-- Hidden success message element -->
+    <% if (successMessage) { %>
+        <div id="success-message" data-message="<%= successMessage %>" style="display: none;"></div>
+    <% } %>
+    
     <!-- Navigation Rail Component -->
     <div id="navRail"></div>
 
@@ -45,7 +50,7 @@
             <div class="profile-content">
                 <!-- User Info -->
                 <div class="user-info">
-                    <div class="user-avatar">C</div>
+                    <div class="user-avatar"><%= user[0].fullName.charAt(0) %></div>
                     <div class="user-details">
                         <div class="name-status-container">
                             <h2 class="full-name"><%= user[0].fullName %></h2>
@@ -94,7 +99,11 @@
                 <!-- Delivery Address -->
                 <div class="delivery-address">
                     <label>Delivery Address</label>
-                    <span><%= user[0].deliveryAddress || '-' %></span>
+                    <% if (user[0].address) { %>
+                        <span><%= user[0].address %>, <%= user[0].postcode %>, <%= user[0].city %>, <%= user[0].state %></span>
+                    <% } else { %>
+                        <span>-</span>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -582,6 +591,14 @@
         editUserBtn.onclick = () => {
             window.location.href = '/update-user/<%= user[0].id %>';
         };
+
+        // Show success toast if message is passed via URL parameter
+        const successMessageElement = document.getElementById('success-message');
+        if (successMessageElement && successMessageElement.dataset.message) {
+            const message = successMessageElement.dataset.message;
+            Toast.success(message);
+            window.history.replaceState({}, '', window.location.pathname);
+        }
     </script>
 </body>
 </html>

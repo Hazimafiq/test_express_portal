@@ -445,17 +445,15 @@ body {
 }
 
 .cases-table th {
-  padding: 16px 20px;
+  padding: 16px;
   text-align: left;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   letter-spacing: 0.28px;
   border-bottom: none;
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .cases-table th.sortable {

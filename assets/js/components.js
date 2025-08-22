@@ -27,18 +27,60 @@ async function initializeNavRail() {
         // Role-based visibility logic can be added here if needed
     }
     
-    // Set active nav item based on current path
+    // Define route groups for navigation highlighting
+    const routeGroups = {
+        '/user-management': [
+            '/user-management',
+            '/create-user', 
+            '/update-user',
+            '/user-details'
+        ],
+        '/add-case': [
+            '/add-case',
+            '/upload-stl'
+        ]
+        // Add more route groups as needed
+    };
+
+    // Helper function to check if current path belongs to a route group
+    function getActiveRouteGroup(currentPath) {
+        for (const [groupKey, routes] of Object.entries(routeGroups)) {
+            for (const route of routes) {
+                // Check exact matches first
+                if (route === currentPath) {
+                    return groupKey;
+                }
+                // Check for dynamic routes that start with the base path
+                // e.g., /user-details matches /user-details/123, /update-user matches /update-user/456
+                if (currentPath.startsWith(route + '/') || 
+                    (route.includes('-') && currentPath.startsWith(route.split('/:')[0] + '/'))) {
+                    return groupKey;
+                }
+            }
+        }
+        return currentPath; // Return original path if no group found
+    }
+
+    // Set active nav item based on current path and route groups
     const currentPath = window.location.pathname;
+    const activeRouteGroup = getActiveRouteGroup(currentPath);
     console.log('[NavRail] Current path:', currentPath);
+    console.log('[NavRail] Active route group:', activeRouteGroup);
+    
     // Top-level items
     document.querySelectorAll('.rail-btn').forEach(btn => {
-        if (btn.getAttribute('href') === currentPath) {
+        const btnHref = btn.getAttribute('href');
+        // Check if button href matches the active route group
+        if (btnHref === activeRouteGroup || btnHref === currentPath) {
             btn.classList.add('active');
         }
     });
+    
     // Submenu items and their parent group
     document.querySelectorAll('.nav-dropdown .menu-item, .expanded-menu .menu-item').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
+        const linkHref = link.getAttribute('href');
+        // Check if link href matches current path or is part of the active route group
+        if (linkHref === currentPath || (routeGroups[activeRouteGroup] && routeGroups[activeRouteGroup].includes(linkHref))) {
             link.classList.add('active');
             const parentExpandable = link.closest('.nav-item.expandable');
             const groupBtn = parentExpandable?.querySelector('.rail-btn');
