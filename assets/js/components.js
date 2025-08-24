@@ -37,8 +37,11 @@ async function initializeNavRail() {
         ],
         '/add-case': [
             '/add-case',
-            '/upload-stl'
+        ],
+        '/upload-stl': [
+            '/upload-stl',
         ]
+
         // Add more route groups as needed
     };
 
@@ -248,6 +251,15 @@ class FormValidation {
         field.classList.add('field-error');
         field.classList.remove('field-success');
 
+        // For file inputs, also add error class to the upload container
+        if (field.type === 'file') {
+            const uploadContainer = field.closest('.file-upload, .file-upload-simple');
+            if (uploadContainer) {
+                uploadContainer.classList.add('field-error');
+                uploadContainer.classList.remove('field-success');
+            }
+        }
+
         // Find or create error message element
         let errorElement = this.getErrorElement(field);
         
@@ -255,9 +267,11 @@ class FormValidation {
         errorElement.textContent = message;
         errorElement.className = 'field-error-message show';
         
-        // Add red border and shadow
-        field.style.borderColor = this.errorColor;
-        field.style.boxShadow = `0 0 0 3px rgba(220, 38, 38, 0.1)`;
+        // Add red border and shadow (only for non-file inputs as file inputs use container styling)
+        if (field.type !== 'file') {
+            field.style.borderColor = this.errorColor;
+            field.style.boxShadow = `0 0 0 3px rgba(220, 38, 38, 0.1)`;
+        }
 
         // Bind event listeners to clear error on interaction
         this.bindClearErrorEvents(field);
@@ -279,6 +293,15 @@ class FormValidation {
         field.classList.add('field-success');
         field.classList.remove('field-error');
 
+        // For file inputs, also add success class to the upload container
+        if (field.type === 'file') {
+            const uploadContainer = field.closest('.file-upload, .file-upload-simple');
+            if (uploadContainer) {
+                uploadContainer.classList.add('field-success');
+                uploadContainer.classList.remove('field-error');
+            }
+        }
+
         // Find or create error message element (reused for success)
         let errorElement = this.getErrorElement(field);
         
@@ -291,9 +314,11 @@ class FormValidation {
             errorElement.className = 'field-error-message';
         }
         
-        // Add green border
-        field.style.borderColor = this.successColor;
-        field.style.boxShadow = `0 0 0 3px rgba(5, 150, 105, 0.1)`;
+        // Add green border (only for non-file inputs as file inputs use container styling)
+        if (field.type !== 'file') {
+            field.style.borderColor = this.successColor;
+            field.style.boxShadow = `0 0 0 3px rgba(5, 150, 105, 0.1)`;
+        }
     }
 
     /**
@@ -310,14 +335,24 @@ class FormValidation {
         // Remove classes
         field.classList.remove('field-error', 'field-success');
         
+        // For file inputs, also clear classes from the upload container
+        if (field.type === 'file') {
+            const uploadContainer = field.closest('.file-upload, .file-upload-simple');
+            if (uploadContainer) {
+                uploadContainer.classList.remove('field-error', 'field-success');
+            }
+        }
+        
         // Find and clear error message
         let errorElement = this.getErrorElement(field);
         errorElement.textContent = '';
         errorElement.className = 'field-error-message';
         
-        // Reset border styles
-        field.style.borderColor = this.defaultBorderColor;
-        field.style.boxShadow = '';
+        // Reset border styles (only for non-file inputs as file inputs use container styling)
+        if (field.type !== 'file') {
+            field.style.borderColor = this.defaultBorderColor;
+            field.style.boxShadow = '';
+        }
     }
 
     /**
@@ -552,6 +587,30 @@ class FormValidation {
                 errorElement = document.createElement('div');
                 errorElement.className = 'field-error-message';
                 radioGroup.appendChild(errorElement);
+            }
+            
+            return errorElement;
+        }
+        
+        // Handle file input fields - place error in upload-field container
+        if (field.type === 'file') {
+            const uploadField = field.closest('.upload-field');
+            let errorElement = uploadField ? uploadField.querySelector('.field-error-message') : null;
+            
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'field-error-message';
+                if (uploadField) {
+                    uploadField.appendChild(errorElement);
+                } else {
+                    // Fallback: insert after the file upload container
+                    const fileUploadContainer = field.closest('.file-upload, .file-upload-simple');
+                    if (fileUploadContainer) {
+                        fileUploadContainer.parentNode.insertBefore(errorElement, fileUploadContainer.nextSibling);
+                    } else {
+                        field.parentNode.insertBefore(errorElement, field.nextSibling);
+                    }
+                }
             }
             
             return errorElement;

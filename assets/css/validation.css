@@ -25,13 +25,14 @@ textarea.field-success {
 /* Error Message Styling */
 .validation-message,
 .field-error-message {
-    font-size: 12px;
-    color: #dc2626;
+    font-size: 14px;
+    color: var(--Colour-text-danger, #D4382B);
     margin-top: 4px;
     min-height: 16px;
     font-weight: 500;
     display: block;
-    line-height: 1.4;
+    line-height: 20px;
+    letter-spacing: 0.28px;
     transition: opacity 0.2s ease, transform 0.2s ease;
     opacity: 0;
     transform: translateY(-4px);
@@ -133,4 +134,61 @@ textarea.field-error:hover {
 
 .role-selection .field-error-message {
     margin-top: 12px;
+}
+
+
+/* File Upload Error States */
+.file-upload-simple.field-error {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.file-upload-simple.field-error:hover {
+    border-color: #b91c1c !important;
+}
+
+.file-upload-simple.field-error:focus-within {
+    border-color: #003366 !important;
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1) !important;
+    background-color: white;
+}
+
+/* File Upload Success States */
+.file-upload-simple.field-success {
+    border-color: #059669 !important;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+    background-color: #f0fdf4;
+}
+
+/* Upload field container to position error messages */
+.upload-field {
+    position: relative;
+}
+
+.upload-field .field-error-message {
+    color: var(--Colour-text-danger, #D4382B);  
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+    margin-top: 4px;
+    min-height: 16px;
+    display: block;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+.upload-field .field-error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.upload-field .field-error-message.field-success-message {
+    color: #059669;
+}
+
+.upload-field .field-error-message:empty {
+    display: none;
 }

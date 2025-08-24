@@ -99,11 +99,64 @@
         document.getElementById('iprFile').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const placeholder = document.querySelector('.file-placeholder');
+            const fileUploadLabel = document.querySelector('.file-upload-label');
             
             if (file) {
                 placeholder.textContent = file.name;
+                
+                // Add cancel button for uploaded file
+                let cancelBtn = fileUploadLabel.querySelector('.cancel-upload');
+                if (!cancelBtn) {
+                    cancelBtn = document.createElement('button');
+                    cancelBtn.className = 'cancel-upload';
+                    cancelBtn.type = 'button';
+                    cancelBtn.innerHTML = '<img src="/assets/images/cancel-file-upload.svg" alt="Remove file">';
+                    
+                    // Hide the file icon
+                    const fileIcon = fileUploadLabel.querySelector('.file-icon');
+                    if (fileIcon) {
+                        fileIcon.style.display = 'none';
+                    }
+                    
+                    fileUploadLabel.appendChild(cancelBtn);
+                    
+                    // Add click handler to remove file
+                    cancelBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Clear the file input
+                        this.value = '';
+                        
+                        // Reset the UI
+                        placeholder.textContent = 'Choose File';
+                        cancelBtn.remove();
+                        
+                        // Show the file icon again
+                        if (fileIcon) {
+                            fileIcon.style.display = 'block';
+                        }
+                        
+                        // Clear any validation state
+                        if (window.formValidation) {
+                            window.formValidation.clearValidation(this);
+                        }
+                    });
+                }
             } else {
                 placeholder.textContent = 'Choose File';
+                
+                // Remove cancel button if it exists
+                const cancelBtn = fileUploadLabel.querySelector('.cancel-upload');
+                if (cancelBtn) {
+                    cancelBtn.remove();
+                }
+                
+                // Show the file icon again
+                const fileIcon = fileUploadLabel.querySelector('.file-icon');
+                if (fileIcon) {
+                    fileIcon.style.display = 'block';
+                }
             }
         });
 

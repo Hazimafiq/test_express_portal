@@ -91,13 +91,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
 }
 
 .page-title {
-    font-size: 24px;
+    color: var(--Colour-text-subtle, #333);
+    font-size: 28px;
+    font-style: normal;
     font-weight: 700;
-    color: #1f2937;
+    line-height: 32px;
+    letter-spacing: 0.56px;
 }
 
 
@@ -119,22 +122,32 @@ body {
 
 /* Form Content Container - maintains 2/3 width for form elements */
 .form-content {
-    width: 66.67%;
+    display: flex;
+    padding: 24px 325px 24px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
 }
 
 .section-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
+    color: var(--Colour-text-subtle, #333);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    margin-bottom: 32px;
 }
 
 .subsection-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 1rem;
+    color: var(--Colour-text-accent-grey, #767676);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+    margin-bottom: 8px;
 }
 
 /* Form Grid */
@@ -147,24 +160,32 @@ body {
 .form-field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    min-width: 455.5px;
+}
+
+.full-width {
+    width: 100%;
 }
 
 .form-field label {
+    color: var(--Colour-text-accent-grey, #767676);
     font-size: 14px;
+    font-style: normal;
     font-weight: 500;
-    color: #374151;
+    line-height: 20px;
+    letter-spacing: 0.28px;
 }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
-    padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
     font-size: 14px;
     transition: all 0.2s ease;
-    background: #f9fafb;
 }
 
 .form-field input:focus,
@@ -191,15 +212,10 @@ body {
     width: 100%;
 }
 
-/* Clinical Condition Styling */
-.clinical-condition {
-    margin-bottom: 1.5rem;
-}
-
 .condition-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 239px 239px 239px;
+    gap: 8px;
 }
 
 .condition-row {
@@ -278,7 +294,8 @@ body {
 .upload-field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    min-width: 455.5px;
 }
 
 .upload-field label {
@@ -337,10 +354,15 @@ body {
 
 /* Simple File Upload Style (for X-Ray and Documents) */
 .file-upload-simple {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
-    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
+    height: 36px;
+    padding: 8px 16px;
+    /* display: flex;
+    gap: 10px; */
+    align-items: center;
+    align-self: stretch;
 }
 
 .file-upload-simple .upload-placeholder {
@@ -367,6 +389,41 @@ body {
 .file-upload-simple.has-file .upload-placeholder span:first-child {
     color: #003366;
     font-weight: 500;
+}
+
+/* File uploaded state with cancel functionality */
+.file-upload-simple.has-file .upload-placeholder {
+    position: relative;
+}
+
+.file-upload-simple.has-file .upload-placeholder .file-upload-icon {
+    display: none;
+}
+
+.file-upload-simple.has-file .upload-placeholder .cancel-upload {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-upload-simple.has-file .upload-placeholder .cancel-upload:hover {
+    opacity: 0.7;
+}
+
+.file-upload-simple.has-file .upload-placeholder .cancel-upload img {
+    width: 16px;
+    height: 16px;
 }
 
 /* Clinical Photos Grid */
@@ -466,13 +523,7 @@ body {
 }
 
 /* Utility Classes */
-.mt-16 {
-    margin-top: 1rem;
-}
 
-.mt-24 {
-    margin-top: 1.5rem;
-}
 
 /* Form Actions - Inherits form-section styling with sticky positioning */
 .form-actions {
@@ -484,9 +535,9 @@ body {
     width: 100%;
     
     /* Sticky positioning */
-    /* position: sticky;
+    position: sticky;
     bottom: 2rem;
-    z-index: 1000; */
+    z-index: 1000;
     
     /* Form actions specific styling */
     display: flex;
@@ -563,12 +614,57 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Select wrapper container */
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.form-field select {
+    cursor: pointer;
+    /* Custom select styling to replace default arrow */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
+    padding-right: 40px; /* Make room for the custom icon */
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+/* Custom arrow icon positioned on the wrapper */
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-image: url('/assets/images/select-icon.svg');
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: center;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+    z-index: 1;
+}
+
+
+/* Rotate icon when select is focused */
+.select-wrapper.select-focused::after,
+.select-wrapper:has(select:focus)::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
 /* IPR and Attachments */
 .ipr-attachments {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    margin-top: 1.5rem;
 }
 
 /* Responsive Design */
@@ -657,141 +753,6 @@ body {
     }
 }
 
-/* Universal Form Validation States */
-.form-field input.error,
-.form-field select.error,
-.form-field textarea.error,
-input.field-error,
-select.field-error,
-textarea.field-error {
-    border-color: #dc2626 !important;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
-    background-color: #fef2f2;
-}
-
-.form-field input.field-success,
-.form-field select.field-success,
-.form-field textarea.field-success,
-input.field-success,
-select.field-success,
-textarea.field-success {
-    border-color: #059669 !important;
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
-    background-color: #f0fdf4;
-}
-
-/* Error Message Styling */
-.validation-message,
-.field-error-message {
-    font-size: 12px;
-    color: #dc2626;
-    margin-top: 4px;
-    min-height: 16px;
-    font-weight: 500;
-    display: block;
-    line-height: 1.4;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    opacity: 0;
-    transform: translateY(-4px);
-}
-
-.validation-message.show,
-.field-error-message.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.validation-message.success,
-.field-error-message.field-success-message {
-    color: #059669;
-}
-
-.validation-message:empty,
-.field-error-message:empty {
-    display: none;
-}
-
-/* Form-level Error Message */
-.form-error-message {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-    color: #dc2626;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.form-error-message::before {
-    content: '⚠️';
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-/* Form Success Message */
-.form-success-message {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-    color: #059669;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.form-success-message::before {
-    content: '✅';
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-/* Focus states override error states temporarily */
-.form-field input.field-error:focus,
-.form-field select.field-error:focus,
-.form-field textarea.field-error:focus,
-input.field-error:focus,
-select.field-error:focus,
-textarea.field-error:focus {
-    border-color: #003366 !important;
-    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1) !important;
-    background-color: white;
-}
-
-/* Required field indicator styling */
-.form-field label.required::after,
-label.required::after {
-    content: ' *';
-    color: #dc2626;
-    font-weight: bold;
-}
-
-/* Enhanced hover states for error fields */
-.form-field input.field-error:hover,
-.form-field select.field-error:hover,
-.form-field textarea.field-error:hover,
-input.field-error:hover,
-select.field-error:hover,
-textarea.field-error:hover {
-    border-color: #b91c1c;
-}
-
-/* Radio button group error styling */
-.role-selection.field-error .radio-custom {
-    border-color: #dc2626;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-}
-
-.role-selection .field-error-message {
-    margin-top: 12px;
-}
 
 /* Loading States */
 .btn:disabled {
@@ -815,6 +776,11 @@ textarea.field-error:hover {
     border-top: 2px solid currentColor;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+.required-asterisk
+{
+    color: #d4382b;
 }
 
 @keyframes spin {

@@ -161,9 +161,10 @@ body {
 .form-field input,
 .form-field select,
 .form-field textarea {
-    padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
     font-size: 14px;
     transition: all 0.2s ease;
     background: #f9fafb;
@@ -196,7 +197,9 @@ body {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
     padding-right: 40px; /* Make room for the custom icon */
     width: 100%;
     transition: all 0.2s ease;
