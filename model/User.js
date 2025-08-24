@@ -11,8 +11,8 @@ class User {
             throw new CustomError('User already exists', 400);
         }
         const hashedPassword = await argon2.hash(password);
-        const query = 'INSERT INTO users_table (username, password, fullName, phoneNumber, email, clinic, address, country, role, address, postcode, city, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [username.trim(), hashedPassword, fullName.trim(), phoneNumber.trim(), email.trim(), clinic.trim(), address.trim(), country.trim(), role.trim(), address.trim(), postcode.trim(), city.trim(), state.trim()];
+        const query = 'INSERT INTO users_table (username, password, fullName, phoneNumber, email, clinic, country, role, address, postcode, city, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const values = [username.trim(), hashedPassword, fullName.trim(), phoneNumber.trim(), email.trim(), clinic.trim(), country.trim(), role.trim(), address.trim(), postcode.trim(), city.trim(), state.trim()];
         const [results] = await pool.query(query, values);
         return {results, message: 'User created.'};
     }
@@ -50,7 +50,6 @@ class User {
     }
 
     static async get_profile_data(id) {
-        // const query = 'SELECT username, phoneNumber, email, role, country, clinic FROM users WHERE id = ? LIMIT 1';
         const query = 'SELECT id, fullName, username, phoneNumber, email, role, country, clinic, status, address, postcode, city, state FROM users_table WHERE id = ? LIMIT 1';
         const values = [id];
         const [results] = await pool.query(query, values);

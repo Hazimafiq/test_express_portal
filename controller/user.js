@@ -4,8 +4,8 @@ const CustomError = require('../errors/CustomError');
 // Register user
 exports.register = async (req, res) => {
     try {
-        const { username, fullName, phoneNumber, email, clinic, address, country, password, confirmPassword, role } = req.body;
-        if (!username || !password || !confirmPassword || !role || !fullName || !phoneNumber || !email || !country || !clinic ) {
+        const { username, fullName, phoneNumber, email, clinic, address, country, password, confirmPassword, role, postcode, city, state } = req.body;
+        if (!username || !password || !confirmPassword || !role || !fullName || !phoneNumber || !email || !country || !clinic || !postcode || !city || !state || !address ) {
             return res.status(400).json({ message: 'All fields are required' });
         }
         if (password !== confirmPassword) {
