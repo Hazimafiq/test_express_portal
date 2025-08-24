@@ -1,6 +1,7 @@
 const express = require('express');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
+const { update_case, update_stl_case, getAllCases, getCaseCounts } = require('../controller/case');
 const axios = require('axios');
 
 const router = express.Router();
@@ -82,12 +83,17 @@ router.get('/add-case', requireAuth, (req, res) => {
     res.render('add_case');
 });
 
-router.post('/add-case', requireAuth, (req, res) => {
-    // TODO: Implement case creation logic
-    // For now, just return success
-    console.log('Case submission:', req.body);
-    res.json({ message: 'Case submitted successfully', id: Date.now() });
-});
+router.post('/add-case', requireAuth, update_case);
+router.post('/add-case/:caseid', requireAuth, update_case);
+
+router.post('/add-case-stl', requireAuth, update_stl_case);
+router.post('/add-case-stl/:caseid', requireAuth, update_stl_case);
+
+// Get all users with filtering, searching, and sorting
+router.get('/get-cases', requireAuth, getAllCases);
+
+// Get cases counts by status
+router.get('/get-case-counts', requireAuth, getCaseCounts);
 
 router.get('/upload-stl', requireAuth, (req, res) => {
     res.render('upload_stl');

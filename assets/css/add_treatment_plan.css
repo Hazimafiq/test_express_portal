@@ -240,6 +240,27 @@ body {
     opacity: 0.6;
 }
 
+/* Cancel upload button */
+.cancel-upload {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancel-upload:hover {
+    opacity: 0.7;
+}
+
+.cancel-upload img {
+    width: 16px;
+    height: 16px;
+}
+
 /* Form Actions */
 .form-actions {
     display: flex;

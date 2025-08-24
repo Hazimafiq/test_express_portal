@@ -6,6 +6,8 @@
     <title>Add New Case - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/add_case.css">
+    <link rel="stylesheet" href="/assets/css/validation.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
@@ -36,38 +38,58 @@
                     <div class="form-content">
                         <div class="form-grid">
                         <div class="form-field">
-                            <label for="patientName">* Name</label>
-                            <input type="text" id="patientName" name="patientName" placeholder="Input here" required>
+                            <label for="patientName">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Name</span>
+                            </label>
+                            <input type="text" id="patientName" name="patientName" placeholder="Input here">
                         </div>
                         <div class="form-field">
-                            <label for="patientGender">* Gender</label>
-                            <select id="patientGender" name="patientGender" required>
-                                <option value="">Select</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
+                            <label for="patientGender">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Gender</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="patientGender" name="patientGender">
+                                    <option value="">Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-field">
-                            <label for="dateOfBirth">* Date of Birth</label>
-                            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                            <label for="dateOfBirth">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Date of Birth</span>
+                            </label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth">
                         </div>
                         <div class="form-field">
-                            <label for="email">Email</label>
+                            <label for="email">
+                                <span class="label-text"></span>Email</span>
+                            </label>
                             <input type="email" id="email" name="email" placeholder="Input here">
                         </div>
                         <div class="form-field">
-                            <label for="treatmentBrand">* Treatment Brand</label>
-                            <select id="treatmentBrand" name="treatmentBrand" required>
-                                <option value="">Select</option>
-                                <option value="brand1">Brand 1</option>
-                                <option value="brand2">Brand 2</option>
-                                <option value="brand3">Brand 3</option>
-                            </select>
+                            <label for="treatmentBrand">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Treatment Brand</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="treatmentBrand" name="treatmentBrand">
+                                    <option value="">Select</option>
+                                    <option value="DCA Pro">DCA Pro</option>
+                                    <option value="Diamond Aligner">Diamond Aligner</option>
+                                    <option value="OEM-Plain">OEM-Plain</option>
+                                    <option value="OEM-Clinic Brand">OEM-Clinic Brand</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-field">
-                            <label for="customSR">Custom SR</label>
-                            <input type="text" id="customSR" name="customSR" placeholder="Input here">
+                            <label for="customSN">
+                                <span class="label-text">Custom SN</span>
+                            </label>
+                            <input type="text" id="customSN" name="customSN" placeholder="Input here">
                         </div>
                     </div>
                     </div>
@@ -172,26 +194,39 @@
                     <!-- IPR and Attachments -->
                     <div class="ipr-attachments">
                         <div class="form-field">
-                            <label for="ipr">* IPR</label>
-                            <select id="ipr" name="ipr" required>
-                                <option value="">As Recommended</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
+                            <label for="ipr">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">IPR</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="ipr" name="ipr">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                    <option value="as_recommended">As Recommended</option>
+                                </select>
+                            </div>
+                            
                         </div>
                         <div class="form-field">
-                            <label for="attachments">* Attachments</label>
-                            <select id="attachments" name="attachments" required>
-                                <option value="">As Recommended</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
+                            <label for="attachments">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Attachments</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="attachments" name="attachments">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                    <option value="as_recommended">As Recommended</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Treatment Notes -->
-                    <div class="form-field mt-24">
-                        <label for="treatmentNotes">Treatment Notes</label>
+                    <div class="form-field full-width">
+                        <label for="treatmentNotes">
+                            <span class="label-text">Treatment Notes</span>
+                        </label>
                         <textarea id="treatmentNotes" name="treatmentNotes" placeholder="Input here" rows="6"></textarea>
                     </div>
                     </div>
@@ -202,120 +237,139 @@
                     <h2 class="section-title">Model Upload</h2>
                     <div class="form-content">
                     
-                    <div class="form-field">
-                        <label for="modelType">* Model Type</label>
-                        <select id="modelType" name="modelType" required>
-                            <option value="">Select</option>
-                            <option value="stl">STL</option>
-                            <option value="ply">PLY</option>
-                            <option value="obj">OBJ</option>
-                        </select>
-                    </div>
+                        <div class="form-field">
+                            <label for="modelType">
+                                <span class="required-asterisk">*</span>
+                                <span class="label-text">Model Type</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="modelType" name="modelType">
+                                    <option value="">Select</option>
+                                    <option value="stl">STL</option>
+                                    <option value="ply">PLY</option>
+                                    <option value="obj">OBJ</option>
+                                </select>
+                            </div>
+                        </div>
 
-                    <!-- File Upload Grid -->
-                    <div class="upload-grid">
-                        <div class="upload-field">
-                            <label for="upperScan">* Upper Scan (*STL/*PLY)</label>
-                            <div class="file-upload file-upload-simple">
-                                <input type="file" id="upperScan" name="upperScan" accept=".stl,.ply" required>
-                                <div class="upload-placeholder">
-                                    <span>Choose File</span>
-                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                        <!-- File Upload Grid -->
+                        <div class="upload-grid">
+                            <div class="upload-field">
+                                <label for="upperScan">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Upper Scan (*STL/*PLY)</span>
+                                </label>
+                                <div class="file-upload file-upload-simple">
+                                    <input type="file" id="upperScan" name="upperScan" accept=".stl,.ply">
+                                    <div class="upload-placeholder">
+                                        <span>Choose File</span>
+                                        <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                    </div>
                                 </div>
+                                <div class="field-error-message"></div>
+                            </div>
+                            <div class="upload-field">
+                                <label for="lowerScan">
+                                    <span class="required-asterisk">*</span>
+                                    <span class="label-text">Lower Scan (*STL/*PLY)</span>
+                                </label>
+                                <div class="file-upload file-upload-simple">
+                                    <input type="file" id="lowerScan" name="lowerScan" accept=".stl,.ply">
+                                    <div class="upload-placeholder">
+                                        <span>Choose File</span>
+                                        <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                    </div>
+                                </div>
+                                <div class="field-error-message"></div>
+                            </div>
+                            <div class="upload-field">
+                                <label for="biteScan">
+                                    <span class="label-text">Bite Scan (*STL/PLY)</span>
+                                </label>
+                                <div class="file-upload file-upload-simple">
+                                    <input type="file" id="biteScan" name="biteScan" accept=".stl,.ply">
+                                    <div class="upload-placeholder">
+                                        <span>Choose File</span>
+                                        <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                    </div>
+                                </div>
+                                <div class="field-error-message"></div>
                             </div>
                         </div>
-                        <div class="upload-field">
-                            <label for="lowerScan">* Lower Scan (*STL/*PLY)</label>
-                            <div class="file-upload file-upload-simple">
-                                <input type="file" id="lowerScan" name="lowerScan" accept=".stl,.ply" required>
-                                <div class="upload-placeholder">
-                                    <span>Choose File</span>
-                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
-                                   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="upload-field">
-                            <label for="biteScan">Bite Scan (*STL/*PLY)</label>
-                            <div class="file-upload file-upload-simple">
-                                <input type="file" id="biteScan" name="biteScan" accept=".stl,.ply" required>
-                                <div class="upload-placeholder">
-                                    <span>Choose File</span>
-                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Clinical Photos -->
-                    <div class="clinical-photos">
-                        <h3 class="subsection-title">Clinical Photos</h3>
-                        <p class="upload-instructions">Please click on the images below to upload photos</p>
-                        
-                        <div class="photo-grid">
-                            <div class="photo-row">
-                                <div class="photo-upload face-photo" data-type="frontal">
-                                    <img src="/assets/images/full-face-front.png" alt="Face Front" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
-                                </div>
-                                <div class="photo-upload face-photo" data-type="smile">
-                                    <img src="/assets/images/full-smiling-face.png" alt="Face Smile" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
-                                </div>
-                                <div class="photo-upload face-photo" data-type="profile">
-                                    <img src="/assets/images/right-side-profile.png" alt="Face Profile" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
-                                </div>
-                            </div>
+                        <!-- Clinical Photos -->
+                        <div class="clinical-photos">
+                            <h3 class="subsection-title">Clinical Photos</h3>
+                            <p class="upload-instructions">Please click on the images below to upload photos</p>
                             
-                            <div class="photo-row">
-                                <div class="photo-upload teeth-photo" data-type="left">
-                                    <img src="/assets/images/buccal-right.png" alt="Teeth Left" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
+                            <div class="photo-grid">
+                                <div class="photo-row">
+                                    <div class="photo-upload face-photo" data-type="frontal">
+                                        <img src="/assets/images/full-face-front.png" alt="Face Front" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="photo-upload face-photo" data-type="smile">
+                                        <img src="/assets/images/full-smiling-face.png" alt="Face Smile" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="photo-upload face-photo" data-type="profile">
+                                        <img src="/assets/images/right-side-profile.png" alt="Face Profile" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
                                 </div>
-                                <div class="photo-upload teeth-photo" data-type="front">
-                                    <img src="/assets/images/bretracted-anterior-frontal.png" alt="Teeth Front" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
-                                </div>
-                                <div class="photo-upload teeth-photo" data-type="right">
-                                    <img src="/assets/images/buccal-left.png" alt="Teeth Right" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
-                                </div>
-                                <div class="photo-upload teeth-photo" data-type="upper">
-                                    <img src="/assets/images/mandibular-occlusal.png" alt="Teeth Upper" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
-                                </div>
-                                <div class="photo-upload teeth-photo" data-type="lower">
-                                    <img src="/assets/images/maxillary-occlusal.png" alt="Teeth Lower" class="photo-outline">
-                                    <input type="file" accept="image/*" style="display: none;">
+                                
+                                <div class="photo-row">
+                                    <div class="photo-upload teeth-photo" data-type="left">
+                                        <img src="/assets/images/buccal-right.png" alt="Teeth Left" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="photo-upload teeth-photo" data-type="front">
+                                        <img src="/assets/images/bretracted-anterior-frontal.png" alt="Teeth Front" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="photo-upload teeth-photo" data-type="right">
+                                        <img src="/assets/images/buccal-left.png" alt="Teeth Right" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="photo-upload teeth-photo" data-type="upper">
+                                        <img src="/assets/images/mandibular-occlusal.png" alt="Teeth Upper" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="photo-upload teeth-photo" data-type="lower">
+                                        <img src="/assets/images/maxillary-occlusal.png" alt="Teeth Lower" class="photo-outline">
+                                        <input type="file" accept="image/*" style="display: none;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- X-Ray Upload -->
-                    <div class="upload-field mt-24">
-                        <label for="xray">X-Ray (*JPEG, PNG or ZIP)</label>
-                        <div class="file-upload file-upload-simple">
-                            <input type="file" id="xray" name="xray" accept=".jpg,.jpeg,.png,.zip">
-                            <div class="upload-placeholder">
-                                <span>Choose File</span>
-                                <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                        <!-- X-Ray Upload -->
+                        <div class="upload-field full-width">
+                            <label for="xray">
+                                <span class="label-text">X-Ray (*JPEG, PNG or ZIP)</span>
+                            </label>
+                            <div class="file-upload file-upload-simple">
+                                <input type="file" id="xray" name="xray" accept=".jpg,.jpeg,.png,.zip">
+                                <div class="upload-placeholder">
+                                    <span>Choose File</span>
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Other Documents Upload -->
-                    <div class="upload-field mt-16">
-                        <label for="documents">Other Documents / Photos (*JPEG, PNG or ZIP)</label>
-                        <div class="file-upload file-upload-simple">
-                            <input type="file" id="documents" name="documents" accept=".jpg,.jpeg,.png,.zip" multiple>
-                            <div class="upload-placeholder">
-                                <span>Choose File</span>
-                                <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                        <!-- Other Documents Upload -->
+                        <div class="upload-field full-width">
+                            <label for="documents">
+                                <span class="label-text">Other Documents / Photos (*JPEG, PNG or ZIP)</span>
+                            </label>
+                            <div class="file-upload file-upload-simple">
+                                <input type="file" id="documents" name="documents" accept=".jpg,.jpeg,.png,.zip" multiple>
+                                <div class="upload-placeholder">
+                                    <span>Choose File</span>
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
 
@@ -327,7 +381,9 @@
             </form>
         </div>
     </main>
-
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
@@ -343,6 +399,35 @@
                 if (this.files.length > 0) {
                     if (this.parentNode.classList.contains('file-upload-simple')) {
                         firstSpan.textContent = this.files[0].name;
+                        
+                        // Add cancel button for uploaded file
+                        let cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
+                        if (!cancelBtn) {
+                            cancelBtn = document.createElement('button');
+                            cancelBtn.className = 'cancel-upload';
+                            cancelBtn.type = 'button';
+                            cancelBtn.innerHTML = '<img src="/assets/images/cancel-file-upload.svg" alt="Remove file">';
+                            uploadPlaceholder.appendChild(cancelBtn);
+                            
+                            // Add click handler to remove file
+                            cancelBtn.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                
+                                // Clear the file input
+                                this.value = '';
+                                
+                                // Reset the UI
+                                firstSpan.textContent = 'Choose File';
+                                this.parentNode.classList.remove('has-file');
+                                cancelBtn.remove();
+                                
+                                // Clear any validation state
+                                if (window.formValidation) {
+                                    window.formValidation.clearValidation(this);
+                                }
+                            });
+                        }
                     } else {
                         firstSpan.textContent = this.files[0].name;
                     }
@@ -350,6 +435,12 @@
                 } else {
                     firstSpan.textContent = 'Choose File';
                     this.parentNode.classList.remove('has-file');
+                    
+                    // Remove cancel button if it exists
+                    const cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
+                    if (cancelBtn) {
+                        cancelBtn.remove();
+                    }
                 }
             });
         });
@@ -417,23 +508,121 @@
         document.getElementById('addCaseForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const formData = new FormData(e.target);
+             // Clear any existing validation errors
+            formValidation.clearAllValidation('createUserForm');
+            formValidation.clearFormError('createUserForm');
+
+              // Define validation rules
+              const validations = [
+                {
+                    field: 'patientName',
+                    rule: 'required',
+                    message: 'Name is required.'
+                },
+                {
+                    field: 'patientGender',
+                    rule: 'required',
+                    message: 'Gender is required.'
+                },
+                {
+                    field: 'dateOfBirth',
+                    rule: 'required',
+                    message: 'Date of Birth is required.'
+                },
+                {
+                    field: 'treatmentBrand',
+                    rule: 'required',
+                    message: 'Treatment Brand is required.'
+                },
+                {
+                    field: 'customSN',
+                    rule: 'required',
+                    message: 'Custom SN is required.'
+                },
+                {
+                    field: 'ipr',
+                    rule: 'required',
+                    message: 'IPR is required.'
+                },
+                {
+                    field: 'attachments',
+                    rule: 'required',
+                    message: 'Attachments is required.'
+                },
+                {
+                    field: 'treatmentNotes',
+                    rule: 'required',
+                    message: 'Treatment Notes is required.'
+                },
+                {
+                    field: 'modelType',
+                    rule: 'required',
+                    message: 'Model Type is required.'
+                },
+                {
+                    field: 'upperScan',
+                    rule: 'required',
+                    message: 'Upper Scan is required.'
+                },
+                {
+                    field: 'lowerScan',
+                    rule: 'required',
+                    message: 'Lower Scan is required.'
+                },
+                
+            ];
+            
+            // Validate all fields
+            const isValid = formValidation.validateFields(validations);
+
+            if (!isValid) {
+                return;
+            }
+
+            // Disable submit button and show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Submitting Case...';
+
+            const formData = new FormData();
+            formData.append('patientName', document.getElementById('patientName').value);
+            formData.append('patientGender', document.getElementById('patientGender').value);
+            formData.append('dateOfBirth', document.getElementById('dateOfBirth').value);
+            formData.append('treatmentBrand', document.getElementById('treatmentBrand').value);
+            formData.append('customSN', document.getElementById('customSN').value);
+            formData.append('ipr', document.getElementById('ipr').value);
+            formData.append('attachments', document.getElementById('attachments').value);
+            
+            formData.append('treatmentNotes', document.getElementById('treatmentNotes').value);
+            formData.append('modelType', document.getElementById('modelType').value);
+            formData.append('upperScan', document.getElementById('upperScan').value);
+            formData.append('lowerScan', document.getElementById('lowerScan').value);
+            formData.append('biteScan', document.getElementById('biteScan').value);
+            
+            formData.append('xray', document.getElementById('xray').value);
+            formData.append('documents', document.getElementById('documents').value);
             
             try {
-                const response = await fetch('/add-case', {
-                    method: 'POST',
-                    body: formData
+                const response = await axios.post('/add-case', formData)
+                .then(response => {
+                    
+                    // Redirect to cases list with success message
+                    window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
+                })
+                .catch(error => {
+                    // Show error message
+                    Toast.error('Failed to submit case. Please try again.');
+                    return;
                 });
-
-                if (response.ok) {
-                    alert('Case submitted successfully!');
-                    window.location.href = '/aligners-cases';
-                } else {
-                    const data = await response.json();
-                    alert(data.message || 'Failed to submit case');
-                }
             } catch (error) {
-                alert('Network error. Please try again.');
+                Toast.error('Network error. Please check your connection and try again.');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = originalText;
             }
         });
 
