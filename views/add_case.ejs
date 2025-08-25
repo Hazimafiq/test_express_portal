@@ -6,9 +6,12 @@
     <title>Add New Case - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/add_case.css">
+    <link rel="stylesheet" href="/assets/css/date-picker.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
     <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
+    <script src="/assets/js/date-picker.js"></script>
+
 </head>
 <body>
     <!-- Navigation Rail Component -->
@@ -52,8 +55,9 @@
                             <div class="select-wrapper">
                                 <select id="patientGender" name="patientGender">
                                     <option value="">Select</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Prefer not to say">Prefer not to say</option>
                                 </select>
                             </div>
                         </div>
@@ -62,7 +66,9 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Date of Birth</span>
                             </label>
-                            <input type="date" id="dateOfBirth" name="dateOfBirth">
+                            <div class="date-wrapper">
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" data-date-picker>
+                            </div>
                         </div>
                         <div class="form-field">
                             <label for="email">
@@ -200,9 +206,10 @@
                             </label>
                             <div class="select-wrapper">
                                 <select id="ipr" name="ipr">
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                    <option value="as_recommended">As Recommended</option>
+                                    <option value="">Select</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                    <option value="As Recommended">As Recommended</option>
                                 </select>
                             </div>
                             
@@ -214,9 +221,10 @@
                             </label>
                             <div class="select-wrapper">
                                 <select id="attachments" name="attachments">
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                    <option value="as_recommended">As Recommended</option>
+                                    <option value="">Select</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                    <option value="As Recommended">As Recommended</option>
                                 </select>
                             </div>
                         </div>
@@ -245,9 +253,8 @@
                             <div class="select-wrapper">
                                 <select id="modelType" name="modelType">
                                     <option value="">Select</option>
-                                    <option value="stl">STL</option>
-                                    <option value="ply">PLY</option>
-                                    <option value="obj">OBJ</option>
+                                    <option value="Digital Model">Digital Model</option>
+                                    <option value="Plaster Model">Plaster Model</option>
                                 </select>
                             </div>
                         </div>
@@ -306,38 +313,38 @@
                                 <div class="photo-row">
                                     <div class="photo-upload face-photo" data-type="frontal">
                                         <img src="/assets/images/full-face-front.png" alt="Face Front" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="frontal" accept="image/*" style="display: none;">
                                     </div>
                                     <div class="photo-upload face-photo" data-type="smile">
                                         <img src="/assets/images/full-smiling-face.png" alt="Face Smile" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="smile" accept="image/*" style="display: none;">
                                     </div>
                                     <div class="photo-upload face-photo" data-type="profile">
                                         <img src="/assets/images/right-side-profile.png" alt="Face Profile" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="profile" accept="image/*" style="display: none;">
                                     </div>
                                 </div>
                                 
                                 <div class="photo-row">
                                     <div class="photo-upload teeth-photo" data-type="left">
                                         <img src="/assets/images/buccal-right.png" alt="Teeth Left" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="left" accept="image/*" style="display: none;">
                                     </div>
                                     <div class="photo-upload teeth-photo" data-type="front">
                                         <img src="/assets/images/bretracted-anterior-frontal.png" alt="Teeth Front" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="front" accept="image/*" style="display: none;">
                                     </div>
                                     <div class="photo-upload teeth-photo" data-type="right">
                                         <img src="/assets/images/buccal-left.png" alt="Teeth Right" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="right" accept="image/*" style="display: none;">
                                     </div>
                                     <div class="photo-upload teeth-photo" data-type="upper">
                                         <img src="/assets/images/mandibular-occlusal.png" alt="Teeth Upper" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="upper" accept="image/*" style="display: none;">
                                     </div>
                                     <div class="photo-upload teeth-photo" data-type="lower">
                                         <img src="/assets/images/maxillary-occlusal.png" alt="Teeth Lower" class="photo-outline">
-                                        <input type="file" accept="image/*" style="display: none;">
+                                        <input type="file" id="lower" accept="image/*" style="display: none;">
                                     </div>
                                 </div>
                             </div>
@@ -352,7 +359,7 @@
                                 <input type="file" id="xray" name="xray" accept=".jpg,.jpeg,.png,.zip">
                                 <div class="upload-placeholder">
                                     <span>Choose File</span>
-                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                    <img src="/assets/images/file-upload.png" id="xray" alt="Upload Icon" class="file-upload-icon">
                                 </div>
                             </div>
                         </div>
@@ -363,10 +370,10 @@
                                 <span class="label-text">Other Documents / Photos (*JPEG, PNG or ZIP)</span>
                             </label>
                             <div class="file-upload file-upload-simple">
-                                <input type="file" id="documents" name="documents" accept=".jpg,.jpeg,.png,.zip" multiple>
+                                <input type="file" id="documents" name="documents" accept=".jpg,.jpeg,.png,.zip">
                                 <div class="upload-placeholder">
                                     <span>Choose File</span>
-                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                    <img src="/assets/images/file-upload.png" id="documents" alt="Upload Icon" class="file-upload-icon">
                                 </div>
                             </div>
                         </div>
@@ -550,11 +557,6 @@
                     message: 'Attachments is required.'
                 },
                 {
-                    field: 'treatmentNotes',
-                    rule: 'required',
-                    message: 'Treatment Notes is required.'
-                },
-                {
                     field: 'modelType',
                     rule: 'required',
                     message: 'Model Type is required.'
@@ -587,36 +589,78 @@
             submitBtn.textContent = 'Submitting Case...';
 
             const formData = new FormData();
-            formData.append('patientName', document.getElementById('patientName').value);
-            formData.append('patientGender', document.getElementById('patientGender').value);
-            formData.append('dateOfBirth', document.getElementById('dateOfBirth').value);
-            formData.append('treatmentBrand', document.getElementById('treatmentBrand').value);
-            formData.append('customSN', document.getElementById('customSN').value);
+            formData.append('name', document.getElementById('patientName').value);
+            formData.append('gender', document.getElementById('patientGender').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('dob', document.getElementById('dateOfBirth').value);
+            formData.append('treatment_brand', document.getElementById('treatmentBrand').value);
+            formData.append('custom_sn', document.getElementById('customSN').value);
+
+            //clinical conditions - send individual boolean values for each condition
+            const conditionCheckboxes = document.querySelectorAll('input[name="clinical_condition"]');
+            conditionCheckboxes.forEach(checkbox => {
+                formData.append(checkbox.value, checkbox.checked ? '1' : '0');
+            });
             formData.append('ipr', document.getElementById('ipr').value);
             formData.append('attachments', document.getElementById('attachments').value);
+            formData.append('treatment_notes', document.getElementById('treatmentNotes').value); 
             
-            formData.append('treatmentNotes', document.getElementById('treatmentNotes').value);
-            formData.append('modelType', document.getElementById('modelType').value);
-            formData.append('upperScan', document.getElementById('upperScan').value);
-            formData.append('lowerScan', document.getElementById('lowerScan').value);
-            formData.append('biteScan', document.getElementById('biteScan').value);
+            //model type
+            formData.append('model_type', document.getElementById('modelType').value);
             
+            // File uploads - append actual files, not values
+            const upperScanFile = document.getElementById('upperScan').files[0];
+            const lowerScanFile = document.getElementById('lowerScan').files[0];
+            const biteScanFile = document.getElementById('biteScan').files[0];
+            
+            if (upperScanFile) formData.append('upper_scan', upperScanFile);
+            if (lowerScanFile) formData.append('lower_scan', lowerScanFile);
+            if (biteScanFile) formData.append('bite_scan', biteScanFile);
+
+            //clinical photos - append actual files, not values
+            const frontalFile = document.getElementById('frontal').files[0];
+            const smileFile = document.getElementById('smile').files[0];
+            const profileFile = document.getElementById('profile').files[0];
+            const leftFile = document.getElementById('left').files[0];
+            const frontFile = document.getElementById('front').files[0];
+            const rightFile = document.getElementById('right').files[0];
+            const upperFile = document.getElementById('upper').files[0];
+            const lowerFile = document.getElementById('lower').files[0];
+            const xrayFile = document.getElementById('xray').files[0];
+            const documentsFile = document.getElementById('documents').files[0];
+
+            if (frontalFile) formData.append('front', frontalFile);
+            if (smileFile) formData.append('smiling', smileFile);
+            if (profileFile) formData.append('right_side', profileFile);
+            if (leftFile) formData.append('buccal_top', leftFile);
+            if (frontFile) formData.append('buccal_bottom', frontFile);
+            if (rightFile) formData.append('buccal_right', rightFile);
+            if (upperFile) formData.append('buccal_center', upperFile);
+            if (lowerFile) formData.append('buccal_left', lowerFile);
+            if (xrayFile) formData.append('xray', xrayFile);
+            if (documentsFile) formData.append('other', documentsFile);
+
             formData.append('xray', document.getElementById('xray').value);
-            formData.append('documents', document.getElementById('documents').value);
+            formData.append('other', document.getElementById('documents').value);
             
             try {
-                const response = await axios.post('/add-case', formData)
+                const response = await axios.post('/add-case', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
                 .then(response => {
-                    
                     // Redirect to cases list with success message
                     window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
                 })
                 .catch(error => {
                     // Show error message
+                    console.log('error', error);
                     Toast.error('Failed to submit case. Please try again.');
                     return;
                 });
             } catch (error) {
+                console.log('error', error);
                 Toast.error('Network error. Please check your connection and try again.');
             } finally {
                 // Reset button state

@@ -192,3 +192,70 @@ textarea.field-error:hover {
 .upload-field .field-error-message:empty {
     display: none;
 }
+
+/* Date wrapper container - replicates select-wrapper approach */
+.date-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.date-wrapper input[type="date"] {
+    cursor: pointer;
+    /* Custom date input styling */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
+    padding-right: 40px; /* Make room for the custom icon */
+    width: 100%;
+    transition: all 0.2s ease;
+    color: var(--Colour-text-subtlest, #A1A1A1);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+}
+
+/* Custom calendar icon positioned on the wrapper */
+.date-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-image: url('/assets/images/calendar-icon.svg');
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: center;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+    z-index: 1;
+}
+
+/* Error states for date wrapper */
+.date-wrapper.field-error::after {
+    /* Icon stays in place even when field has error */
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Error message positioning for date fields - outside wrapper, inside form-field */
+.form-field:has(.date-wrapper) .field-error-message {
+    margin-top: 4px;
+    position: static;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.form-field:has(.date-wrapper) .field-error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
