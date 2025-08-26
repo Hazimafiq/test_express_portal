@@ -243,6 +243,7 @@
                     document.querySelector('[data-status="inactive"] .tab-count').textContent = counts.inactive;
                 } catch (error) {
                     console.error('Error loading user counts:', error);
+                    Toast.error('Failed to load user counts');
                 }
             }
 

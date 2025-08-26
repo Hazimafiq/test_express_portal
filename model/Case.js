@@ -124,7 +124,7 @@ class Case {
     }
 
     static async get_patient_details_data(caseid) {
-        const query = 'SELECT case_id, name, gender, dob, email, treatment_brand, custom_sn FROM patient_table WHERE case_id = ? LIMIT 1';
+        const query = 'SELECT id, case_id, name, gender, dob, email, treatment_brand, custom_sn, category, status, updated_at FROM patient_table WHERE case_id = ? LIMIT 1';
         const values = [caseid];
         const [results] = await pool.query(query, values);
         if(results.length == 0){
@@ -134,7 +134,7 @@ class Case {
     }
 
     static async get_treatment_details_data(caseid) {
-        const query = 'SELECT case_id, crowding, deep_bite, spacing, narrow_arch, class_ii_div_1, class_ii_div_2, class_iii, open_bite, overjet, anterior_crossbite, posterior_crossbite, others, ipr, attachments, treatment_notes FROM patient_table WHERE case_id = ? LIMIT 1';
+        const query = 'SELECT patient_table.case_id, treatment_model_table.crowding, treatment_model_table.deep_bite, treatment_model_table.spacing, treatment_model_table.narrow_arch, treatment_model_table.class_ii_div_1, treatment_model_table.class_ii_div_2, treatment_model_table.class_iii, treatment_model_table.open_bite, treatment_model_table.overjet, treatment_model_table.anterior_crossbite, treatment_model_table.posterior_crossbite, treatment_model_table.others, treatment_model_table.ipr, treatment_model_table.attachments, treatment_model_table.treatment_notes FROM patient_table JOIN treatment_model_table ON patient_table.case_id = treatment_model_table.case_id WHERE patient_table.case_id = ? LIMIT 1';
         const values = [caseid];
         const [results] = await pool.query(query, values);
         if(results.length == 0){
@@ -154,9 +154,10 @@ class Case {
     }
 
     static async get_all_cases(filters = {}, session = {}) {
-        const { treatment_brand, created_date, last_updated_date, search, sortBy = 'created_at', sortOrder = 'DESC', limit, offset } = filters;
+        const { treatment_brand, created_date, last_updated_date, status, search, sortBy = 'created_at', sortOrder = 'DESC', limit, offset } = filters;
         const { id, role } = session;
 
+        console.log(filters);
         let query = 'SELECT case_id, treatment_brand, name, category, created_at, updated_at, status FROM patient_table';
         let whereConditions = [];
         let queryParams = [];
@@ -170,17 +171,51 @@ class Case {
             whereConditions.push('treatment_brand = ?');
             queryParams.push(treatment_brand.trim());
         }
-        
-        // Add search filter (searches in case id, and name)
-        if (created_date && created_date !== '') {
-            whereConditions.push('created_at >= ?');
-            queryParams.push(created_date);
+
+        // Add status filter
+        if (status && status.trim() !== '' && status !== 'all') {
+            whereConditions.push('status = ?');
+            queryParams.push(status.trim());
         }
         
-        // Add search filter (searches in case id, and name)
+        // Add created date filter (handles date ranges in format "from|to")
+        if (created_date && created_date !== '') {
+            const dates = created_date.split('|');
+            if (dates.length === 2) {
+                const [fromDate, toDate] = dates;
+                if (fromDate && fromDate.trim() !== '') {
+                    whereConditions.push('DATE(created_at) >= ?');
+                    queryParams.push(fromDate.trim());
+                }
+                if (toDate && toDate.trim() !== '') {
+                    whereConditions.push('DATE(created_at) <= ?');
+                    queryParams.push(toDate.trim());
+                }
+            } else {
+                // Single date case
+                whereConditions.push('DATE(created_at) = ?');
+                queryParams.push(created_date);
+            }
+        }
+        
+        // Add last updated date filter (handles date ranges in format "from|to")
         if (last_updated_date && last_updated_date !== '') {
-            whereConditions.push('updated_at <= ?');
-            queryParams.push(last_updated_date);
+            const dates = last_updated_date.split('|');
+            if (dates.length === 2) {
+                const [fromDate, toDate] = dates;
+                if (fromDate && fromDate.trim() !== '') {
+                    whereConditions.push('DATE(updated_at) >= ?');
+                    queryParams.push(fromDate.trim());
+                }
+                if (toDate && toDate.trim() !== '') {
+                    whereConditions.push('DATE(updated_at) <= ?');
+                    queryParams.push(toDate.trim());
+                }
+            } else {
+                // Single date case
+                whereConditions.push('DATE(updated_at) = ?');
+                queryParams.push(last_updated_date);
+            }
         }
         
         // Add search filter (searches in case id, and name)
@@ -226,10 +261,37 @@ class Case {
             countQuery += ' WHERE ' + whereConditions.join(' AND ');
             // For count query, we only need the filter parameters, not limit/offset
             let paramCount = 0;
+            
+            // Count parameters for each filter to match the exact parameter count
+            if (role=='doctor') paramCount++;
             if (treatment_brand && treatment_brand.trim() !== '') paramCount++;
-            if (created_date && created_date !== '') paramCount++;
-            if (last_updated_date && last_updated_date !== '') paramCount++;
-            if (search && search.trim() !== '') paramCount += 2; // search uses 2 parameters
+            if (status && status.trim() !== '' && status !== 'all') paramCount++;
+            
+            // Count created_date parameters
+            if (created_date && created_date !== '') {
+                const dates = created_date.split('|');
+                if (dates.length === 2) {
+                    const [fromDate, toDate] = dates;
+                    if (fromDate && fromDate.trim() !== '') paramCount++;
+                    if (toDate && toDate.trim() !== '') paramCount++;
+                } else {
+                    paramCount++;
+                }
+            }
+            
+            // Count last_updated_date parameters
+            if (last_updated_date && last_updated_date !== '') {
+                const dates = last_updated_date.split('|');
+                if (dates.length === 2) {
+                    const [fromDate, toDate] = dates;
+                    if (fromDate && fromDate.trim() !== '') paramCount++;
+                    if (toDate && toDate.trim() !== '') paramCount++;
+                } else {
+                    paramCount++;
+                }
+            }
+            
+            if (search && search.trim() !== '') paramCount += 2;
             
             countParams = queryParams.slice(0, paramCount);
         }
@@ -262,16 +324,44 @@ class Case {
             queryParams.push(treatment_brand.trim());
         }
         
-        // Add search filter (searches in case id, and name)
+        // Add created date filter (handles date ranges in format "from|to")
         if (created_date && created_date !== '') {
-            whereConditions.push('created_at >= ?');
-            queryParams.push(created_date);
+            const dates = created_date.split('|');
+            if (dates.length === 2) {
+                const [fromDate, toDate] = dates;
+                if (fromDate && fromDate.trim() !== '') {
+                    whereConditions.push('DATE(created_at) >= ?');
+                    queryParams.push(fromDate.trim());
+                }
+                if (toDate && toDate.trim() !== '') {
+                    whereConditions.push('DATE(created_at) <= ?');
+                    queryParams.push(toDate.trim());
+                }
+            } else {
+                // Single date case
+                whereConditions.push('DATE(created_at) = ?');
+                queryParams.push(created_date);
+            }
         }
         
-        // Add search filter (searches in case id, and name)
+        // Add last updated date filter (handles date ranges in format "from|to")
         if (last_updated_date && last_updated_date !== '') {
-            whereConditions.push('updated_at <= ?');
-            queryParams.push(last_updated_date);
+            const dates = last_updated_date.split('|');
+            if (dates.length === 2) {
+                const [fromDate, toDate] = dates;
+                if (fromDate && fromDate.trim() !== '') {
+                    whereConditions.push('DATE(updated_at) >= ?');
+                    queryParams.push(fromDate.trim());
+                }
+                if (toDate && toDate.trim() !== '') {
+                    whereConditions.push('DATE(updated_at) <= ?');
+                    queryParams.push(toDate.trim());
+                }
+            } else {
+                // Single date case
+                whereConditions.push('DATE(updated_at) = ?');
+                queryParams.push(last_updated_date);
+            }
         }
         
         // Add search filter (searches in case id, and name)
@@ -315,6 +405,16 @@ class Case {
         const query = 'UPDATE users_table SET fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ? WHERE username = ? LIMIT 1';
         const values = [fullName, phoneNumber, email, country, role, username];
         const [results] = await pool.query(query, values);
+        return results;
+    }
+
+    static async updateCaseStatus(caseId, status) {
+        const query = 'UPDATE patient_table SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE case_id = ?';
+        const values = [status, caseId];
+        const [results] = await pool.query(query, values);
+        if (results.affectedRows === 0) {
+            throw new CustomError('Case not found', 404);
+        }
         return results;
     }
 }

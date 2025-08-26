@@ -401,7 +401,8 @@
             uploadedFiles.forEach((fileData, index) => {
                 formData.append('documents', fileData.file);
             });
-            
+            formData.append('status', '0'); // 0 = draft
+            formData.append('category', 'Upload STL');
             try {
                 const response = await axios.post('/add-case-stl', formData, {
                     headers: {

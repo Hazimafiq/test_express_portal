@@ -26,7 +26,7 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <a href="/user-details/<%= user[0].id %>" class="breadcrumb-item">User Details</a>
+                <a href="/user-details/<%= user.id %>" class="breadcrumb-item">User Details</a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
@@ -37,7 +37,7 @@
             <div class="page-header">
                 <h1 class="page-title">Update Profile</h1>
                 <div class="page-actions">
-                    <% if (user[0].status === 'active') { %>
+                    <% if (user.status === 'active') { %>
                         <button class="btn btn-deactivate" id="deactivateBtn">Deactivate User</button>
                     <% } else { %>
                         <button class="btn btn-deactivate" id="deleteBtn">Delete User</button>
@@ -57,28 +57,28 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Username</span>
                                 </label>
-                                <input type="text" id="username" name="username" placeholder="Input here" value="<%= user[0].username %>">
+                                <input type="text" id="username" name="username" placeholder="Input here" value="<%= user.username %>">
                             </div>
                             <div class="form-field">
                                 <label for="fullName">
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Full Name</span>
                                 </label>
-                                <input type="text" id="fullName" name="fullName" placeholder="Input here" value="<%= user[0].fullName %>">
+                                <input type="text" id="fullName" name="fullName" placeholder="Input here" value="<%= user.fullName %>">
                             </div>
                             <div class="form-field">
                                 <label for="email">
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Email</span>
                                 </label>
-                                <input type="email" id="email" name="email" placeholder="Input here" value="<%= user[0].email %>">
+                                <input type="email" id="email" name="email" placeholder="Input here" value="<%= user.email %>">
                             </div>
                             <div class="form-field">
                                 <label for="phoneNumber">
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Phone Number</span>
                                 </label>
-                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Input here" value="<%= user[0].phoneNumber %>">
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Input here" value="<%= user.phoneNumber %>">
                             </div>
                             <div class="form-field">
                                 <label for="country">
@@ -88,13 +88,13 @@
                                 <div class="select-wrapper">
                                     <select id="country" name="country">
                                         <option value="">Select</option>
-                                        <option value="malaysia" <%= user[0].country === 'malaysia' ? 'selected' : '' %>>Malaysia</option>
-                                        <option value="thailand" <%= user[0].country === 'thailand' ? 'selected' : '' %>>Thailand</option>
-                                        <option value="singapore" <%= user[0].country === 'singapore' ? 'selected' : '' %>>Singapore</option>
-                                        <option value="indonesia" <%= user[0].country === 'indonesia' ? 'selected' : '' %>>Indonesia</option>
-                                        <option value="philippines" <%= user[0].country === 'philippines' ? 'selected' : '' %>>Philippines</option>
-                                        <option value="vietnam" <%= user[0].country === 'vietnam' ? 'selected' : '' %>>Vietnam</option>
-                                        <option value="other" <%= user[0].country === 'other' ? 'selected' : '' %>>Other</option>
+                                        <option value="malaysia" <%= user.country === 'malaysia' ? 'selected' : '' %>>Malaysia</option>
+                                        <option value="thailand" <%= user.country === 'thailand' ? 'selected' : '' %>>Thailand</option>
+                                        <option value="singapore" <%= user.country === 'singapore' ? 'selected' : '' %>>Singapore</option>
+                                        <option value="indonesia" <%= user.country === 'indonesia' ? 'selected' : '' %>>Indonesia</option>
+                                        <option value="philippines" <%= user.country === 'philippines' ? 'selected' : '' %>>Philippines</option>
+                                        <option value="vietnam" <%= user.country === 'vietnam' ? 'selected' : '' %>>Vietnam</option>
+                                        <option value="other" <%= user.country === 'other' ? 'selected' : '' %>>Other</option>
                                     </select>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Clinic</span>
                                 </label>
-                                <input type="text" id="clinic" name="clinic" placeholder="Input here" value="<%= user[0].clinic %>">
+                                <input type="text" id="clinic" name="clinic" placeholder="Input here" value="<%= user.clinic %>">
                             </div>
                         </div>
                     </div>
@@ -116,36 +116,36 @@
                         <div class="form-grid">
                             <div class="form-field">
                                 <label for="address">Address</label>
-                                <input type="text" id="address" name="address" placeholder="Input here" value="<%= user[0].address %>">
+                                <input type="text" id="address" name="address" placeholder="Input here" value="<%= user.address %>">
                             </div>
                             <div class="form-field">
                                 <label for="postcode">Postcode</label>
-                                <input type="text" id="postcode" name="postcode" placeholder="Input here" value="<%= user[0].postcode %>">
+                                <input type="text" id="postcode" name="postcode" placeholder="Input here" value="<%= user.postcode %>">
                             </div>
                             <div class="form-field">
                                 <label for="city">City</label>
-                                <input type="text" id="city" name="city" placeholder="Input here" value="<%= user[0].city %>">
+                                <input type="text" id="city" name="city" placeholder="Input here" value="<%= user.city %>">
                             </div>
                             <div class="form-field">
                                 <label for="state">State</label>
                                 <div class="select-wrapper">
                                     <select id="state" name="state">
                                         <option value="">Select</option>
-                                        <option value="selangor" <%= user[0].state === 'selangor' ? 'selected' : '' %>>Selangor</option>
-                                        <option value="kuala_lumpur" <%= user[0].state === 'kuala_lumpur' ? 'selected' : '' %>>Kuala Lumpur</option>
-                                        <option value="penang" <%= user[0].state === 'penang' ? 'selected' : '' %>>Penang</option>
-                                        <option value="johor" <%= user[0].state === 'johor' ? 'selected' : '' %>>Johor</option>
-                                        <option value="perak" <%= user[0].state === 'perak' ? 'selected' : '' %>>Perak</option>
-                                        <option value="kedah" <%= user[0].state === 'kedah' ? 'selected' : '' %>>Kedah</option>
-                                        <option value="kelantan" <%= user[0].state === 'kelantan' ? 'selected' : '' %>>Kelantan</option>
-                                        <option value="terengganu" <%= user[0].state === 'terengganu' ? 'selected' : '' %>>Terengganu</option>
-                                        <option value="pahang" <%= user[0].state === 'pahang' ? 'selected' : '' %>>Pahang</option>
-                                        <option value="negeri_sembilan" <%= user[0].state === 'negeri_sembilan' ? 'selected' : '' %>>Negeri Sembilan</option>
-                                        <option value="melaka" <%= user[0].state === 'melaka' ? 'selected' : '' %>>Melaka</option>
-                                        <option value="perlis" <%= user[0].state === 'perlis' ? 'selected' : '' %>>Perlis</option>
-                                        <option value="sabah" <%= user[0].state === 'sabah' ? 'selected' : '' %>>Sabah</option>
-                                        <option value="sarawak" <%= user[0].state === 'sarawak' ? 'selected' : '' %>>Sarawak</option>
-                                        <option value="other" <%= user[0].state === 'other' ? 'selected' : '' %>>Other</option>
+                                        <option value="selangor" <%= user.state === 'selangor' ? 'selected' : '' %>>Selangor</option>
+                                        <option value="kuala_lumpur" <%= user.state === 'kuala_lumpur' ? 'selected' : '' %>>Kuala Lumpur</option>
+                                        <option value="penang" <%= user.state === 'penang' ? 'selected' : '' %>>Penang</option>
+                                        <option value="johor" <%= user.state === 'johor' ? 'selected' : '' %>>Johor</option>
+                                        <option value="perak" <%= user.state === 'perak' ? 'selected' : '' %>>Perak</option>
+                                        <option value="kedah" <%= user.state === 'kedah' ? 'selected' : '' %>>Kedah</option>
+                                        <option value="kelantan" <%= user.state === 'kelantan' ? 'selected' : '' %>>Kelantan</option>
+                                        <option value="terengganu" <%= user.state === 'terengganu' ? 'selected' : '' %>>Terengganu</option>
+                                        <option value="pahang" <%= user.state === 'pahang' ? 'selected' : '' %>>Pahang</option>
+                                        <option value="negeri_sembilan" <%= user.state === 'negeri_sembilan' ? 'selected' : '' %>>Negeri Sembilan</option>
+                                        <option value="melaka" <%= user.state === 'melaka' ? 'selected' : '' %>>Melaka</option>
+                                        <option value="perlis" <%= user.state === 'perlis' ? 'selected' : '' %>>Perlis</option>
+                                        <option value="sabah" <%= user.state === 'sabah' ? 'selected' : '' %>>Sabah</option>
+                                        <option value="sarawak" <%= user.state === 'sarawak' ? 'selected' : '' %>>Sarawak</option>
+                                        <option value="other" <%= user.state === 'other' ? 'selected' : '' %>>Other</option>
                                     </select>
                                 </div>
                             </div>
@@ -165,21 +165,21 @@
                             <div class="role-selection" id="roleSelection">
                                 <div class="role-option">
                                     <label class="radio-label">
-                                        <input type="radio" name="role" value="doctor" <%= user[0].role === 'doctor' ? 'checked' : '' %>>
+                                        <input type="radio" name="role" value="doctor" <%= user.role === 'doctor' ? 'checked' : '' %>>
                                         <span class="radio-custom"></span>
                                         Doctor
                                     </label>
                                 </div>
                                 <div class="role-option">
                                     <label class="radio-label">
-                                        <input type="radio" name="role" value="staff" <%= user[0].role === 'staff' ? 'checked' : '' %>>
+                                        <input type="radio" name="role" value="staff" <%= user.role === 'staff' ? 'checked' : '' %>>
                                         <span class="radio-custom"></span>
                                         Staff
                                     </label>
                                 </div>
                                 <div class="role-option">
                                     <label class="radio-label">
-                                        <input type="radio" name="role" value="superadmin" <%= user[0].role === 'superadmin' ? 'checked' : '' %>>
+                                        <input type="radio" name="role" value="superadmin" <%= user.role === 'superadmin' ? 'checked' : '' %>>
                                         <span class="radio-custom"></span>
                                         Superadmin
                                     </label>
@@ -323,7 +323,7 @@
             submitBtn.textContent = 'Updating User...';
 
             const formData = {
-                userId: '<%= user[0].id %>',
+                userId: '<%= user.id %>',
                 username: document.getElementById('username').value,
                 fullName: document.getElementById('fullName').value,
                 email: document.getElementById('email').value,
@@ -360,7 +360,7 @@
 
         // Cancel button
         document.getElementById('cancelBtn').addEventListener('click', () => {
-            window.location.href = `/user-details/<%= user[0].id %>`;
+            window.location.href = `/user-details/<%= user.id %>`;
         });
 
         // Modal functionality
@@ -373,7 +373,7 @@
         const cancelDelete = document.getElementById('cancelDelete');
         const confirmDelete = document.getElementById('confirmDelete');
 
-        if('<%= user[0].status %>' === 'active') {
+        if('<%= user.status %>' === 'active') {
             // Show modal when deactivate button is clicked
             deactivateBtn.addEventListener('click', () => {
                 modal.classList.add('show');
@@ -397,7 +397,7 @@
             confirmDeactivate.addEventListener('click', async () => {
                 try {
                     const formData = {
-                        userId: '<%= user[0].id %>'
+                        userId: '<%= user.id %>'
                     }
                     const response = await axios.post('/deactivate-user', formData);
                     if (response.status === 200) {
@@ -423,12 +423,12 @@
             });
         }
 
-        if('<%= user[0].status %>' === 'inactive') {
+        if('<%= user.status %>' === 'inactive') {
             // Handle delete confirmation
             confirmDelete.addEventListener('click', async () => {
                 try {
                     const formData = {
-                        userId: '<%= user[0].id %>'
+                        userId: '<%= user.id %>'
                     }
                     const response = await axios.post('/delete-user', formData);
                     if (response.status === 200) {

@@ -35,10 +35,10 @@
             <div class="profile-content">
                 <!-- User Info -->
                 <div class="user-info">
-                    <div class="user-avatar"><%= user[0].fullName.charAt(0) %></div>
+                    <div class="user-avatar"><%= user.fullName.charAt(0) %></div>
                     <div class="user-details">
-                        <h2 class="full-name"><%= user[0].fullName %></h2>
-                        <p class="user-id">User ID: <%= user[0].id %></p>
+                        <h2 class="full-name"><%= user.fullName %></h2>
+                        <p class="user-id">User ID: <%= user.id %></p>
                     </div>
                 </div>
 
@@ -47,33 +47,33 @@
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Username</label>
-                            <span><%= user[0].username %></span>
+                            <span><%= user.username %></span>
                         </div>
                         <div class="profile-field">
                             <label>Role</label>
-                            <span><%= user[0].role %></span>
+                            <span><%= user.role %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Phone Number</label>
-                            <span><%= user[0].phoneNumber || '-' %></span>
+                            <span><%= user.phoneNumber || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Email</label>
-                            <span><%= user[0].email || '-' %></span>
+                            <span><%= user.email || '-' %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Clinic</label>
-                            <span><%= user[0].clinic || '-' %></span>
+                            <span><%= user.clinic || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Country</label>
-                            <span><%= user[0].country || '-' %></span>
+                            <span><%= user.country || '-' %></span>
                         </div>
                     </div>
                 </div>
@@ -81,8 +81,8 @@
                 <!-- Delivery Address -->
                 <div class="delivery-address">
                     <label>Delivery Address</label>
-                    <% if (user[0].address) { %>
-                        <span><%= user[0].address %>, <%= user[0].postcode %>, <%= user[0].city %>, <%= user[0].state %></span>
+                    <% if (user.address) { %>
+                        <span><%= user.address %>, <%= user.postcode %>, <%= user.city %>, <%= user.state %></span>
                     <% } else { %>
                         <span>-</span>
                     <% } %>

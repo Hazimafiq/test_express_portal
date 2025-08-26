@@ -1,11 +1,9 @@
 const express = require('express');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
-const { update_case, update_stl_case, getAllCases, getCaseCounts } = require('../controller/case');
-const axios = require('axios');
+const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data } = require('../controller/case');
 
 const router = express.Router();
-const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT}`;
 
 // Authentication middleware
 const requireAuth = (req, res, next) => {
@@ -45,9 +43,9 @@ router.post('/change-password', changePassword);
 // Profile route
 router.get('/profile', requireAuth, async (req, res) => {
     try {
-        const userProfile = await axios.get(`${baseURL}/get_profile?id=${req.session.user.id}`);       
+        const userProfile = await get_user_profile(req.session.user.id);       
         res.render('profile', {
-            user: userProfile.data.user
+            user: userProfile[0]
         });
     } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -64,13 +62,23 @@ router.get('/aligners-cases', requireAuth, (req, res) => {
 });
 
 // Case details route
-router.get('/cases/:caseId', requireAuth, (req, res) => {
+router.get('/cases/:caseId', requireAuth, async (req, res) => {
     const { caseId } = req.params;
-    // In a real app, fetch case data by caseId
-    res.render('case_details', {
-        caseId,
-    });
+    try {
+        const patient_details = await get_patient_details_data(caseId);
+        res.render('case_details', {
+            caseId,
+            patient_details: patient_details[0],
+            user: req.session.user
+        });
+    } catch (error) {
+        console.error('Error fetching patient details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
+
+router.get('/get_patient_details_data', requireAuth, get_patient_details_data);
+router.get('/get_patient_treatment_details_data', requireAuth, get_patient_treatment_details_data);
 
 // Add treatment plan route
 router.get('/add-treatment-plan/:caseId', requireAuth, (req, res) => {
@@ -89,21 +97,41 @@ router.post('/add-case/:caseid', requireAuth, update_case);
 router.post('/add-case-stl', requireAuth, update_stl_case);
 router.post('/add-case-stl/:caseid', requireAuth, update_stl_case);
 
-// Get all users with filtering, searching, and sorting
+// Get all cases with filtering, searching, and sorting
 router.get('/get-cases', requireAuth, getAllCases);
 
 // Get cases counts by status
 router.get('/get-case-counts', requireAuth, getCaseCounts);
 
-router.get('/upload-stl', requireAuth, (req, res) => {
-    res.render('upload_stl');
+// Get treatment details
+router.get('/get-patient-treatment-details', requireAuth, get_patient_treatment_details_data);
+//get mo
+
+router.get('/update-case', requireAuth, async (req, res) => {
+    const { caseId } = req.query;
+    try {
+        const patient_details = await get_patient_details_data(caseId);
+        res.render('update_case', { caseId, patient_details: patient_details[0] });
+    } catch (error) {
+        console.error('Error fetching patient details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
-router.post('/save-draft', requireAuth, (req, res) => {
-    // TODO: Implement draft saving logic
-    // For now, just return success
-    console.log('Draft saved:', req.body);
-    res.json({ message: 'Draft saved successfully', id: Date.now() });
+// Set case as draft
+router.post('/cases/:caseId/set-draft', requireAuthAPI, async (req, res) => {
+    try {
+        const { caseId } = req.params;
+        
+        res.status(200).json({ message: 'Case set as draft successfully' });
+    } catch (error) {
+        console.error('Error setting case as draft:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/upload-stl', requireAuth, (req, res) => {
+    res.render('upload_stl');
 });
 
 // User management route
@@ -125,9 +153,9 @@ router.get('/user-details/:userId', requireAuth, async (req, res) => {
     const { userId } = req.params;
     const { success } = req.query; 
     try {
-        const userProfile = await axios.get(`${baseURL}/get_profile?id=${userId}`);       
+        const userProfile = await get_user_profile(userId);       
         res.render('user_details', {
-            user: userProfile.data.user,
+            user: userProfile[0],  // userProfile is an array, take the first element
             successMessage: success || null
         });
     } catch (error) {
@@ -140,9 +168,9 @@ router.get('/user-details/:userId', requireAuth, async (req, res) => {
 router.get('/update-user/:userId', requireAuth, async (req, res) => {
     const { userId } = req.params;
     try {
-        const userProfile = await axios.get(`${baseURL}/get_profile?id=${userId}`);       
+        const userProfile = await get_user_profile(userId);       
         res.render('update_user', {
-            user: userProfile.data.user
+            user: userProfile[0]  // userProfile is an array, take the first element
         });
     } catch (error) {
         console.error('Error fetching user profile:', error);

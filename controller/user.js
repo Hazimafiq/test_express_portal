@@ -46,15 +46,31 @@ exports.login = async (req, res) => {
 // Get one user details
 exports.get_user_profile = async (req, res) => {
     try {
-        const { id } = req.query;
+        // If called as HTTP endpoint, get id from query
+        // If called directly, treat req as the userId
+        const id = typeof req === 'object' && req.query ? req.query.id : req;
+        
         const user = await User.get_profile_data(id);
-        res.status(200).json({ user });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
+        
+        // If res is provided, it's an HTTP request
+        if (res) {
+            res.status(200).json({ user });
         } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
+            // If no res, return the data directly
+            return user;
+        }
+    } catch (err) {
+        if (res) {
+            // HTTP request error handling
+            if (err instanceof CustomError) {
+                return res.status(err.statusCode).json({ message: err.message });
+            } else {
+                console.error(err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        } else {
+            // Direct call error handling - rethrow the error
+            throw err;
         }
     }
 };

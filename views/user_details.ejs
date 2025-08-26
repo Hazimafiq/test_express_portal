@@ -39,8 +39,8 @@
                 <h1 class="page-title">User Details</h1>
                 <div class="page-actions">
                     <button class="btn btn-secondary" id="changePasswordBtn">Change Password</button>
-                    <button class="btn <%= user[0].status === 'inactive' ? 'btn-secondary' : 'btn-primary' %>" id="editUserBtn">Update Profile</button>
-                    <% if (user[0].status === 'inactive') { %>
+                    <button class="btn <%= user.status === 'inactive' ? 'btn-secondary' : 'btn-primary' %>" id="editUserBtn">Update Profile</button>
+                    <% if (user.status === 'inactive') { %>
                         <button class="btn btn-primary" id="activateUserBtn">Activate User</button>
                     <% } %>
                 </div>
@@ -50,13 +50,13 @@
             <div class="profile-content">
                 <!-- User Info -->
                 <div class="user-info">
-                    <div class="user-avatar"><%= user[0].fullName.charAt(0) %></div>
+                    <div class="user-avatar"><%= user.fullName.charAt(0) %></div>
                     <div class="user-details">
                         <div class="name-status-container">
-                            <h2 class="full-name"><%= user[0].fullName %></h2>
-                            <span class="status-badge <%= user[0].status === 'active' ? 'active' : 'inactive' %>"><%= user[0].status === 'active' ? 'Active' : 'Inactive' %></span>
+                            <h2 class="full-name"><%= user.fullName %></h2>
+                            <span class="status-badge <%= user.status === 'active' ? 'active' : 'inactive' %>"><%= user.status === 'active' ? 'Active' : 'Inactive' %></span>
                         </div>
-                        <p class="user-id">User ID: <%= user[0].id %></p>
+                        <p class="user-id">User ID: <%= user.id %></p>
                     </div>
                 </div>
 
@@ -65,33 +65,33 @@
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Username</label>
-                            <span><%= user[0].username || '-' %></span>
+                            <span><%= user.username || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Role</label>
-                            <span><%= user[0].role || '-' %></span>
+                            <span><%= user.role || '-' %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Phone Number</label>
-                            <span><%= user[0].phoneNumber || '-' %></span>
+                            <span><%= user.phoneNumber || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Email</label>
-                            <span><%= user[0].email || '-' %></span>
+                            <span><%= user.email || '-' %></span>
                         </div>
                     </div>
 
                     <div class="profile-column">
                         <div class="profile-field">
                             <label>Clinic</label>
-                            <span><%= user[0].clinic || '-' %></span>
+                            <span><%= user.clinic || '-' %></span>
                         </div>
                         <div class="profile-field">
                             <label>Country</label>
-                            <span><%= user[0].country || '-' %></span>
+                            <span><%= user.country || '-' %></span>
                         </div>
                     </div>
                 </div>
@@ -99,8 +99,8 @@
                 <!-- Delivery Address -->
                 <div class="delivery-address">
                     <label>Delivery Address</label>
-                    <% if (user[0].address) { %>
-                        <span><%= user[0].address %>, <%= user[0].postcode %>, <%= user[0].city %>, <%= user[0].state %></span>
+                    <% if (user.address) { %>
+                        <span><%= user.address %>, <%= user.postcode %>, <%= user.city %>, <%= user.state %></span>
                     <% } else { %>
                         <span>-</span>
                     <% } %>
@@ -237,7 +237,7 @@
             }
         };
 
-        if ('<%= user[0].status %>' === 'inactive') {
+        if ('<%= user.status %>' === 'inactive') {
 
             activateUserBtn.addEventListener('click', () => {
                 activateModal.classList.add('show');
@@ -517,7 +517,7 @@
             }
 
             const formData = {
-                userId: '<%= user[0].id %>',
+                userId: '<%= user.id %>',
                 oldPassword: currentPassword,
                 newPassword: newPassword,
                 confirmNewPassword: confirmPassword
@@ -550,7 +550,7 @@
         // Activate user
         confirmActivate.addEventListener('click', async () => {
             const formData = {
-                userId: '<%= user[0].id %>'
+                userId: '<%= user.id %>'
             }
             try {
                 const response = await axios.post('/activate-user', formData);
@@ -589,7 +589,7 @@
         });
 
         editUserBtn.onclick = () => {
-            window.location.href = '/update-user/<%= user[0].id %>';
+            window.location.href = '/update-user/<%= user.id %>';
         };
 
         // Show success toast if message is passed via URL parameter
