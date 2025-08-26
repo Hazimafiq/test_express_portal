@@ -630,6 +630,20 @@ class FormValidation {
             return errorElement;
         }
         
+        // Handle date fields - place error outside date-wrapper but inside form-field
+        if (field.type === 'date' || field.hasAttribute('data-date-picker')) {
+            const formField = field.closest('.form-field');
+            let errorElement = formField.querySelector('.field-error-message');
+            
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'field-error-message';
+                formField.appendChild(errorElement);
+            }
+            
+            return errorElement;
+        }
+        
         let errorElement = field.parentNode.querySelector('.field-error-message');
         
         if (!errorElement) {

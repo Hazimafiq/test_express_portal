@@ -1,0 +1,246 @@
+/* Custom Date Picker Styles */
+.custom-date-picker {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.date-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.date-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.date-input:hover {
+    border-color: #c0c0c0;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.date-input.has-value {
+    color: #1f2937;
+}
+
+.date-input::placeholder {
+    color: #9ca3af;
+}
+
+.calendar-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: url("/assets/images/calendar-icon.svg") no-repeat center;
+    background-size: 16px 16px;
+    pointer-events: none;
+}
+
+.calendar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,.1);
+    width: 300px;
+    max-width: calc(100vw - 100px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+}
+
+.calendar-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    z-index: 9999;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.calendar-nav-btn {
+    background: #fff;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.calendar-nav-btn:hover {
+    background: #f9fafb;
+}
+
+.calendar-nav-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.calendar-month-year {
+    color: var(--Colour-text-subtle, #333);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+}
+
+.calendar-grid {
+    padding: 0 14px 12px;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    padding: 4px 16px 8px;
+    color: #9aa3ad;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+}
+
+.calendar-weekday {
+    text-align: center;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    padding: 16px;
+}
+
+.calendar-day,
+.date-cell {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: 500;
+    color: #2b2f33;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    background: none;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover,
+.date-cell:hover {
+    background: #f3f4f6;
+}
+
+.calendar-day.muted,
+.date-cell.muted {
+    color: #c7cdd4;
+    cursor: default;
+}
+
+.calendar-day.muted:hover,
+.date-cell.muted:hover {
+    background: transparent;
+}
+
+.calendar-day.today,
+.date-cell.today {
+    background: #e1f2ff;
+    color: #0f2a4d;
+}
+
+.calendar-day.active,
+.date-cell.active {
+    background: #0f2a4d;
+    color: #fff;
+}
+
+.calendar-day.active:hover,
+.date-cell.active:hover {
+    background: #0f2a4d;
+}
+
+.calendar-day:disabled,
+.date-cell:disabled {
+    color: #c7cdd4;
+    cursor: not-allowed;
+}
+
+.calendar-day:disabled:hover,
+.date-cell:disabled:hover {
+    background: transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .calendar-dropdown {
+        left: -10px;
+        width: calc(100vw - 20px);
+        max-width: none;
+    }
+    
+    .calendar-header {
+        padding: 12px 14px;
+    }
+    
+    .calendar-weekdays {
+        padding: 8px 14px 4px;
+    }
+    
+    .calendar-grid {
+        padding: 0 14px 12px;
+    }
+    
+    .calendar-day,
+    .date-cell {
+        height: 28px;
+        font-size: 13px;
+    }
+}
+
+/* Integration with existing form styles */
+.form-field .custom-date-picker {
+    width: 100%;
+}
+
+/* Override default date input styles when using custom picker */
+.form-field .date-input {
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
+}
+
+.form-field .date-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}

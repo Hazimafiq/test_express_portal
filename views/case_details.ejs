@@ -6,6 +6,7 @@
     <title>Case Details - <%= caseId %></title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/case_details.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
     <script>
         window.CASE_ID = "<%= caseId %>";
@@ -24,33 +25,41 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item active">Case Details C0000<%= caseId %></span>
+                <span class="breadcrumb-item active">Case Details <%= caseId %></span>
             </nav>
 
             <!-- Page Header -->
             <div class="page-header">
                 <div class="page-header-left">
                     <div class="title-badges-row">
-                        <h1 class="page-title">C0000<%= caseId %></h1>
+                        <h1 class="page-title"><%= caseId %></h1>
                         <div class="page-badges">
-                            <span class="pill-badge badge-blue" id="badgeStatus">New Case</span>
-                            <span class="pill-badge badge-green" id="badgeStatus">Submitted</span>
-                            <span class="pill-badge badge-grey" id="badgeStatus">Draft</span>
+                            <span class="pill-badge badge-new-case" id="badgeStatus"><%= patient_details.category %></span>
+                            <span class="pill-badge badge-<%= patient_details.status == 0 ? 'draft' : 'submitted' %>" id="badgeStatus"><%= patient_details.status == 0 ? 'Draft' : 'Submitted' %></span>
                         </div>
                     </div>
-                    <div class="subtitle" id="submittedSubtitle">Last updated on 20/6/2025</div>
+                    <div class="subtitle" id="submittedSubtitle">Last updated on <script>document.write(new Date('<%= patient_details.updated_at %>').toLocaleDateString('en-GB', {day: '2-digit', month: 'numeric', year: 'numeric'}));</script></div>
                 </div>
                 <div class="page-actions">
-                    <button class="btn btn-outline" id="addPlanBtn">Add Treatment Plan</button>
-                    <button class="btn btn-primary" id="setDraftBtn">Set as Draft</button>
+                    <% if (user && user.role === 'superadmin') { %>
+                        <button class="btn btn-outline" id="addPlanBtn">Add Treatment Plan</button>
+                    <% } %>
+                    
+                    <% if (patient_details.status == 0) { %>
+                        <button class="btn btn-primary" id="updateCaseBtn">Update Case</button>
+                    <% } else if (patient_details.status == 1) { %>
+                        <button class="btn btn-primary" id="setDraftBtn">Set as Draft</button>
+                    <% } %>
                 </div>
             </div>
 
             <!-- Tabs -->
             <div class="tabs">
                 <button class="tab active" data-tab="patient">Patient Details</button>
-                <button class="tab" data-tab="treatment">Treatment Details</button>
-                <button class="tab" data-tab="simulations">Simulations</button>
+                <% if (patient_details.category === 'New Case') { %>
+                    <button class="tab" data-tab="treatment">Treatment Details</button>
+                    <button class="tab" data-tab="simulations">Simulations</button>
+                <% } %>
                 <button class="tab" data-tab="comments">Comments</button>
                 <button class="tab" data-tab="attachments">Attachments</button>
             </div>
@@ -59,10 +68,10 @@
             <section class="tab-panel" id="panel-patient">
                 <div class="patient-details-container">
                     <div class="patient-header">
-                        <div class="avatar" id="patientAvatar">J</div>
+                        <div class="avatar" id="patientAvatar"><%= patient_details.name.charAt(0) %></div>
                         <div class="identity">
-                            <div class="name" id="patientName">Jennifer Tan Yi Wen</div>
-                            <div class="patient-id" id="patientId">Patient ID: 13989023001</div>
+                            <div class="name" id="patientName"><%= patient_details.name %></div>
+                            <div class="patient-id" id="patientId">Patient ID: <%= patient_details.id %></div>
                         </div>
                     </div>
                     
@@ -70,29 +79,29 @@
                         <div class="info-row">
                             <div class="info-item">
                                 <label>Gender</label>
-                                <span id="kvGender">Female</span>
+                                <span id="kvGender"><%= patient_details.gender %></span>
                             </div>
                             <div class="info-item">
                                 <label>Date of Birth</label>
-                                <span id="kvDob">12/02/1996</span>
+                                <span id="kvDob"><%= patient_details.dob ? new Date(patient_details.dob).toLocaleDateString('en-GB', {day: '2-digit', month: 'numeric', year: 'numeric'}) : '-' %></span>
                             </div>
                             <div class="info-item">
                                 <label>Email</label>
-                                <span id="kvEmail">-</span>
+                                <span id="kvEmail"><%= patient_details.email || '-' %></span>
                             </div>
                         </div>
                         <div class="info-row">
                             <div class="info-item">
                                 <label>Treatment Brand</label>
-                                <span id="kvBrand">DCA Pro</span>
+                                <span id="kvBrand"><%= patient_details.treatment_brand || '-' %></span>
                             </div>
                             <div class="info-item">
                                 <label>Category</label>
-                                <span id="kvCategory">New Case</span>
+                                <span id="kvCategory"><%= patient_details.category || '-' %></span>
                             </div>
                             <div class="info-item">
                                 <label>Custom SN</label>
-                                <span id="kvCustomSn">-</span>
+                                <span id="kvCustomSn"><%= patient_details.custom_sn || '-' %></span>
                             </div>
                         </div>
                     </div>
@@ -146,6 +155,7 @@
                         <div class="plan-header">
                             <h2 class="plan-title">Plan 1</h2>
                             <span class="pill-badge badge-green" id="badgeStatus">Approved</span>
+                            <button class="btn btn-revoke" id="revokeBtn">Revoke</button>
                         </div>
                         <!-- Example without badge:
                         <div class="plan-header no-badge">
@@ -275,9 +285,31 @@
                         <h3 class="attachment-section-title">Model</h3>
                         <p class="attachment-section-subtitle-with-link">Please click <a href="#" class="link">here</a> to download all models.</p>
                         
-                        <div class="model-type-label">Model Type</div>
-                        <div class="model-type-value">Digital Model</div>
-                        
+                        <div class="model-info-grid">
+                            <div class="model-info-item">
+                                <div class="model-type-label">Model Type</div>
+                                <div class="model-type-value">Digital Model</div>
+                            </div>
+                            
+                            <div class="model-info-item">
+                                <div class="model-type-label">Submitted Date</div>
+                                <div class="model-type-value">23/07/2025</div>
+                            </div>
+                            
+                            <% if (patient_details.category === 'Upload STL') { %>
+                            <div class="model-info-item">
+                                <div class="model-type-label">Product</div>
+                                <div class="model-type-value">Clear Aligners 0.76mm</div>
+                            </div>
+                            
+                            <div class="model-info-item">
+                                <div class="model-type-label">Product Arrival Date</div>
+                                <div class="model-type-value">23/07/2025</div>
+                            </div>
+                            <% } %>
+                        </div>
+
+                        <% if (patient_details.category === 'New Case') { %>
                         <div class="attachment-fields">
                             <!-- Upper Scan -->
                             <div class="attachment-field-group">
@@ -306,9 +338,41 @@
                                 </div>
                             </div>
                         </div>
+                        <% } %>
+
+                        <% if (patient_details.category === 'Upload STL') { %>
+                        <span class="attachment-field-label documents-stl">Documents</span>
+                        <div class="attachment-fields stl">
+                           
+                            <div class="attachment-field-group">
+                               
+                                <div class="attachment-input-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="attachment-filename">1241228053-upperjaw.stl</span>
+                                </div>
+                            </div>
+
+                            <div class="attachment-field-group">
+                                <label class="attachment-field-label"></label>
+                                <div class="attachment-input-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="attachment-filename">2412280533-lowerjaw.stl</span>
+                                </div>
+                            </div>
+
+                            <div class="attachment-field-group">
+                                <label class="attachment-field-label"></label>
+                                <div class="attachment-input-field">
+                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                    <span class="attachment-filename">2412280533-biteregister1.stl</span>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
                 
+                <% if (patient_details.category === 'New Case') { %>
                 <!-- Clinical Photos Section in its own container -->
                 <div class="attachments-container">
                     <div class="attachment-section">
@@ -418,6 +482,7 @@
                         <p class="attachment-section-subtitle">No file uploaded.</p>
                     </div>
                 </div>
+                <% } %>
             </section>
         </div>
     </main>
@@ -447,15 +512,141 @@
         </div>
     </div>
 
+    <!-- Approve Treatment Plan Modal -->
+    <div class="modal-overlay" id="approveModal">
+        <div class="modal-dialog">
+            <div class="modal-header activate-modal-header">
+                <h3 class="modal-title">Confirm to Approve?</h3>
+                <button class="modal-close" id="closeApproveModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">You won't be able to approve another plan while the initial plan remains active. Please contact our admin to revoke current plan if you wish to make changes.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="cancelApprove">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmApprove">Yes, Approve</button>
+            </div>
+        </div>
+    </div>
+
+     <!-- Revoke Treatment Plan Modal -->
+     <div class="modal-overlay" id="revokeModal">
+        <div class="modal-dialog">
+            <div class="modal-header activate-modal-header">
+                <h3 class="modal-title">Confirm to Revoke?</h3>
+                <button class="modal-close" id="closeRevokeModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">Doctor will need to select and approve the new treatment plan again.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="cancelRevoke">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmRevoke">Yes, Revoke</button>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
 
+            const approveModal = document.getElementById('approveModal');
+            const approveBtn = document.getElementById('approveBtn');
+            const cancelApprove = document.getElementById('cancelApprove');
+            const confirmApprove = document.getElementById('confirmApprove');
+            const closeApproveModal = document.getElementById('closeApproveModal');
+
+            const revokeModal = document.getElementById('revokeModal');
+            const revokeBtn = document.getElementById('revokeBtn');
+            const cancelRevoke = document.getElementById('cancelRevoke');
+            const confirmRevoke = document.getElementById('confirmRevoke');
+            const closeRevokeModal = document.getElementById('closeRevokeModal');
+
+            approveBtn.addEventListener('click', () => {
+                approveModal.classList.add('show');
+            });
+
+            // Close modal functions
+            function closeApproveModalDialog() {
+                approveModal.classList.remove('show');
+            }
+            
+            cancelApprove.addEventListener('click', closeApproveModalDialog);
+            
+            confirmApprove.addEventListener('click', closeApproveModalDialog);
+            approveModal.addEventListener('click', (e) => {
+                if (e.target === approveModal) {
+                    closeApproveModalDialog();
+                }
+            });
+
+            closeApproveModal.addEventListener('click', closeApproveModalDialog);
+
+            revokeBtn.addEventListener('click', () => {
+                revokeModal.classList.add('show');
+            });
+
+            // Close modal functions
+            function closeModalDialog() {
+                revokeModal.classList.remove('show');
+            }
+            
+            cancelRevoke.addEventListener('click', closeModalDialog);
+            
+            confirmRevoke.addEventListener('click', closeModalDialog);
+            revokeModal.addEventListener('click', (e) => {
+                if (e.target === revokeModal) {
+                    closeModalDialog();
+                }
+            });
+
+            closeRevokeModal.addEventListener('click', closeModalDialog);
+
             // Add treatment plan button
             const addPlanBtn = document.getElementById('addPlanBtn');
-            addPlanBtn.addEventListener('click', () => {
-                window.location.href = `/add-treatment-plan/${window.CASE_ID}`;
-            });
+            if (addPlanBtn) {
+                addPlanBtn.addEventListener('click', () => {
+                    window.location.href = `/add-treatment-plan/${window.CASE_ID}`;
+                });
+            }
+
+            // Update case button
+            const updateCaseBtn = document.getElementById('updateCaseBtn');
+            if (updateCaseBtn) {
+                updateCaseBtn.addEventListener('click', () => {
+                    window.location.href = `/add-case/${window.CASE_ID}`;
+                });
+            }
+
+            // Set as draft button
+            const setDraftBtn = document.getElementById('setDraftBtn');
+            if (setDraftBtn) {
+                setDraftBtn.addEventListener('click', async () => {
+                    try {
+                        const response = await axios.post(`/cases/${window.CASE_ID}/set-draft`)
+                        .then(response => {
+                            Toast.success(response.data.message);
+                            window.location.reload();
+
+                        })
+                        .catch(error => {
+                            console.error('Failed to set case as draft', error);
+                            Toast.error(error.response.data.message || 'Failed to set case as draft');
+                        });
+
+                        
+                    } catch (error) {
+                        console.error('Error setting case as draft:', error);
+                        Toast.error(error.response.data.message || 'Failed to set case as draft');
+                    }
+                });
+            }
 
             // Tab switching functionality
             const tabEls = document.querySelectorAll('.tab');
@@ -480,15 +671,78 @@
                         if (!el) return;
                         el.classList.toggle('hidden', key !== tab);
                     });
+
+                    // Fetch treatment details when treatment tab is clicked
+                    if (tab === 'treatment') {
+                        // Show loading state
+                        const treatmentPanel = document.getElementById('panel-treatments');
+                        treatmentPanel.innerHTML = '<div class="loading">Loading treatment details...</div>';
+
+                        // Fetch treatment details
+                        axios.get(`/get-patient-treatment-details?caseid=${window.CASE_ID}`)
+                            .then(response => {
+                                const data = response.data.patient_treatment_details;
+                               
+                                // Update treatment panel with fetched data
+                                treatmentPanel.innerHTML = `
+                                    <!-- Clinical Data Section -->
+                                    <div class="treatment-container">
+                                        <h3 class="treatment-section-title">Clinical Data</h3>
+                                        <div class="treatment-content">
+                                            <div class="treatment-field">
+                                                <label>Clinical Condition</label>
+                                                <span class="treatment-value">${(() => {
+                                                    const conditions = [];
+                                                    if (data[0].crowding == 1) conditions.push('Crowding');
+                                                    if (data[0].deep_bite == 1) conditions.push('Deep Bite');
+                                                    if (data[0].spacing == 1) conditions.push('Spacing');
+                                                    if (data[0].narrow_arch == 1) conditions.push('Narrow Arch');
+                                                    if (data[0].class_ii_div_1 == 1) conditions.push('Class II div 1');
+                                                    if (data[0].class_ii_div_2 == 1) conditions.push('Class II div 2');
+                                                    if (data[0].class_iii == 1) conditions.push('Class III');
+                                                    if (data[0].open_bite == 1) conditions.push('Open Bite');
+                                                    if (data[0].overjet == 1) conditions.push('Overjet');
+                                                    if (data[0].anterior_crossbite == 1) conditions.push('Anterior Crossbite');
+                                                    if (data[0].posterior_crossbite == 1) conditions.push('Posterior Crossbite');
+                                                    if (data[0].others == 1) conditions.push(data[0].others);
+                                                    return conditions.length > 0 ? conditions.join(', ') : 'None';
+                                                })()}</span>
+                                            </div>
+                                            <div class="treatment-row">
+                                                <div class="treatment-field">
+                                                    <label>IPR</label>
+                                                    <span class="treatment-value">${data[0].ipr || '-'}</span>
+                                                </div>
+                                                <div class="treatment-field">
+                                                    <label>Attachments</label>
+                                                    <span class="treatment-value">${data[0].attachments || '-'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Treatment Notes Section -->
+                                    <div class="treatment-container">
+                                        <h3 class="treatment-section-title">Treatment Notes</h3>
+                                        <div class="treatment-content">
+                                            <div class="treatment-field">
+                                                <label>Notes</label>
+                                                <div class="treatment-notes">
+                                                    <div class="notes-content">${data[0].treatment_notes || '-'}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching treatment details:', error);
+                                Toast.error(error.response.data.message || 'Failed to fetch treatment details');
+                            });
+                    }
                 });
             });
 
-            // TODO: Replace with real API call to fetch case data by CASE_ID
-            // fetch(`/api/cases/${window.CASE_ID}`)
-            //   .then(response => response.json())
-            //   .then(data => {
-            //     // Populate the page with real data
-            //   });
             
             // Photo Modal Functionality
             const photoModal = document.getElementById('photoModal');

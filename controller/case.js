@@ -91,15 +91,31 @@ exports.update_stl_case = async (req, res) => {
 // Get patient details data
 exports.get_patient_details_data = async (req, res) => {
     try {
-        const { caseid } = req.query;
+        // If called as HTTP endpoint, get caseid from query
+        // If called directly, treat req as the caseId
+        const caseid = typeof req === 'object' && req.query ? req.query.caseid : req;
+        
         const patient_details = await Case.get_patient_details_data(caseid);
-        res.status(200).json({ patient_details });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
+        
+        // If res is provided, it's an HTTP request
+        if (res) {
+            res.status(200).json({ patient_details });
         } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
+            // If no res, return the data directly
+            return patient_details;
+        }
+    } catch (err) {
+        if (res) {
+            // HTTP request error handling
+            if (err instanceof CustomError) {
+                return res.status(err.statusCode).json({ message: err.message });
+            } else {
+                console.error(err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        } else {
+            // Direct call error handling - rethrow the error
+            throw err;
         }
     }
 };
@@ -108,7 +124,7 @@ exports.get_patient_details_data = async (req, res) => {
 exports.get_patient_treatment_details_data = async (req, res) => {
     try {
         const { caseid } = req.query;
-        const patient_treatment_details = await Case.get_patient_treatment_details_data(caseid);
+        const patient_treatment_details = await Case.get_treatment_details_data(caseid);
         res.status(200).json({ patient_treatment_details });
     } catch (err) {
         if (err instanceof CustomError) {
@@ -120,6 +136,8 @@ exports.get_patient_treatment_details_data = async (req, res) => {
     }
 };
 
+
+
 // Get all cases with filtering, searching, and sorting
 exports.getAllCases = async (req, res) => {
     try {
@@ -128,6 +146,7 @@ exports.getAllCases = async (req, res) => {
             created_date: req.query.created_date,
             last_updated_date: req.query.last_updated_date,
             search: req.query.search,
+            status: req.query.status,
             sortBy: req.query.sortBy || 'created_at',
             sortOrder: req.query.sortOrder || 'DESC',
             limit: req.query.limit,
