@@ -1,7 +1,7 @@
 const express = require('express');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
-const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data } = require('../controller/case');
+const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data, downloadModelFiles, downloadClinicalPhotos, downloadIndividualFile } = require('../controller/case');
 const { get_file_with_signedurl } = require('../controller/file')
 
 const router = express.Router();
@@ -114,6 +114,11 @@ router.get('/get-patient-treatment-details', requireAuth, get_patient_treatment_
 
 // Get file with signedurl
 router.get('/file/:caseid/:fileid', get_file_with_signedurl);
+
+// Download routes
+router.get('/download/models/:caseid', requireAuth, downloadModelFiles);
+router.get('/download/photos/:caseid', requireAuth, downloadClinicalPhotos);
+router.get('/download/file/:caseid/:filetype', requireAuth, downloadIndividualFile);
 
 router.get('/update-case', requireAuth, async (req, res) => {
     const { caseId } = req.query;

@@ -40,6 +40,15 @@ async function initializeNavRail() {
         ],
         '/upload-stl': [
             '/upload-stl',
+        ],
+        '/aligners-cases': [
+            '/aligners-cases',
+            '/cases',
+            '/cases/:id/edit',
+            '/cases/:id/delete',
+            '/cases/:id/approve',
+            '/cases/:id/revoke',
+            '/cases/:id/delete',
         ]
 
         // Add more route groups as needed
@@ -55,8 +64,10 @@ async function initializeNavRail() {
                 }
                 // Check for dynamic routes that start with the base path
                 // e.g., /user-details matches /user-details/123, /update-user matches /update-user/456
+                // Special handling for /cases to match /cases/iwp-5576, /cases/123, etc.
                 if (currentPath.startsWith(route + '/') || 
-                    (route.includes('-') && currentPath.startsWith(route.split('/:')[0] + '/'))) {
+                    (route.includes('-') && currentPath.startsWith(route.split('/:')[0] + '/')) ||
+                    (route === '/cases' && currentPath.startsWith('/cases/'))) {
                     return groupKey;
                 }
             }

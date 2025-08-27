@@ -87,7 +87,7 @@ class Case {
         let query = '';
         let storesignurl = '';
         for (let i = 0; i < files.length; i++){
-            storesignurl = domainname + `/` + caseid + `/` + (i+1)
+            storesignurl = domainname +  caseid + `/` + (i+1)
             query += `INSERT INTO file_upload_table SET planner_id = ${session.user.id}, case_id = ${pool.escape(caseid)}, file_type = ${pool.escape(files[i].fieldname)}, file_name = ${pool.escape(files[i].key.split('.'[1]))}, file_originalname = ${pool.escape(files[i].originalname)}, file_url = ${pool.escape(files[i].location)}, signedurl = ${pool.escape(storesignurl)}, file_id = ${i+1};`
         }
         const [results] = await pool.query(query);
