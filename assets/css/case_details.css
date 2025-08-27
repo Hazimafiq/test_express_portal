@@ -327,8 +327,8 @@ body {
 /* Attachments Panel Styles */
 .attachments-container {
   padding: 24px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.40);
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 32px;
@@ -448,6 +448,7 @@ body {
   height: 36px;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .attachment-input-field:hover {
@@ -468,6 +469,32 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+}
+
+.download-link {
+  color: #3B82F6;
+  text-decoration: none;
+  margin-left: auto;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.download-link:hover {
+  background-color: #EBF4FF;
+  color: #2563EB;
+  transform: translateY(-1px);
+  opacity: 1;
+}
+
+.download-link svg {
+  width: 16px;
+  height: 16px;
 }
 
 .attachment-files-row {

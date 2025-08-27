@@ -12,6 +12,10 @@
 </head>
 
 <body>
+    <!-- Hidden success message element -->
+    <% if (successMessage) { %>
+        <div id="success-message" data-message="<%= successMessage %>" style="display: none;"></div>
+    <% } %>
     <!-- Top header hidden for rail layout -->
     <header class="header" aria-hidden="true"></header>
 
@@ -193,8 +197,6 @@
                     <!-- Pagination buttons will be generated dynamically -->
                 </nav>
             </div>
-
-
 
             <!-- Loading State -->
             <div class="loading-state" id="loadingState" style="display: none; text-align: center; padding: 2rem;">

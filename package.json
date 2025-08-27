@@ -9,6 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "archiver": "^7.0.1",
         "argon2": "^0.43.1",
         "aws-sdk": "^2.1692.0",
         "axios": "^1.11.0",

@@ -146,10 +146,15 @@ class Case {
         const query = 'SELECT case_id, file_type, file_name, signedurl FROM file_upload_table WHERE case_id = ?';
         const values = [caseid];
         const [results] = await pool.query(query, values);
+        //get model type from treatment_model_table
+        const model_type_query = 'SELECT model_type FROM treatment_model_table WHERE case_id = ?';
+        const [model_type_result] = await pool.query(model_type_query, values);
+        const model_type = model_type_result[0].model_type;
+        
         if(results.length == 0){
             throw new CustomError('No Patient Model Found', 401)
         }
-        return results;
+        return {results, model_type};
     }
 
     static async get_normal_case_data(caseid) {

@@ -333,58 +333,52 @@
             }
         });
 
-        // Form submission
-        document.getElementById('uploadStlForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Validation rules
+        const validations = [
+            {
+                field: 'patientName',
+                rule: 'required',
+                message: 'Name is required.'
+            },
+            {
+                field: 'treatmentBrand',
+                rule: 'required',
+                message: 'Treatment Brand is required.'
+            },
+            {
+                field: 'product',
+                rule: 'required',
+                message: 'Product is required.'
+            },
+            {
+                field: 'productArrivalDate',
+                rule: 'required',
+                message: 'Product Arrival Date is required.'
+            },
+            {
+                field: 'modelType',
+                rule: 'required',
+                message: 'Model Type is required.'
+            }
+        ];
 
-               // Clear any existing validation errors
+        // Function to handle form submission
+        async function handleFormSubmission(status, button) {
+            // Clear any existing validation errors
             formValidation.clearAllValidation('uploadStlForm');
             formValidation.clearFormError('uploadStlForm');
 
-              // Define validation rules
-              const validations = [
-                {
-                    field: 'patientName',
-                    rule: 'required',
-                    message: 'Name is required.'
-                },
-                {
-                    field: 'treatmentBrand',
-                    rule: 'required',
-                    message: 'Treatment Brand is required.'
-                },
-                {
-                    field: 'product',
-                    rule: 'required',
-                    message: 'Product is required.'
-                },
-                {
-                    field: 'productArrivalDate',
-                    rule: 'required',
-                    message: 'Product Arrival Date is required.'
-                },
-                {
-                    field: 'modelType',
-                    rule: 'required',
-                    message: 'Model Type is required.'
-                },
-                
-            ];
-
-             // Validate all fields
-             const isValid = formValidation.validateFields(validations);
-
+            // Validate all fields for both draft and submit
+            const isValid = formValidation.validateFields(validations);
             if (!isValid) {
                 return;
             }
-            
-            
-            // Disable submit button and show loading state
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-            submitBtn.textContent = 'Submitting Case...';
+
+            // Disable button and show loading state
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.classList.add('loading');
+            button.textContent = status === '1' ? 'Submitting Case...' : 'Saving Draft...';
 
             const formData = new FormData();
             formData.append('name', document.getElementById('patientName').value);
@@ -401,73 +395,44 @@
             uploadedFiles.forEach((fileData, index) => {
                 formData.append('documents', fileData.file);
             });
-            formData.append('status', '0'); // 0 = draft
+            formData.append('status', status);
             formData.append('category', 'Upload STL');
+
             try {
                 const response = await axios.post('/add-case-stl', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                }).then(response => {
-                    // Redirect to cases list with success message
-                    window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
-                })
-                .catch(error => {
-                    // Show error message
-                    console.log('error', error);
-                    Toast.error('Failed to upload STL. Please try again.');
-                    return;
                 });
+                
+                // Redirect to cases list with success message
+                window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
             } catch (error) {
+                console.log('error', error);
                 if (error.response) {
-                    Toast.error(error.response.data.message || 'Failed to upload STL');
+                    Toast.error(error.response.data.message || `Failed to ${status === '1' ? 'submit' : 'save'} STL`);
                 } else {
                     Toast.error('Network error. Please try again.');
                 }
             } finally {
-                // Reset submit button
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('loading');
-                submitBtn.textContent = originalText;
+                // Reset button state
+                button.disabled = false;
+                button.classList.remove('loading');
+                button.textContent = originalText;
             }
+        }
+
+        // Form submission event listeners
+        document.getElementById('submitBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleFormSubmission('1', e.target);
         });
 
-        // Save as draft
-        document.getElementById('saveDraftBtn').addEventListener('click', async () => {
-            const formData = new FormData();
-            formData.append('name', document.getElementById('patientName').value);
-            formData.append('gender', document.getElementById('patientGender').value);
-            formData.append('email', document.getElementById('email').value);
-            formData.append('dob', document.getElementById('dateOfBirth').value);
-            formData.append('treatment_brand', document.getElementById('treatmentBrand').value);
-            formData.append('custom_sn', document.getElementById('customSN').value);
-            formData.append('product', document.getElementById('product').value);
-            formData.append('product_arrival_date', document.getElementById('productArrivalDate').value);
-            formData.append('model_type', document.getElementById('modelType').value);
-            formData.append('status', '0'); // 0 = draft
-            formData.append('category', 'Upload STL');
-            
-            // Add uploaded files
-            uploadedFiles.forEach((fileData, index) => {
-                formData.append('documents', fileData.file);
-            });
-            
-            try {
-                const response = await fetch('/save-stl-draft', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    alert('Draft saved successfully!');
-                } else {
-                    const data = await response.json();
-                    alert(data.message || 'Failed to save draft');
-                }
-            } catch (error) {
-                alert('Network error. Please try again.');
-            }
+        document.getElementById('saveDraftBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleFormSubmission('0', e.target);
         });
+
     </script>
 </body>
 </html>
