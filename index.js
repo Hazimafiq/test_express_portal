@@ -64,7 +64,10 @@ const s3Storage = multerS3({
     other: 'other/',
 
     // document
-    documents: 'documents/'
+    documents: 'documents/',
+
+    // ipr
+    ipr: 'ipr/'
     };
     
     const folder = folderMap[file.fieldname] || 'misc/';
@@ -100,6 +103,7 @@ const uploadAny = upload.any();
 // Make upload middleware available globally
 app.use('/add-case', uploadAny);
 app.use('/add-case-stl', uploadAny);
+app.use('/update-simulation-plan', uploadAny);
 app.use('/save-draft', uploadAny);
 
 // Cookie parser config

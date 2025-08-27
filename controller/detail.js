@@ -1,48 +1,22 @@
+const Detail = require('../model/Detail');
 const Case = require('../model/Case');
 const CustomError = require('../errors/CustomError');
 const archiver = require('archiver');
 const AWS = require('aws-sdk');
 const https = require('https');
 
-// Update case, if with case_id query, then means edit, else means new case, status code 0 = draft, status 1 = submitted, category = New Case, Upload STL
-exports.update_case = async (req, res) => {
+// Update comments in details page
+exports.update_comment = async (req, res) => {
     try {
-        const { name, gender, dob, email, treatment_brand, custom_sn, crowding, deep_bite, spacing, narrow_arch, class_ii_div_1, class_ii_div_2, class_iii, open_bite, overjet, anterior_crossbite, posterior_crossbite, others, ipr, attachments, treatment_notes, model_type, status, category } = req.body;
+        const { comments } = req.body;
 
-        const { caseid } = req.params
-
-        const files = req.files || [];    
-
-        const filesByField = {};
-        files.forEach(file => {
-        if (!filesByField[file.fieldname]) {
-                filesByField[file.fieldname] = [];
-            }
-            filesByField[file.fieldname].push(file);
-        });
-        const { lower_scan, upper_scan, bite_scan, front, smiling, right_side, buccal_top, buccal_bottom, buccal_right, buccal_center, buccal_left, xray, other } = filesByField
-        if (!name || !gender || !dob || !treatment_brand || !ipr || !attachments || !model_type || !lower_scan || !upper_scan) {
-            return res.status(400).json({ message: 'All fields are required' });
+        const { caseid } = req.query  
+        if ( !comments ) {
+            return res.status(400).json({ message: 'Please leave comments before save.' });
         }
-        if (!caseid){
-            const new_case = await Case.new_case(req.body, req.session);
-            const new_case_treatment = await Case.new_case_treatment(new_case, req.body);
-            const new_case_file = await Case.new_case_file_upload(new_case, req.session, req.files);
-            if(status == 0){
-                res.status(201).json({ message: 'Case draft created successfully' });
-            } else {                
-                res.status(201).json({ message: 'Case created successfully' });
-            }
-        } else {
-            const edit_case = await Case.edit_case(caseid, req.body)
-            const edit_case_treatment = await Case.edit_case_treatment(caseid, req.body)
-            const edit_case_file = await Case.edit_case_file_upload(caseid, req.session, req.files);
-            if(status == 0){
-                res.status(201).json({ message: 'Case draft updated successfully' });
-            } else {                
-                res.status(201).json({ message: 'Case updated successfully' });
-            }
-        }
+        const save_comment = await Detail.update_comment(caseid, comments, req.session.user);
+
+        res.status(201).json({ message: 'Comment updated.' });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });
@@ -53,10 +27,51 @@ exports.update_case = async (req, res) => {
     }
 };
 
-// Update case, if with case_id query, then means edit, else means new case, status code 0 = draft, status 1 = submitted
-exports.update_stl_case = async (req, res) => {
+// Get comments in details page
+exports.get_comment = async (req, res) => {
     try {
-        const { name, gender, dob, email, treatment_brand, custom_sn, product, product_arrival_date, model_type, status, category } = req.body;
+        const { caseid } = req.params  
+        if ( !caseid ) {
+            return res.status(400).json({ message: 'No caseid received.' });
+        }
+        const save_comment = await Detail.get_comment(caseid);
+
+        res.status(201).json({ save_comment });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        }
+        console.error(err);
+        // Handle specific error for user already exists
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+// Add simulation plan number in details page
+exports.add_simulation_plan = async (req, res) => {
+    try {
+        const { caseid } = req.query  
+        if ( !caseid ) {
+            return res.status(400).json({ message: 'No caseid received.' });
+        }
+        const add_simulation_plan = await Detail.add_simulation_plan(caseid);
+
+        res.status(201).json({ message: 'Simulation plan added.' });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        }
+        console.error(err);
+        // Handle specific error for user already exists
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+// Update simulation link and upload ipr file in details page
+exports.update_simulation_plan = async (req, res) => {    
+    try {
+        // need name for ipr filename, simulation_number need to know which plan
+        const { name, simulation_url, simulation_number } = req.body;
         const { caseid } = req.query
 
         const files = req.files || [];    
@@ -69,32 +84,16 @@ exports.update_stl_case = async (req, res) => {
             filesByField[file.fieldname].push(file);
         });
 
-        const { documents } = filesByField
+        const { ipr } = filesByField
 
-        if (!name || !treatment_brand || !dob || !product || !product_arrival_date || !model_type) {
+        if (!simulation_url || !ipr) {
             return res.status(400).json({ message: 'All fields are required' });
         }
-        if (!caseid){
-            const new_case = await Case.new_case(req.body, req.session);
-            const new_case_stl_treatment = await Case.new_case_stl(new_case, req.body);
-            if(documents){
-                const new_case_file = await Case.new_case_file_upload(new_case, req.session, req.files);
-            }
-            if(status == 0){
-                res.status(201).json({ message: 'Case draft created successfully' });
-            } else {                
-                res.status(201).json({ message: 'Case created successfully' });
-            }
-        } else {
-            const edit_case = await Case.edit_case(caseid, req.body)
-            const edit_case_stl_treatment = await Case.edit_case_stl(caseid, req.body)
-            const edit_case_file = await Case.edit_case_file_upload(caseid, req.session, req.files);
-            if(status == 0){
-                res.status(201).json({ message: 'Case draft updated successfully' });
-            } else {                
-                res.status(201).json({ message: 'Case updated successfully' });
-            }
+        const new_simulation = await Detail.update_simulation_plan(caseid, req.body);
+        if(ipr){
+            const new_ipr = await Case.new_case_file_upload(caseid, req.session, req.files, simulation_number);
         }
+        res.status(201).json({ message: 'Simulation plan updated!' });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });
@@ -105,155 +104,40 @@ exports.update_stl_case = async (req, res) => {
     }
 };
 
-// Get patient details data
-exports.get_patient_details_data = async (req, res) => {
+// Get simulation link and ipr file in details page
+exports.get_simulation_plan = async (req, res) => {    
     try {
-        // If called as HTTP endpoint, get caseid from query
-        // If called directly, treat req as the caseId
-        const caseid = typeof req === 'object' && req.query ? req.query.caseid : req;
-        
-        const patient_details = await Case.get_patient_details_data(caseid);
-        
-        // If res is provided, it's an HTTP request
-        if (res) {
-            res.status(200).json({ patient_details });
-        } else {
-            // If no res, return the data directly
-            return patient_details;
-        }
-    } catch (err) {
-        if (res) {
-            // HTTP request error handling
-            if (err instanceof CustomError) {
-                return res.status(err.statusCode).json({ message: err.message });
-            } else {
-                console.error(err);
-                return res.status(500).json({ message: 'Internal server error' });
-            }
-        } else {
-            // Direct call error handling - rethrow the error
-            throw err;
-        }
-    }
-};
+        // simulation_number need to know which plan
+        const { caseid, simulation_number } = req.query
 
-// Get patient treatment details data
-exports.get_patient_treatment_details_data = async (req, res) => {
-    try {
-        const { caseid } = req.query;
-        const patient_treatment_details = await Case.get_treatment_details_data(caseid);
-        res.status(200).json({ patient_treatment_details });
+        const simulation_details = await Detail.get_simulation_plan(caseid, simulation_number);
+
+        res.status(201).json({ simulation_details });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });
-        } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
         }
-    }
-};
-
-// Get patient model details data
-exports.get_patient_model_data = async (req, res) => {
-    try {
-        const { caseid } = req.query;
-        const patient_model_details = await Case.get_model_data(caseid);
-        res.status(200).json({ patient_model_details });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
-        } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-    }
-};
-
-// Get patient normal case data
-exports.get_normal_case_data = async (req, res) => {
-    try {
-        const { caseid } = req.query;
-        const normal_case_details = await Case.get_normal_case_data(caseid);
-        res.status(200).json({ normal_case_details });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
-        } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-    }
-};
-
-// Get patient upload stl data
-exports.get_upload_stl_data = async (req, res) => {
-    try {
-        const { caseid } = req.query;
-        const upload_stl_details = await Case.get_upload_stl_data(caseid);
-        res.status(200).json({ upload_stl_details });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
-        } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-    }
-};
-
-// update case to other status (0 = draft, 1 = submitted)
-exports.updateCasetoDraft = async (req, res) => {
-    try {
-        const { caseId } = req.params;
-        const case_status = await Case.updateCaseStatus(caseId);
-        res.status(200).json({ message: 'Case set as draft successfully.' });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
-        } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-    }
-};
-
-// Get all cases with filtering, searching, and sorting
-exports.getAllCases = async (req, res) => {
-    try {
-        const filters = {
-            treatment_brand: req.query.treatment_brand,
-            created_date: req.query.created_date,
-            last_updated_date: req.query.last_updated_date,
-            search: req.query.search,
-            status: req.query.status,
-            sortBy: req.query.sortBy || 'created_at',
-            sortOrder: req.query.sortOrder || 'DESC',
-            limit: req.query.limit,
-            offset: req.query.offset
-        };
-        
-        const result = await Case.get_all_cases(filters, req.session.user);
-        res.status(200).json(result);
-    } catch (err) {
-        console.error('Error fetching users:', err);
+        console.error(err);
+        // Handle specific error for user already exists
         res.status(500).json({ message: 'Internal server error' });
     }
 };
 
-// Get user counts by status
-exports.getCaseCounts = async (req, res) => {
+// Approve simulation plan / Revoke simulation plan
+exports.action_simulation_plan = async (req, res) => {    
     try {
-        const filters = {
-            treatment_brand: req.query.treatment_brand,
-            created_date: req.query.created_date,
-            last_updated_date: req.query.last_updated_date,
-            search: req.query.search
-        };
-        
-        const counts = await Case.getCaseCounts(filters, req.session.user);
-        res.status(200).json(counts);
+        // simulation_number need to know which plan, action = 'Approved' or 'Revoke'
+        const { caseid, simulation_number, action } = req.query
+
+        const simulation_details = await Detail.action_simulation_plan(caseid, simulation_number, action);
+
+        res.status(201).json({ message: `This simulation plan is ${action}.` });
     } catch (err) {
-        console.error('Error fetching user counts:', err);
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        }
+        console.error(err);
+        // Handle specific error for user already exists
         res.status(500).json({ message: 'Internal server error' });
     }
 };
