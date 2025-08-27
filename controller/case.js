@@ -139,12 +139,44 @@ exports.get_patient_treatment_details_data = async (req, res) => {
     }
 };
 
-// Get patient treatment details data
+// Get patient model details data
 exports.get_patient_model_data = async (req, res) => {
     try {
         const { caseid } = req.query;
         const patient_model_details = await Case.get_model_data(caseid);
         res.status(200).json({ patient_model_details });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        } else {
+            console.error(err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+};
+
+// Get patient normal case data
+exports.get_normal_case_data = async (req, res) => {
+    try {
+        const { caseid } = req.query;
+        const normal_case_details = await Case.get_normal_case_data(caseid);
+        res.status(200).json({ normal_case_details });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        } else {
+            console.error(err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+};
+
+// Get patient upload stl data
+exports.get_upload_stl_data = async (req, res) => {
+    try {
+        const { caseid } = req.query;
+        const upload_stl_details = await Case.get_upload_stl_data(caseid);
+        res.status(200).json({ upload_stl_details });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });
