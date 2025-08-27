@@ -87,7 +87,7 @@ class Case {
         let query = '';
         let storesignurl = '';
         for (let i = 0; i < files.length; i++){
-            storesignurl = domainname + `/` + caseid + `/` + (i+1)
+            storesignurl = domainname + caseid + `/` + (i+1)
             query += `INSERT INTO file_upload_table SET planner_id = ${session.user.id}, case_id = ${pool.escape(caseid)}, file_type = ${pool.escape(files[i].fieldname)}, file_name = ${pool.escape(files[i].key.split('.'[1]))}, file_originalname = ${pool.escape(files[i].originalname)}, file_url = ${pool.escape(files[i].location)}, signedurl = ${pool.escape(storesignurl)}, file_id = ${i+1};`
         }
         const [results] = await pool.query(query);
@@ -113,7 +113,7 @@ class Case {
             if(check_result[i][0]){ // check file_type exists or not
                 query += `UPDATE file_upload_table SET planner_id = ${session.user.id}, file_name = ${pool.escape(files[i].key.split('.'[1]))}, file_originalname = ${pool.escape(files[i].originalname)}, file_url = ${pool.escape(files[i].location)}, updated_at = ${pool.escape(new Date())} WHERE case_id = ${pool.escape(caseid)} AND file_type = ${pool.escape(files[i].fieldname)};`
             } else {
-                storesignurl = domainname + `/` + caseid + `/` + (latestfileid + count)
+                storesignurl = domainname + caseid + `/` + (latestfileid + count)
                 query += `INSERT INTO file_upload_table SET planner_id = ${session.user.id}, case_id = ${pool.escape(caseid)}, file_type = ${pool.escape(files[i].fieldname)}, file_name = ${pool.escape(files[i].key.split('.'[1]))}, file_originalname = ${pool.escape(files[i].originalname)}, file_url = ${pool.escape(files[i].location)}, signedurl = ${pool.escape(storesignurl)}, file_id = ${latestfileid + count};`
                 count += 1
             }
@@ -143,13 +143,51 @@ class Case {
     }
 
     static async get_model_data(caseid) {
-        const query = 'SELECT case_id, file_type, file_name, file_url, signedurl FROM file_upload_table WHERE case_id = ?';
+        const query = 'SELECT case_id, file_type, file_name, signedurl FROM file_upload_table WHERE case_id = ?';
         const values = [caseid];
         const [results] = await pool.query(query, values);
         if(results.length == 0){
             throw new CustomError('No Patient Model Found', 401)
         }
         return results;
+    }
+
+    static async get_normal_case_data(caseid) {
+        let returndata = [];
+        const query = 'SELECT patient_table.id, patient_table.case_id, patient_table.name, patient_table.gender, patient_table.dob, patient_table.email, patient_table.treatment_brand, patient_table.custom_sn, patient_table.category, patient_table.status, patient_table.updated_at, treatment_model_table.crowding, treatment_model_table.deep_bite, treatment_model_table.spacing, treatment_model_table.narrow_arch, treatment_model_table.class_ii_div_1, treatment_model_table.class_ii_div_2, treatment_model_table.class_iii, treatment_model_table.open_bite, treatment_model_table.overjet, treatment_model_table.anterior_crossbite, treatment_model_table.posterior_crossbite, treatment_model_table.others, treatment_model_table.ipr, treatment_model_table.attachments, treatment_model_table.treatment_notes FROM patient_table JOIN treatment_model_table ON patient_table.case_id = treatment_model_table.case_id WHERE patient_table.case_id = ? LIMIT 1';
+        const value = [caseid];
+        const [data_result] = await pool.query(query, value);
+        if(data_result.length == 0){
+            throw new CustomError('No Patient Found', 401)
+        }
+        const file_query = 'SELECT file_type, file_name, signedurl FROM file_upload_table WHERE case_id = ?';
+        const file_value = [caseid];
+        const [file_results] = await pool.query(file_query, file_value);
+        if(file_results.length == 0){
+            throw new CustomError('No Patient Model Found', 401)
+        }
+        returndata.push(data_result)
+        returndata.push(file_results)
+        return returndata;
+    }
+
+    static async get_upload_stl_data(caseid) {
+        let returndata = [];
+        const basic_query = 'SELECT id, case_id, name, gender, dob, email, treatment_brand, custom_sn, category, status, updated_at FROM patient_table WHERE case_id = ? LIMIT 1';
+        const basic_values = [caseid];
+        const [data_result] = await pool.query(basic_query, basic_values);
+        if(data_result.length == 0){
+            throw new CustomError('No Patient Found', 401)
+        }
+        const file_query = 'SELECT file_type, file_name, signedurl FROM file_upload_table WHERE case_id = ?';
+        const file_value = [caseid];
+        const [file_results] = await pool.query(file_query, file_value);
+        if(file_results.length == 0){
+            throw new CustomError('No Patient Model Found', 401)
+        }
+        returndata.push(data_result)
+        returndata.push(file_results)
+        return returndata;
     }
 
     static async get_all_cases(filters = {}, session = {}) {
