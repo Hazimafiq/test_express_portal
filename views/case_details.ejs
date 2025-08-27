@@ -47,7 +47,7 @@
                     
                     <% if (patient_details.status == 0) { %>
                         <button class="btn btn-primary" id="updateCaseBtn">Update Case</button>
-                    <% } else if (patient_details.status == 1) { %>
+                    <% } else if (patient_details.status == 1 && user && user.role === 'superadmin') { %>
                         <button class="btn btn-primary" id="setDraftBtn">Set as Draft</button>
                     <% } %>
                 </div>
@@ -279,210 +279,7 @@
                 </div>
             </section>
             <section class="tab-panel hidden" id="panel-attachments">
-                <!-- Model Section in its own container -->
-                <div class="attachments-container">
-                    <div class="attachment-section">
-                        <h3 class="attachment-section-title">Model</h3>
-                        <p class="attachment-section-subtitle-with-link">Please click <a href="#" class="link">here</a> to download all models.</p>
-                        
-                        <div class="model-info-grid">
-                            <div class="model-info-item">
-                                <div class="model-type-label">Model Type</div>
-                                <div class="model-type-value">Digital Model</div>
-                            </div>
-                            
-                            <div class="model-info-item">
-                                <div class="model-type-label">Submitted Date</div>
-                                <div class="model-type-value">23/07/2025</div>
-                            </div>
-                            
-                            <% if (patient_details.category === 'Upload STL') { %>
-                            <div class="model-info-item">
-                                <div class="model-type-label">Product</div>
-                                <div class="model-type-value">Clear Aligners 0.76mm</div>
-                            </div>
-                            
-                            <div class="model-info-item">
-                                <div class="model-type-label">Product Arrival Date</div>
-                                <div class="model-type-value">23/07/2025</div>
-                            </div>
-                            <% } %>
-                        </div>
-
-                        <% if (patient_details.category === 'New Case') { %>
-                        <div class="attachment-fields">
-                            <!-- Upper Scan -->
-                            <div class="attachment-field-group">
-                                <label class="attachment-field-label">Upper Scan</label>
-                                <div class="attachment-input-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="attachment-filename">1241228053-upperjaw.stl</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Lower Scan -->
-                            <div class="attachment-field-group">
-                                <label class="attachment-field-label">Lower Scan</label>
-                                <div class="attachment-input-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="attachment-filename">2412280533-lowerjaw.stl</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Bite Scan -->
-                            <div class="attachment-field-group">
-                                <label class="attachment-field-label">Bite Scan</label>
-                                <div class="attachment-input-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="attachment-filename">2412280533-biteregister1.stl</span>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-
-                        <% if (patient_details.category === 'Upload STL') { %>
-                        <span class="attachment-field-label documents-stl">Documents</span>
-                        <div class="attachment-fields stl">
-                           
-                            <div class="attachment-field-group">
-                               
-                                <div class="attachment-input-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="attachment-filename">1241228053-upperjaw.stl</span>
-                                </div>
-                            </div>
-
-                            <div class="attachment-field-group">
-                                <label class="attachment-field-label"></label>
-                                <div class="attachment-input-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="attachment-filename">2412280533-lowerjaw.stl</span>
-                                </div>
-                            </div>
-
-                            <div class="attachment-field-group">
-                                <label class="attachment-field-label"></label>
-                                <div class="attachment-input-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="attachment-filename">2412280533-biteregister1.stl</span>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                    </div>
-                </div>
-                
-                <% if (patient_details.category === 'New Case') { %>
-                <!-- Clinical Photos Section in its own container -->
-                <div class="attachments-container">
-                    <div class="attachment-section">
-                        <h3 class="attachment-section-title">Clinical Photos</h3>
-                        <p class="attachment-section-subtitle-with-link">Please click <a href="#" class="link">here</a> to download all photos.</p>
-                        
-                        <!-- First Row - Face Photos -->
-                        <div class="attachment-files-row">
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder1.png" alt="Full Face Front">
-
-                            </div>
-                            
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.751px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder3.png" alt="Full Smiling Face">
-
-                            </div>
-                            
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder1.png" alt="Right Side Profile">
-                           
-                            </div>
-                        </div>
-                        
-                        <!-- Second Row - Intraoral Photos -->
-                        <div class="attachment-files-row">
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder2.png" alt="Buccal Right">
-
-                            </div>
-                            
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder2.png" alt="Retracted Anterior Frontal">
-                         
-                            </div>
-                            
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder2.png" alt="Buccal Left">
-  
-                            </div>
-                            
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder2.png" alt="Maxillary Occlusal">
-                           
-                            </div>
-                            
-                            <div class="attachment-file">
-                                <div class="attachment-file-overlay">
-                                    <div class="attachment-file-overlay-icon">
-                                        <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
-                                    </div>
-                                </div>
-                                <img src="/assets/images/placeholder2.png" alt="Mandibular Occlusal">
-             
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- X-Ray Section in its own container -->
-                <div class="attachments-container">
-                    <div class="attachment-section">
-                        <h3 class="attachment-section-title">X-Ray</h3>
-                        <p class="attachment-section-subtitle">No file uploaded.</p>
-                    </div>
-                </div>
-                
-                <!-- Other Documents/Photos Section in its own container -->
-                <div class="attachments-container">
-                    <div class="attachment-section">
-                        <h3 class="attachment-section-title">Other Documents / Photos</h3>
-                        <p class="attachment-section-subtitle">No file uploaded.</p>
-                    </div>
-                </div>
-                <% } %>
+                <div class="loading">Loading attachments...</div>
             </section>
         </div>
     </main>
@@ -556,6 +353,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
 
+            const created_at = '<%= patient_details.created_at %>';
             const approveModal = document.getElementById('approveModal');
             const approveBtn = document.getElementById('approveBtn');
             const cancelApprove = document.getElementById('cancelApprove');
@@ -740,9 +538,281 @@
                                 Toast.error(error.response.data.message || 'Failed to fetch treatment details');
                             });
                     }
+
+                    // Fetch attachments when attachments tab is clicked
+                    if (tab === 'attachments') {
+                        // Show loading state
+                        const attachmentsPanel = document.getElementById('panel-attachments');
+                        attachmentsPanel.innerHTML = '<div class="loading">Loading attachments...</div>';
+
+                        // Fetch attachments data
+                        axios.get(`/get_patient_model?caseid=${window.CASE_ID}`)
+                            .then(response => {
+                                const {results, model_type} = response.data.patient_model_details;
+                                console.log('files', results);
+                                console.log('patient_details', created_at);
+                                // Group files by type
+                                const filesByType = {
+                                    'upper_scan': [],
+                                    'lower_scan': [],
+                                    'bite_scan': [],
+                                    'front': [],
+                                    'smiling': [],
+                                    'right_side': [],
+                                    'buccal_right': [],
+                                    'buccal_center': [],
+                                    'buccal_left': [],
+                                    'buccal_top': [],
+                                    'buccal_bottom': [],
+                                    'xray': [],
+                                    'other': []
+                                };
+
+                                results.forEach(file => {
+                                    if (filesByType[file.file_type]) {
+                                        filesByType[file.file_type].push(file);
+                                    }
+                                });
+
+                                // Generate attachments HTML
+                                attachmentsPanel.innerHTML = generateAttachmentsHTML(filesByType, model_type);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching attachments:', error);
+                                Toast.error(error.response?.data?.message || 'Failed to fetch attachments');
+                            });
+                    }
                 });
             });
 
+            // Function to generate attachments HTML
+            function generateAttachmentsHTML(filesByType, model_type) {
+                const category = '<%= patient_details.category %>';
+                let html = '';
+
+                // Model Section
+                html += `
+                    <div class="attachments-container">
+                        <div class="attachment-section">
+                            <h3 class="attachment-section-title">Model</h3>
+                            <p class="attachment-section-subtitle-with-link">Please click <a href="#" class="link">here</a> to download all models.</p>
+                            
+                            <div class="model-info-grid">
+                                <div class="model-info-item">
+                                    <div class="model-type-label">Model Type</div>
+                                    <div class="model-type-value">${model_type}</div>
+                                </div>
+                                
+                                <div class="model-info-item">
+                                    <div class="model-type-label">Submitted Date</div>
+                                    <div class="model-type-value">${new Date ('<%= patient_details.updated_at %>').toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric'})}</div>
+                                </div>`;
+
+                if (category === 'Upload STL') {
+                    html += `
+                                <div class="model-info-item">
+                                    <div class="model-type-label">Product</div>
+                                    <div class="model-type-value">Clear Aligners 0.76mm</div>
+                                </div>
+                                
+                                <div class="model-info-item">
+                                    <div class="model-type-label">Product Arrival Date</div>
+                                    <div class="model-type-value">${new Date('<%= patient_details.created_at %>').toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric'})}</div>
+                                </div>`;
+                }
+
+                html += `
+                            </div>`;
+
+                // Document files section based on category
+                if (category === 'New Case') {
+                    html += `
+                            <div class="attachment-fields">`;
+                    
+                    // Upper Scan
+                    if (filesByType.upper_scan.length > 0) {
+                        html += `
+                                <div class="attachment-field-group">
+                                    <label class="attachment-field-label">Upper Scan</label>
+                                    <div class="attachment-input-field">
+                                        <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                        <span class="attachment-filename">${filesByType.upper_scan[0].file_name}</span>
+                                    </div>
+                                </div>`;
+                    }
+                    
+                    // Lower Scan
+                    if (filesByType.lower_scan.length > 0) {
+                        html += `
+                                <div class="attachment-field-group">
+                                    <label class="attachment-field-label">Lower Scan</label>
+                                    <div class="attachment-input-field">
+                                        <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                        <span class="attachment-filename">${filesByType.lower_scan[0].file_name}</span>
+                                    </div>
+                                </div>`;
+                    }
+                    
+                    // Bite Scan
+                    if (filesByType.bite_scan.length > 0) {
+                        html += `
+                                <div class="attachment-field-group">
+                                    <label class="attachment-field-label">Bite Scan</label>
+                                    <div class="attachment-input-field">
+                                        <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                        <span class="attachment-filename">${filesByType.bite_scan[0].file_name}</span>
+                                    </div>
+                                </div>`;
+                    }
+                    
+                    html += `
+                            </div>`;
+                } else if (category === 'Upload STL') {
+                    html += `
+                            <span class="attachment-field-label documents-stl">Documents</span>
+                            <div class="attachment-fields stl">`;
+                    
+                    // Show all STL documents
+                    const stlFiles = [...filesByType.upper_scan, ...filesByType.lower_scan, ...filesByType.bite_scan];
+                    stlFiles.forEach(file => {
+                        html += `
+                                <div class="attachment-field-group">
+                                    <div class="attachment-input-field">
+                                        <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                        <span class="attachment-filename">${file.file_name}</span>
+                                    </div>
+                                </div>`;
+                    });
+                    
+                    html += `
+                            </div>`;
+                }
+
+                html += `
+                        </div>
+                    </div>`;
+
+                // Clinical Photos Section (only for New Case)
+                if (category === 'New Case') {
+                    html += `
+                    <div class="attachments-container">
+                        <div class="attachment-section">
+                            <h3 class="attachment-section-title">Clinical Photos</h3>
+                            <p class="attachment-section-subtitle-with-link">Please click <a href="#" class="link">here</a> to download all photos.</p>`;
+
+                    // Face photos row
+                    const facePhotos = [...filesByType.front, ...filesByType.smiling, ...filesByType.right_side];
+                    if (facePhotos.length > 0) {
+                        html += `
+                            <div class="attachment-files-row">`;
+                        
+                        facePhotos.forEach(file => {
+                            html += `
+                                <div class="attachment-file">
+                                    <div class="attachment-file-overlay">
+                                        <div class="attachment-file-overlay-icon">
+                                            <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
+                                        </div>
+                                    </div>
+                                    <img src="${file.file_url}" alt="${file.file_name}">
+                                </div>`;
+                        });
+                        
+                        html += `
+                            </div>`;
+                    }
+
+                    // Intraoral photos row
+                    const intraoralPhotos = [...filesByType.buccal_right, ...filesByType.buccal_center, ...filesByType.buccal_left, ...filesByType.buccal_top, ...filesByType.buccal_bottom];
+                    if (intraoralPhotos.length > 0) {
+                        html += `
+                            <div class="attachment-files-row">`;
+                        
+                        intraoralPhotos.forEach(file => {
+                            html += `
+                                <div class="attachment-file">
+                                    <div class="attachment-file-overlay">
+                                        <div class="attachment-file-overlay-icon">
+                                            <img src="/assets/images/enlarge-picture.svg" alt="Enlarge" style="width: 18.75px; height: 18.751px;">
+                                        </div>
+                                    </div>
+                                    <img src="${file.signedurl || file.file_url}" alt="${file.file_name}">
+                                </div>`;
+                        });
+                        
+                        html += `
+                            </div>`;
+                    }
+
+                    html += `
+                        </div>
+                    </div>`;
+
+                    // X-Ray Section
+                    html += `
+                    <div class="attachments-container">
+                        <div class="attachment-section">
+                            <h3 class="attachment-section-title">X-Ray</h3>
+                            <div class="attachment-fields">`;
+                    
+                    if (filesByType.xray.length > 0) {
+                        filesByType.xray.forEach(file => {
+                            html += `
+                                <div class="attachment-field-group">
+                                    <div class="attachment-input-field">
+                                        <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                        <span class="attachment-filename">${file.file_name}</span>
+                                    </div>
+                                </div>`;
+                        });
+                    } else {
+                        html += `
+                                <div class="attachment-field-group">
+                                    <div class="attachment-input-field">
+                                        <span class="attachment-filename">No file uploaded.</span>
+                                    </div>
+                                </div>`;
+                    }
+                    
+                    html += `
+                            </div>
+                        </div>
+                    </div>`;
+
+                    // Other Documents/Photos Section
+                    html += `
+                    <div class="attachments-container">
+                        <div class="attachment-section">
+                            <h3 class="attachment-section-title">Other Documents / Photos</h3>
+                            <div class="attachment-fields">`;
+                    
+                    if (filesByType.other.length > 0) {
+                        filesByType.other.forEach(file => {
+                            html += `
+                                <div class="attachment-field-group">
+                                    <div class="attachment-input-field">
+                                        <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                        <span class="attachment-filename">${file.file_name}</span>
+                                    </div>
+                                </div>`;
+                        });
+                    } else {
+                        html += `
+                                <div class="attachment-field-group">
+                                    <div class="attachment-input-field">
+                                        <span class="attachment-filename">No file uploaded.</span>
+                                    </div>
+                                </div>`;
+                    }
+                    
+                    html += `
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                return html;
+            }
             
             // Photo Modal Functionality
             const photoModal = document.getElementById('photoModal');

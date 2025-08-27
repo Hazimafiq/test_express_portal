@@ -511,82 +511,80 @@
             });
         });
 
-        // Form submission
-        document.getElementById('addCaseForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-             // Clear any existing validation errors
+        // Validation rules
+        const validations = [
+            {
+                field: 'patientName',
+                rule: 'required',
+                message: 'Name is required.'
+            },
+            {
+                field: 'patientGender',
+                rule: 'required',
+                message: 'Gender is required.'
+            },
+            {
+                field: 'dateOfBirth',
+                rule: 'required',
+                message: 'Date of Birth is required.'
+            },
+            {
+                field: 'treatmentBrand',
+                rule: 'required',
+                message: 'Treatment Brand is required.'
+            },
+            {
+                field: 'customSN',
+                rule: 'required',
+                message: 'Custom SN is required.'
+            },
+            {
+                field: 'ipr',
+                rule: 'required',
+                message: 'IPR is required.'
+            },
+            {
+                field: 'attachments',
+                rule: 'required',
+                message: 'Attachments is required.'
+            },
+            {
+                field: 'modelType',
+                rule: 'required',
+                message: 'Model Type is required.'
+            },
+            {
+                field: 'upperScan',
+                rule: 'required',
+                message: 'Upper Scan is required.'
+            },
+            {
+                field: 'lowerScan',
+                rule: 'required',
+                message: 'Lower Scan is required.'
+            }
+        ];
+
+        // Function to handle form submission
+        async function handleFormSubmission(status, button) {
+            // Clear any existing validation errors
             formValidation.clearAllValidation('createUserForm');
             formValidation.clearFormError('createUserForm');
 
-              // Define validation rules
-              const validations = [
-                {
-                    field: 'patientName',
-                    rule: 'required',
-                    message: 'Name is required.'
-                },
-                {
-                    field: 'patientGender',
-                    rule: 'required',
-                    message: 'Gender is required.'
-                },
-                {
-                    field: 'dateOfBirth',
-                    rule: 'required',
-                    message: 'Date of Birth is required.'
-                },
-                {
-                    field: 'treatmentBrand',
-                    rule: 'required',
-                    message: 'Treatment Brand is required.'
-                },
-                {
-                    field: 'customSN',
-                    rule: 'required',
-                    message: 'Custom SN is required.'
-                },
-                {
-                    field: 'ipr',
-                    rule: 'required',
-                    message: 'IPR is required.'
-                },
-                {
-                    field: 'attachments',
-                    rule: 'required',
-                    message: 'Attachments is required.'
-                },
-                {
-                    field: 'modelType',
-                    rule: 'required',
-                    message: 'Model Type is required.'
-                },
-                {
-                    field: 'upperScan',
-                    rule: 'required',
-                    message: 'Upper Scan is required.'
-                },
-                {
-                    field: 'lowerScan',
-                    rule: 'required',
-                    message: 'Lower Scan is required.'
-                },
-                
-            ];
-            
-            // Validate all fields
-            const isValid = formValidation.validateFields(validations);
+            // For drafts, skip validation
+            //if (status === '1') {
+                // Validate all fields for submission
+                const isValid = formValidation.validateFields(validations);
+                if (!isValid) {
+                    return;
+                }
+            //}
 
-            if (!isValid) {
-                return;
-            }
-
-            // Disable submit button and show loading state
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-            submitBtn.textContent = 'Submitting Case...';
+            // Disable button and show loading state
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.classList.add('loading');
+            button.textContent = status === '1' ? 'Submitting Case...' : 'Saving Draft...';
 
             const formData = new FormData();
             formData.append('name', document.getElementById('patientName').value);
@@ -642,55 +640,40 @@
 
             formData.append('xray', document.getElementById('xray').value);
             formData.append('other', document.getElementById('documents').value);
-            formData.append('status', '0'); // 0 = draft
+            formData.append('status', status);
             formData.append('category', 'New Case');
+
             try {
                 const response = await axios.post('/add-case', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                })
-                .then(response => {
-                    // Redirect to cases list with success message
-                    window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
-                })
-                .catch(error => {
-                    // Show error message
-                    console.log('error', error);
-                    Toast.error('Failed to submit case. Please try again.');
-                    return;
                 });
+                
+                // Redirect to cases list with success message
+                window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
             } catch (error) {
                 console.log('error', error);
-                Toast.error('Network error. Please check your connection and try again.');
+                Toast.error(status === '1' ? 
+                    'Failed to submit case. Please try again.' : 
+                    'Failed to save draft. Please try again.');
             } finally {
                 // Reset button state
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('loading');
-                submitBtn.textContent = originalText;
+                button.disabled = false;
+                button.classList.remove('loading');
+                button.textContent = originalText;
             }
+        }
+
+        // Form submission event listeners
+        document.getElementById('submitBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleFormSubmission('1', e.target);
         });
 
-        // Save as draft
-        document.getElementById('saveDraftBtn').addEventListener('click', async () => {
-            const formData = new FormData(document.getElementById('addCaseForm'));
-            formData.append('status', '0'); // 0 = draft
-            
-            try {
-                const response = await fetch('/save-draft', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    alert('Draft saved successfully!');
-                } else {
-                    const data = await response.json();
-                    alert(data.message || 'Failed to save draft');
-                }
-            } catch (error) {
-                alert('Network error. Please try again.');
-            }
+        document.getElementById('saveDraftBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleFormSubmission('0', e.target);
         });
     </script>
 </body>

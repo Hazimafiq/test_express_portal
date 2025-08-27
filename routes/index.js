@@ -59,7 +59,11 @@ router.get('/get_profile', get_user_profile);
 
 // Aligners cases route (existing functionality)
 router.get('/aligners-cases', requireAuth, (req, res) => {
-    res.render('aligners_cases');
+    const { success } = req.query; 
+    res.render('aligners_cases', {
+        user: req.session.user,
+        successMessage: success || null
+    });
 });
 
 // Case details route
