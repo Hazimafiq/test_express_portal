@@ -1,7 +1,8 @@
 const express = require('express');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
-const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data } = require('../controller/case');
+const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data } = require('../controller/case');
+const { get_file_with_signedurl } = require('../controller/file')
 
 const router = express.Router();
 
@@ -79,6 +80,7 @@ router.get('/cases/:caseId', requireAuth, async (req, res) => {
 
 router.get('/get_patient_details_data', requireAuth, get_patient_details_data);
 router.get('/get_patient_treatment_details_data', requireAuth, get_patient_treatment_details_data);
+router.get('/get_patient_model', requireAuth, get_patient_model_data);
 
 // Add treatment plan route
 router.get('/add-treatment-plan/:caseId', requireAuth, (req, res) => {
@@ -105,7 +107,9 @@ router.get('/get-case-counts', requireAuth, getCaseCounts);
 
 // Get treatment details
 router.get('/get-patient-treatment-details', requireAuth, get_patient_treatment_details_data);
-//get mo
+
+// Get file with signedurl
+router.get('/file/:caseid/:fileid', get_file_with_signedurl);
 
 router.get('/update-case', requireAuth, async (req, res) => {
     const { caseId } = req.query;

@@ -1,7 +1,6 @@
 const pool = require('../utils/mysql');
 const randomstring = require("randomstring")
 const CustomError = require('../errors/CustomError');
-const { check } = require('prettier');
 const STATUS = process.env.STATUS;
 
 
@@ -144,7 +143,7 @@ class Case {
     }
 
     static async get_model_data(caseid) {
-        const query = 'SELECT case_id, file_type, file_name, file_url, signedurl FROM file_upload_table WHERE case_id = ? LIMIT 1';
+        const query = 'SELECT case_id, file_type, file_name, file_url, signedurl FROM file_upload_table WHERE case_id = ?';
         const values = [caseid];
         const [results] = await pool.query(query, values);
         if(results.length == 0){
@@ -157,7 +156,6 @@ class Case {
         const { treatment_brand, created_date, last_updated_date, status, search, sortBy = 'created_at', sortOrder = 'DESC', limit, offset } = filters;
         const { id, role } = session;
 
-        console.log(filters);
         let query = 'SELECT case_id, treatment_brand, name, category, created_at, updated_at, status FROM patient_table';
         let whereConditions = [];
         let queryParams = [];
