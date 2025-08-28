@@ -205,6 +205,38 @@ body {
     transition: all 0.2s ease;
 }
 
+/* Default state: placeholder text in grey */
+.form-field select {
+    color: var(--Colour-text-subtlest, #A1A1A1);
+}
+
+/* When select is focused (dropdown open), show text in black */
+.form-field select:focus {
+    color: #000000;
+}
+
+/* When select has a meaningful value selected, show it in black */
+.form-field select option:checked:not([value=""]) {
+    color: #000000;
+}
+
+/* JavaScript will add this class to change text color when a value is selected */
+.form-field select.has-value {
+    color: #000000;
+}
+
+/* Style for select options when dropdown is open */
+.form-field select option {
+    color: #000000;
+    background: #ffffff;
+}
+
+/* When an option is selected, keep it black */
+.form-field select option:checked {
+    color: #000000;
+    background: #f0f0f0;
+}
+
 /* Custom arrow icon positioned on the wrapper */
 .select-wrapper::after {
     content: '';

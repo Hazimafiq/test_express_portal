@@ -456,6 +456,37 @@
         document.querySelectorAll('.photo-upload').forEach(upload => {
             const input = upload.querySelector('input[type="file"]');
             
+            // Add a clear button to remove uploaded images
+            const clearButton = document.createElement('div');
+            clearButton.className = 'clear-photo';
+            clearButton.innerHTML = '×';
+            clearButton.style.display = 'none';
+            clearButton.style.position = 'absolute';
+            clearButton.style.top = '5px';
+            clearButton.style.right = '5px';
+            clearButton.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            clearButton.style.borderRadius = '50%';
+            clearButton.style.width = '24px';
+            clearButton.style.height = '24px';
+            clearButton.style.textAlign = 'center';
+            clearButton.style.lineHeight = '22px';
+            clearButton.style.fontSize = '18px';
+            clearButton.style.cursor = 'pointer';
+            clearButton.style.zIndex = '10';
+            upload.style.position = 'relative';
+            upload.appendChild(clearButton);
+            
+            clearButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                input.value = '';
+                upload.style.backgroundImage = '';
+                const photoOutline = upload.querySelector('.photo-outline');
+                if (photoOutline) {
+                    photoOutline.style.display = '';
+                }
+                clearButton.style.display = 'none';
+            });
+            
             upload.addEventListener('click', () => {
                 input.click();
             });
@@ -487,7 +518,14 @@
                             upload.style.backgroundImage = `url(${e.target.result})`;
                             upload.style.backgroundSize = 'cover';
                             upload.style.backgroundPosition = 'center';
-                            upload.classList.add('has-image');
+                            const photoOutline = upload.querySelector('.photo-outline');
+                            if (photoOutline) {
+                                photoOutline.style.display = 'none';
+                            }
+                            const clearButton = upload.querySelector('.clear-photo');
+                            if (clearButton) {
+                                clearButton.style.display = 'block';
+                            }
                         };
                         reader.readAsDataURL(file);
                     }
@@ -503,7 +541,14 @@
                             upload.style.backgroundImage = `url(${e.target.result})`;
                             upload.style.backgroundSize = 'cover';
                             upload.style.backgroundPosition = 'center';
-                            upload.classList.add('has-image');
+                            const photoOutline = upload.querySelector('.photo-outline');
+                            if (photoOutline) {
+                                photoOutline.style.display = 'none';
+                            }
+                            const clearButton = upload.querySelector('.clear-photo');
+                            if (clearButton) {
+                                clearButton.style.display = 'block';
+                            }
                         };
                         reader.readAsDataURL(file);
                     }

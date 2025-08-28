@@ -44,7 +44,7 @@ async function initializeNavRail() {
         '/aligners-cases': [
             '/aligners-cases',
             '/cases',
-            '/cases/:id/edit',
+            '/update-case',
             '/cases/:id/delete',
             '/cases/:id/approve',
             '/cases/:id/revoke',
@@ -747,3 +747,44 @@ class FormValidation {
 
 // Create global instance
 window.formValidation = new FormValidation();
+
+// Select color management for placeholder vs selected value
+function initializeSelectColors() {
+    const selects = document.querySelectorAll('.form-field select');
+    
+    selects.forEach(select => {
+        // Set initial color based on selected option
+        updateSelectColor(select);
+        
+        // Add change event listener
+        select.addEventListener('change', function() {
+            updateSelectColor(this);
+        });
+    });
+}
+
+function updateSelectColor(select) {
+    const selectedOption = select.options[select.selectedIndex];
+    
+    if (selectedOption && selectedOption.value === '') {
+        // Placeholder option selected - keep grey
+        select.classList.remove('has-value');
+    } else {
+        // Real value selected - make it black
+        select.classList.add('has-value');
+    }
+}
+
+// Initialize select colors when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSelectColors();
+});
+
+// Also initialize when components are loaded dynamically
+if (typeof loadComponent === 'function') {
+    const originalLoadComponent = loadComponent;
+    loadComponent = async function(elementId, componentPath) {
+        await originalLoadComponent(elementId, componentPath);
+        initializeSelectColors();
+    };
+}

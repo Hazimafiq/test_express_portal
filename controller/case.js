@@ -7,7 +7,8 @@ const https = require('https');
 // Update case, if with case_id query, then means edit, else means new case, status code 0 = draft, status 1 = submitted, category = New Case, Upload STL
 exports.update_case = async (req, res) => {
     try {
-        const { name, gender, dob, email, treatment_brand, custom_sn, crowding, deep_bite, spacing, narrow_arch, class_ii_div_1, class_ii_div_2, class_iii, open_bite, overjet, anterior_crossbite, posterior_crossbite, others, ipr, attachments, treatment_notes, model_type, status, category } = req.body;
+        console.log('req.body', req.body);
+        const { name, gender, dob, email, treatment_brand, custom_sn, crowding, deep_bite, spacing, narrow_arch, class_ii_div_1, class_ii_div_2, class_iii, open_bite, overjet, anterior_crossbite, posterior_crossbite, others, ipr, attachments, treatment_notes, model_type, status, category, file_flags, removed_files } = req.body;
 
         const { caseid } = req.params
 
@@ -21,10 +22,22 @@ exports.update_case = async (req, res) => {
             filesByField[file.fieldname].push(file);
         });
         const { lower_scan, upper_scan, bite_scan, front, smiling, right_side, buccal_top, buccal_bottom, buccal_right, buccal_center, buccal_left, xray, other } = filesByField
-        if (!name || !gender || !dob || !treatment_brand || !ipr || !attachments || !model_type || !lower_scan || !upper_scan) {
-            return res.status(400).json({ message: 'All fields are required' });
+        console.log('filesByField', filesByField);
+      
+        // Parse file flags if provided
+        let parsedFileFlags = {};
+        if (file_flags) {
+            try {
+                parsedFileFlags = JSON.parse(file_flags);
+            } catch (err) {
+                console.error('Error parsing file flags:', err);
+            }
         }
+
         if (!caseid){
+            if (!name || !gender || !dob || !treatment_brand || !ipr || !attachments || !model_type || !lower_scan || !upper_scan) {
+                return res.status(400).json({ message: 'All fields are required' });
+            }
             const new_case = await Case.new_case(req.body, req.session);
             const new_case_treatment = await Case.new_case_treatment(new_case, req.body);
             const new_case_file = await Case.new_case_file_upload(new_case, req.session, req.files);
@@ -34,9 +47,31 @@ exports.update_case = async (req, res) => {
                 res.status(201).json({ message: 'Case created successfully' });
             }
         } else {
+            console.log('update filess')
+            // For existing cases, validate scan files based on flags
+            const fileValidation = await Case.validateRequiredFiles(caseid, parsedFileFlags);
+            
+            // Check if required fields are present
+            if (!name || !gender || !dob || !treatment_brand || !ipr || !attachments || !model_type) {
+                return res.status(400).json({ message: 'All fields are required' });
+            }
+            
+            // Check if required scan files will be available after operations
+            if (!fileValidation.upper_scan || !fileValidation.lower_scan) {
+                const missingFiles = [];
+                if (!fileValidation.upper_scan) missingFiles.push('Upper Scan');
+                if (!fileValidation.lower_scan) missingFiles.push('Lower Scan');
+                return res.status(400).json({ 
+                    message: `Required files missing: ${missingFiles.join(', ')}. Please upload the missing files.` 
+                });
+            }
+            
             const edit_case = await Case.edit_case(caseid, req.body)
             const edit_case_treatment = await Case.edit_case_treatment(caseid, req.body)
-            const edit_case_file = await Case.edit_case_file_upload(caseid, req.session, req.files);
+            
+            // Handle file operations based on flags (always call this to handle removals even if no new files)
+            const edit_case_file = await Case.edit_case_file_upload_with_flags(caseid, req.session, req.files, parsedFileFlags);
+            
             if(status == 0){
                 res.status(201).json({ message: 'Case draft updated successfully' });
             } else {                
@@ -49,15 +84,15 @@ exports.update_case = async (req, res) => {
         }
         console.error(err);
         // Handle specific error for user already exists
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error' + err });
     }
 };
 
 // Update case, if with case_id query, then means edit, else means new case, status code 0 = draft, status 1 = submitted
 exports.update_stl_case = async (req, res) => {
     try {
-        const { name, gender, dob, email, treatment_brand, custom_sn, product, product_arrival_date, model_type, status, category } = req.body;
-        const { caseid } = req.query
+        const { name, gender, dob, email, treatment_brand, custom_sn, product, product_arrival_date, model_type, status, category, file_flags } = req.body;
+        const { caseid } = req.params
 
         const files = req.files || [];    
 
@@ -70,6 +105,17 @@ exports.update_stl_case = async (req, res) => {
         });
 
         const { documents } = filesByField
+
+        // Parse file flags if provided
+        let parsedFileFlags = {};
+        if (file_flags) {
+            try {
+                parsedFileFlags = JSON.parse(file_flags);
+                console.log('Parsed file flags:', parsedFileFlags);
+            } catch (err) {
+                console.error('Error parsing file flags:', err);
+            }
+        }
 
         if (!name || !treatment_brand || !dob || !product || !product_arrival_date || !model_type) {
             return res.status(400).json({ message: 'All fields are required' });
@@ -88,7 +134,14 @@ exports.update_stl_case = async (req, res) => {
         } else {
             const edit_case = await Case.edit_case(caseid, req.body)
             const edit_case_stl_treatment = await Case.edit_case_stl(caseid, req.body)
-            const edit_case_file = await Case.edit_case_file_upload(caseid, req.session, req.files);
+            
+            // Get existing file IDs from the form data
+            const existingFileIds = req.body.existingFiles ? 
+                (Array.isArray(req.body.existingFiles) ? req.body.existingFiles : [req.body.existingFiles]) : [];
+            
+            // Use the enhanced file upload method that handles file operations by ID
+            const edit_case_file = await Case.edit_upload_stl_file_upload_with_flags(caseid, req.session, req.files, parsedFileFlags, existingFileIds);
+            
             if(status == 0){
                 res.status(201).json({ message: 'Case draft updated successfully' });
             } else {                
@@ -172,15 +225,29 @@ exports.get_patient_model_data = async (req, res) => {
 // Get patient normal case data
 exports.get_normal_case_data = async (req, res) => {
     try {
-        const { caseid } = req.query;
+        // If called as HTTP endpoint, get caseid from query
+        // If called directly, treat req as the caseId
+        const caseid = typeof req === 'object' && req.query ? req.query.caseid : req;
         const normal_case_details = await Case.get_normal_case_data(caseid);
-        res.status(200).json({ normal_case_details });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
+         // If res is provided, it's an HTTP request
+         if (res) {
+            res.status(200).json({ normal_case_details });
         } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
+            // If no res, return the data directly
+            return normal_case_details;
+        }
+    } catch (err) {
+        if (res) {
+            // HTTP request error handling
+            if (err instanceof CustomError) {
+                return res.status(err.statusCode).json({ message: err.message });
+            } else {
+                console.error(err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        } else {
+            // Direct call error handling - rethrow the error
+            throw err;
         }
     }
 };
@@ -188,15 +255,25 @@ exports.get_normal_case_data = async (req, res) => {
 // Get patient upload stl data
 exports.get_upload_stl_data = async (req, res) => {
     try {
-        const { caseid } = req.query;
+        const caseid = typeof req === 'object' && req.query ? req.query.caseid : req;
         const upload_stl_details = await Case.get_upload_stl_data(caseid);
-        res.status(200).json({ upload_stl_details });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
+        if (res) {
+            res.status(200).json({ upload_stl_details });
         } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
+            return upload_stl_details;
+        }
+    } catch (err) {
+        if (res) {
+            // HTTP request error handling
+            if (err instanceof CustomError) {
+                return res.status(err.statusCode).json({ message: err.message });
+            } else {
+                console.error(err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        } else {
+            // Direct call error handling - rethrow the error
+            throw err;
         }
     }
 };
@@ -208,8 +285,9 @@ exports.updateCasetoDraft = async (req, res) => {
     }
     try {
         const { caseId } = req.params;
-        const case_status = await Case.updateCaseStatus(caseId);
-        res.status(200).json({ message: 'Case set as draft successfully.' });
+        const { status } = req.query;
+        const case_status = await Case.updateCaseStatus(caseId, status);
+        res.status(200).json({ message: 'Case status has been changed to draft.' });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });

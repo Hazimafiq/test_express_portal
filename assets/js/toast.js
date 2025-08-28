@@ -232,6 +232,8 @@ class Toast {
 // Initialize Toast instance
 document.addEventListener('DOMContentLoaded', () => {
     Toast.getInstance();
+    // Make Toast globally available
+    window.Toast = Toast;
 });
 
 // Export for module usage
