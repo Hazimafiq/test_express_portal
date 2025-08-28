@@ -1,4 +1,5 @@
 const Case = require('../model/Case');
+const Utils = require('../model/Utils');
 const CustomError = require('../errors/CustomError');
 const archiver = require('archiver');
 const AWS = require('aws-sdk');
@@ -43,7 +44,8 @@ exports.update_case = async (req, res) => {
             const new_case_file = await Case.new_case_file_upload(new_case, req.session, req.files);
             if(status == 0){
                 res.status(201).json({ message: 'Case draft created successfully' });
-            } else {                
+            } else {
+                const sendmail = await Utils.new_case_notification(new_case);
                 res.status(201).json({ message: 'Case created successfully' });
             }
         } else {

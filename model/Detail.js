@@ -39,7 +39,7 @@ class Detail {
         return results;
     }
 
-    static async add_simulation_plan(caseid) {
+    static async add_simulation_plan(caseid, simulation_url) {
         let simulation_number = 1;
         const check_case_id = 'SELECT * FROM patient_table WHERE case_id = ?';
         const [case_checking] = await pool.query(check_case_id, caseid);
@@ -49,46 +49,28 @@ class Detail {
         const check_plan_id = 'SELECT * FROM simulation_data_table WHERE case_id = ?';
         const [plan_checking] = await pool.query(check_plan_id, caseid);
         if (plan_checking.length === 0) {
-            const Isimulation_query = 'INSERT INTO simulation_data_table (case_id, simulation_number) VALUES (?, ?)';
-            const values = [caseid, simulation_number];
+            const Isimulation_query = 'INSERT INTO simulation_data_table (case_id, simulation_number, simulation_url) VALUES (?, ?, ?)';
+            const values = [caseid, simulation_number, simulation_url];
             const [results] = await pool.query(Isimulation_query, values);
-            return results;
+            return simulation_number;
         } else {
             simulation_number = plan_checking.length + 1;
-            const Isimulation_query = 'INSERT INTO simulation_data_table (case_id, simulation_number) VALUES (?, ?)';
-            const values = [caseid, simulation_number];
+            const Isimulation_query = 'INSERT INTO simulation_data_table (case_id, simulation_number, simulation_url) VALUES (?, ?, ?)';
+            const values = [caseid, simulation_number, simulation_url];
             const [results] = await pool.query(Isimulation_query, values);
-            return results;
+            return simulation_number;
         }
     }
-
-    static async update_simulation_plan(caseid, { simulation_url, simulation_number }) {
-        const check_case_id = 'SELECT * FROM patient_table WHERE case_id = ?';
-        const [checking] = await pool.query(check_case_id, caseid);
-        if (checking.length === 0) {
-            throw new CustomError('No this case id', 400);
-        }        
-        const check_plan_id = 'SELECT simulation_url FROM simulation_data_table WHERE case_id = ? AND simulation_number = ?';
-        const check_plan_values = [caseid, simulation_number];
-        const [plan_checking] = await pool.query(check_plan_id, check_plan_values);
-        if (plan_checking.length === 0) {
-            throw new CustomError('No this simulation id', 400);
-        }
-        const Usimulation_query = 'UPDATE simulation_data_table SET simulation_url = ? WHERE case_id = ? AND simulation_number = ?';
-        const values = [simulation_url, caseid, simulation_number];
-        const [results] = await pool.query(Usimulation_query, values);
-        return results;
-    }
-
-    static async get_simulation_plan(caseid , simulation_number ) {
+    
+    static async get_simulation_plan(caseid) {
         const check_case_id = 'SELECT * FROM patient_table WHERE case_id = ?';
         const [checking] = await pool.query(check_case_id, caseid);
         if (checking.length === 0) {
             throw new CustomError('No this case id', 400);
         }
 
-        const check_plan_id = 'SELECT simulation_data_table.simulation_url, simulation_data_table.created_time, file_upload_table.file_name, file_upload_table.file_originalname, file_upload_table.file_type, file_upload_table.signedurl FROM simulation_data_table JOIN file_upload_table ON simulation_data_table.case_id = file_upload_table.case_id WHERE simulation_data_table.case_id = ? AND simulation_data_table.simulation_number = ? AND file_upload_table.file_type = "ipr" LIMIT 1;';
-        const check_plan_values = [caseid, simulation_number];
+        const check_plan_id = 'SELECT simulation_data_table.simulation_number, simulation_data_table.simulation_url, simulation_data_table.created_time, file_upload_table.file_name, file_upload_table.file_originalname, file_upload_table.file_type, file_upload_table.signedurl, file_upload_table.simulation_number FROM simulation_data_table JOIN file_upload_table ON simulation_data_table.case_id = file_upload_table.case_id AND simulation_data_table.simulation_number = file_upload_table.simulation_number  WHERE simulation_data_table.case_id = ? AND file_upload_table.file_type = "ipr";';
+        const check_plan_values = [caseid];
         const [plan_checking] = await pool.query(check_plan_id, check_plan_values);
         if (plan_checking.length === 0) {
             throw new CustomError('No this simulation id', 400);

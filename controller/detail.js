@@ -50,29 +50,12 @@ exports.get_comment = async (req, res) => {
 // Add simulation plan number in details page
 exports.add_simulation_plan = async (req, res) => {
     try {
-        const { caseid } = req.query  
+        // need name for ipr filename, simulation_number need to know which plan
+        const { name, simulation_url } = req.body;
+        const { caseid } = req.query
         if ( !caseid ) {
             return res.status(400).json({ message: 'No caseid received.' });
         }
-        const add_simulation_plan = await Detail.add_simulation_plan(caseid);
-
-        res.status(201).json({ message: 'Simulation plan added.' });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
-        }
-        console.error(err);
-        // Handle specific error for user already exists
-        res.status(500).json({ message: 'Internal server error' });
-    }
-};
-
-// Update simulation link and upload ipr file in details page
-exports.update_simulation_plan = async (req, res) => {    
-    try {
-        // need name for ipr filename, simulation_number need to know which plan
-        const { name, simulation_url, simulation_number } = req.body;
-        const { caseid } = req.query
 
         const files = req.files || [];    
 
@@ -89,11 +72,10 @@ exports.update_simulation_plan = async (req, res) => {
         if (!simulation_url || !ipr) {
             return res.status(400).json({ message: 'All fields are required' });
         }
-        const new_simulation = await Detail.update_simulation_plan(caseid, req.body);
-        if(ipr){
-            const new_ipr = await Case.new_case_file_upload(caseid, req.session, req.files, simulation_number);
-        }
-        res.status(201).json({ message: 'Simulation plan updated!' });
+        const add_simulation_plan = await Detail.add_simulation_plan(caseid, simulation_url);
+        const new_ipr = await Case.new_case_file_upload(caseid, req.session, req.files, add_simulation_plan);
+
+        res.status(201).json({ message: 'Simulation plan added.' });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });
@@ -108,9 +90,9 @@ exports.update_simulation_plan = async (req, res) => {
 exports.get_simulation_plan = async (req, res) => {    
     try {
         // simulation_number need to know which plan
-        const { caseid, simulation_number } = req.query
+        const { caseid } = req.query
 
-        const simulation_details = await Detail.get_simulation_plan(caseid, simulation_number);
+        const simulation_details = await Detail.get_simulation_plan(caseid);
 
         res.status(201).json({ simulation_details });
     } catch (err) {

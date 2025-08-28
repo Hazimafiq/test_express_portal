@@ -103,7 +103,7 @@ const uploadAny = upload.any();
 // Make upload middleware available globally
 app.use('/add-case', uploadAny);
 app.use('/add-case-stl', uploadAny);
-app.use('/update-simulation-plan', uploadAny);
+app.use('/add-simulation-plan', uploadAny);
 app.use('/save-draft', uploadAny);
 
 // Cookie parser config
