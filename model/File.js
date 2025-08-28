@@ -59,10 +59,24 @@ class File {
                 check_pdf = 0
             }
 
+            // Extract the S3 key from the file_url instead of using file_name
+            // file_url format: https://bucket.s3.region.amazonaws.com/key
+            let s3Key = limit_timeurl[0].file_url;
+            console.log('Original file_url:', s3Key);
+            
+            if (s3Key.includes('amazonaws.com/')) {
+                s3Key = s3Key.split('amazonaws.com/')[1];
+                // URL decode the key to handle spaces and special characters
+                s3Key = decodeURIComponent(s3Key);
+                console.log('Extracted and decoded S3 key:', s3Key);
+            } else {
+                console.log('Warning: file_url does not contain amazonaws.com, using as-is');
+            }
+
             if (check_pdf == 0) {
                 url = s3.getSignedUrl('getObject', {
                     Bucket: keyword,
-                    Key: limit_timeurl[0].file_name.replace(/[^\p{L}\p{N}\s._\-()@+#&!=\/]/gu, '_'),
+                    Key: s3Key,
                     Expires: 60 * 60 * 24
                 });
             } else {
@@ -70,7 +84,7 @@ class File {
                     Bucket: keyword,
                     ResponseContentDisposition: 'inline',
                     ResponseContentType: 'application/pdf',
-                    Key: limit_timeurl[0].file_name.replace(/[^\p{L}\p{N}\s._\-()@+#&!=\/]/gu, '_'),
+                    Key: s3Key,
                     Expires: 60 * 60 * 24
                 });
             }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Case - Doctor Portal</title>
+    <title>Update Case - <%= caseid %></title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/add_case.css">
     <link rel="stylesheet" href="/assets/css/date-picker.css">
@@ -25,12 +25,12 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item active">Add New Case</span>
+                <span class="breadcrumb-item active">Update Case</span>
             </nav>
 
             <!-- Page Header -->
             <div class="page-header">
-                <h1 class="page-title">Add New Case</h1>
+                <h1 class="page-title">Update Case</h1>
             </div>
 
             <!-- Add Case Form -->
@@ -45,7 +45,7 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Name</span>
                             </label>
-                            <input type="text" id="patientName" name="patientName" placeholder="Input here">
+                            <input type="text" id="patientName" name="patientName" placeholder="Input here" value="<%= normal_case_details.name %>">
                         </div>
                         <div class="form-field">
                             <label for="patientGender">
@@ -53,11 +53,11 @@
                                 <span class="label-text">Gender</span>
                             </label>
                             <div class="select-wrapper">
-                                <select id="patientGender" name="patientGender">
+                                <select id="patientGender" name="patientGender" value="<%= normal_case_details.gender %>">
                                     <option value="">Select</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Prefer not to say">Prefer not to say</option>
+                                    <option value="Male" <%= normal_case_details.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                                    <option value="Female" <%= normal_case_details.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                                    <option value="Prefer not to say" <%= normal_case_details.gender === 'Prefer not to say' ? 'selected' : '' %>>Prefer not to say</option>
                                 </select>
                             </div>
                         </div>
@@ -67,14 +67,14 @@
                                 <span class="label-text">Date of Birth</span>
                             </label>
                             <div class="date-wrapper">
-                                <input type="date" id="dateOfBirth" name="dateOfBirth" data-date-picker>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" data-date-picker value="<%= normal_case_details.dob %>">
                             </div>
                         </div>
                         <div class="form-field">
                             <label for="email">
                                 <span class="label-text"></span>Email</span>
                             </label>
-                            <input type="email" id="email" name="email" placeholder="Input here">
+                            <input type="email" id="email" name="email" placeholder="Input here" value="<%= normal_case_details.email %>">
                         </div>
                         <div class="form-field">
                             <label for="treatmentBrand">
@@ -82,12 +82,12 @@
                                 <span class="label-text">Treatment Brand</span>
                             </label>
                             <div class="select-wrapper">
-                                <select id="treatmentBrand" name="treatmentBrand">
+                                <select id="treatmentBrand" name="treatmentBrand" value="<%= normal_case_details.treatment_brand %>">
                                     <option value="">Select</option>
-                                    <option value="DCA Pro">DCA Pro</option>
-                                    <option value="Diamond Aligner">Diamond Aligner</option>
-                                    <option value="OEM-Plain">OEM-Plain</option>
-                                    <option value="OEM-Clinic Brand">OEM-Clinic Brand</option>
+                                    <option value="DCA Pro" <%= normal_case_details.treatment_brand === 'DCA Pro' ? 'selected' : '' %>>DCA Pro</option>
+                                    <option value="Diamond Aligner" <%= normal_case_details.treatment_brand === 'Diamond Aligner' ? 'selected' : '' %>>Diamond Aligner</option>
+                                    <option value="OEM-Plain" <%= normal_case_details.treatment_brand === 'OEM-Plain' ? 'selected' : '' %>>OEM-Plain</option>
+                                    <option value="OEM-Clinic Brand" <%= normal_case_details.treatment_brand === 'OEM-Clinic Brand' ? 'selected' : '' %>>OEM-Clinic Brand</option>
                                 </select>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                             <label for="customSN">
                                 <span class="label-text">Custom SN</span>
                             </label>
-                            <input type="text" id="customSN" name="customSN" placeholder="Input here">
+                            <input type="text" id="customSN" name="customSN" placeholder="Input here" value="<%= normal_case_details.custom_sn %>">
                         </div>
                     </div>
                     </div>
@@ -112,84 +112,84 @@
                         <div class="condition-grid">
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="crowding">
+                                    <input type="checkbox" name="clinical_condition" value="crowding" <%= normal_case_details.crowding === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Crowding
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="class_ii_div_1">
+                                    <input type="checkbox" name="clinical_condition" value="class_ii_div_1" <%= normal_case_details.class_ii_div_1 === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Class II div 1
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="overjet">
+                                    <input type="checkbox" name="clinical_condition" value="overjet" <%= normal_case_details.overjet === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Overjet
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="deep_bite">
+                                    <input type="checkbox" name="clinical_condition" value="deep_bite" <%= normal_case_details.deep_bite === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Deep Bite
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="class_ii_div_2">
+                                    <input type="checkbox" name="clinical_condition" value="class_ii_div_2" <%= normal_case_details.class_ii_div_2 === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Class II div 2
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="anterior_crossbite">
+                                    <input type="checkbox" name="clinical_condition" value="anterior_crossbite" <%= normal_case_details.anterior_crossbite === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Anterior Crossbite
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="spacing">
+                                    <input type="checkbox" name="clinical_condition" value="spacing" <%= normal_case_details.spacing === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Spacing
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="class_iii">
+                                    <input type="checkbox" name="clinical_condition" value="class_iii" <%= normal_case_details.class_iii === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Class III
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="posterior_crossbite">
+                                    <input type="checkbox" name="clinical_condition" value="posterior_crossbite" <%= normal_case_details.posterior_crossbite === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Posterior Crossbite
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="narrow_arch">
+                                    <input type="checkbox" name="clinical_condition" value="narrow_arch" <%= normal_case_details.narrow_arch === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Narrow Arch
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="open_bite">
+                                    <input type="checkbox" name="clinical_condition" value="open_bite" <%= normal_case_details.open_bite === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Open Bite
                                 </label>
                             </div>
                             <div class="condition-row">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="clinical_condition" value="others">
+                                    <input type="checkbox" name="clinical_condition" value="others" <%= normal_case_details.others === 1 ? 'checked' : '' %>>
                                     <span class="checkmark"></span>
                                     Others
                                 </label>
@@ -205,11 +205,11 @@
                                 <span class="label-text">IPR</span>
                             </label>
                             <div class="select-wrapper">
-                                <select id="ipr" name="ipr">
+                                <select id="ipr" name="ipr" value="<%= normal_case_details.ipr %>">
                                     <option value="">Select</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                    <option value="As Recommended">As Recommended</option>
+                                    <option value="Yes" <%= normal_case_details.ipr === 'Yes' ? 'selected' : '' %>>Yes</option>
+                                    <option value="No" <%= normal_case_details.ipr === 'No' ? 'selected' : '' %>>No</option>
+                                    <option value="As Recommended" <%= normal_case_details.ipr === 'As Recommended' ? 'selected' : '' %>>As Recommended</option>
                                 </select>
                             </div>
                             
@@ -220,11 +220,11 @@
                                 <span class="label-text">Attachments</span>
                             </label>
                             <div class="select-wrapper">
-                                <select id="attachments" name="attachments">
+                                <select id="attachments" name="attachments" value="<%= normal_case_details.attachments %>">
                                     <option value="">Select</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                    <option value="As Recommended">As Recommended</option>
+                                    <option value="Yes" <%= normal_case_details.attachments === 'Yes' ? 'selected' : '' %>>Yes</option>
+                                    <option value="No" <%= normal_case_details.attachments === 'No' ? 'selected' : '' %>>No</option>
+                                    <option value="As Recommended" <%= normal_case_details.attachments === 'As Recommended' ? 'selected' : '' %>>As Recommended</option>
                                 </select>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                         <label for="treatmentNotes">
                             <span class="label-text">Treatment Notes</span>
                         </label>
-                        <textarea id="treatmentNotes" name="treatmentNotes" placeholder="Input here" rows="6"></textarea>
+                        <textarea id="treatmentNotes" name="treatmentNotes" placeholder="Input here" rows="6"><%= normal_case_details.treatment_notes %></textarea>
                     </div>
                     </div>
                 </div>
@@ -251,14 +251,27 @@
                                 <span class="label-text">Model Type</span>
                             </label>
                             <div class="select-wrapper">
-                                <select id="modelType" name="modelType">
+                                <select id="modelType" name="modelType" value="<%= normal_case_details.model_type %>">
                                     <option value="">Select</option>
-                                    <option value="Digital Model">Digital Model</option>
-                                    <option value="Plaster Model">Plaster Model</option>
+                                    <option value="Digital Model" <%= normal_case_details.model_type === 'Digital Model' ? 'selected' : '' %>>Digital Model</option>
+                                    <option value="Plaster Model" <%= normal_case_details.model_type === 'Plaster Model' ? 'selected' : '' %>>Plaster Model</option>
                                 </select>
                             </div>
                         </div>
-
+                        <%
+                        // Helper function to find file by type
+                        function findFileByType(files, fileType) {
+                            if (!files || !Array.isArray(files)) return null;
+                            return files.find(file => file.file_type === fileType);
+                        }
+                        
+                        // Helper function to get file name or placeholder
+                        function getFileNameOrPlaceholder(files, fileType, placeholder) {
+                            const file = findFileByType(files, fileType);
+                            return file ? file.file_name : placeholder;
+                        }
+                        %>
+                        
                         <!-- File Upload Grid -->
                         <div class="upload-grid">
                             <div class="upload-field">
@@ -267,9 +280,9 @@
                                     <span class="label-text">Upper Scan (*STL/*PLY)</span>
                                 </label>
                                 <div class="file-upload file-upload-simple">
-                                    <input type="file" id="upperScan" name="upperScan" accept=".stl,.ply">
+                                    <input type="file" id="upperScan" name="upperScan" accept=".stl,.ply" value="<%= normal_case_files[0].file_name %>">
                                     <div class="upload-placeholder">
-                                        <span>Choose File</span>
+                                        <span><%= getFileNameOrPlaceholder(normal_case_files, 'upper_scan', 'Choose File') %></span>
                                         <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
                                     </div>
                                 </div>
@@ -283,7 +296,7 @@
                                 <div class="file-upload file-upload-simple">
                                     <input type="file" id="lowerScan" name="lowerScan" accept=".stl,.ply">
                                     <div class="upload-placeholder">
-                                        <span>Choose File</span>
+                                        <span><%= getFileNameOrPlaceholder(normal_case_files, 'lower_scan', 'Choose File') %></span>
                                         <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
                                     </div>
                                 </div>
@@ -296,7 +309,7 @@
                                 <div class="file-upload file-upload-simple">
                                     <input type="file" id="biteScan" name="biteScan" accept=".stl,.ply">
                                     <div class="upload-placeholder">
-                                        <span>Choose File</span>
+                                        <span><%= getFileNameOrPlaceholder(normal_case_files, 'bite_scan', 'Choose File') %></span>
                                         <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
                                     </div>
                                 </div>
@@ -308,43 +321,34 @@
                         <div class="clinical-photos">
                             <h3 class="subsection-title">Clinical Photos</h3>
                             <p class="upload-instructions">Please click on the images below to upload photos</p>
-                            
                             <div class="photo-grid">
                                 <div class="photo-row">
-                                    <div class="photo-upload face-photo" data-type="frontal">
-                                        <img src="/assets/images/full-face-front.png" alt="Face Front" class="photo-outline">
-                                        <input type="file" id="frontal" accept="image/*" style="display: none;">
+                                    <div class="photo-upload face-photo" data-type="frontal" style="background-image: url('<%= normal_case_files[3].file_type === 'front' ? normal_case_files[3].signedurl : '/assets/images/full-face-front.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="frontal" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'front', 'Choose File') %>">
                                     </div>
-                                    <div class="photo-upload face-photo" data-type="smile">
-                                        <img src="/assets/images/full-smiling-face.png" alt="Face Smile" class="photo-outline">
-                                        <input type="file" id="smile" accept="image/*" style="display: none;">
+                                    <div class="photo-upload face-photo" data-type="smile" style="background-image: url('<%= normal_case_files[4].file_type === 'smiling' ? normal_case_files[4].signedurl : '/assets/images/full-smiling-face.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="smile" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'smiling', 'Choose File') %>">
                                     </div>
-                                    <div class="photo-upload face-photo" data-type="profile">
-                                        <img src="/assets/images/right-side-profile.png" alt="Face Profile" class="photo-outline">
-                                        <input type="file" id="profile" accept="image/*" style="display: none;">
+                                    <div class="photo-upload face-photo" data-type="profile" style="background-image: url('<%= normal_case_files[5].file_type === 'right_side' ? normal_case_files[5].signedurl : '/assets/images/right-side-profile.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="profile" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'right_side', 'Choose File') %>">
                                     </div>
                                 </div>
                                 
                                 <div class="photo-row">
-                                    <div class="photo-upload teeth-photo" data-type="left">
-                                        <img src="/assets/images/buccal-right.png" alt="Teeth Left" class="photo-outline">
-                                        <input type="file" id="left" accept="image/*" style="display: none;">
+                                    <div class="photo-upload teeth-photo" data-type="left" style="background-image: url('<%= normal_case_files[10].file_type === 'buccal_left' ? normal_case_files[10].signedurl : '/assets/images/buccal-left.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="left" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'buccal_left', 'Choose File') %>">
                                     </div>
-                                    <div class="photo-upload teeth-photo" data-type="front">
-                                        <img src="/assets/images/bretracted-anterior-frontal.png" alt="Teeth Front" class="photo-outline">
-                                        <input type="file" id="front" accept="image/*" style="display: none;">
+                                    <div class="photo-upload teeth-photo" data-type="front" style="background-image: url('<%= normal_case_files[9].file_type === 'buccal_center' ? normal_case_files[9].signedurl : '/assets/images/bretracted-anterior-frontal.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="front" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'buccal_center', 'Choose File') %>">
                                     </div>
-                                    <div class="photo-upload teeth-photo" data-type="right">
-                                        <img src="/assets/images/buccal-left.png" alt="Teeth Right" class="photo-outline">
-                                        <input type="file" id="right" accept="image/*" style="display: none;">
+                                    <div class="photo-upload teeth-photo" data-type="right" style="background-image: url('<%= normal_case_files[8].file_type === 'buccal_right' ? normal_case_files[8].signedurl : '/assets/images/buccal-right.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="right" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'buccal_right', 'Choose File') %>">
                                     </div>
-                                    <div class="photo-upload teeth-photo" data-type="upper">
-                                        <img src="/assets/images/mandibular-occlusal.png" alt="Teeth Upper" class="photo-outline">
-                                        <input type="file" id="upper" accept="image/*" style="display: none;">
+                                    <div class="photo-upload teeth-photo" data-type="upper" style="background-image: url('<%= normal_case_files[6].file_type === 'buccal_top' ? normal_case_files[6].signedurl : '/assets/images/mandibular-occlusal.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="upper" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'buccal_top', 'Choose File') %>">
                                     </div>
-                                    <div class="photo-upload teeth-photo" data-type="lower">
-                                        <img src="/assets/images/maxillary-occlusal.png" alt="Teeth Lower" class="photo-outline">
-                                        <input type="file" id="lower" accept="image/*" style="display: none;">
+                                    <div class="photo-upload teeth-photo" data-type="lower" style="background-image: url('<%= normal_case_files[7].file_type === 'buccal_bottom' ? normal_case_files[7].signedurl : '/assets/images/maxillary-occlusal.png' %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="lower" accept="image/*" style="display: none;" value="<%= getFileNameOrPlaceholder(normal_case_files, 'buccal_bottom', 'Choose File') %>">
                                     </div>
                                 </div>
                             </div>
@@ -357,11 +361,12 @@
                             </label>
                             <div class="file-upload file-upload-simple">
                                 <input type="file" id="xray" name="xray" accept=".jpg,.jpeg,.png,.zip">
-                                <div class="upload-placeholder">
-                                    <span>Choose File</span>
-                                    <img src="/assets/images/file-upload.png" id="xray" alt="Upload Icon" class="file-upload-icon">
+                                                                <div class="upload-placeholder">
+                                    <span><%= getFileNameOrPlaceholder(normal_case_files, 'xray', 'Choose File') %></span>
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
                                 </div>
                             </div>
+                            <div class="field-error-message"></div>
                         </div>
 
                         <!-- Other Documents Upload -->
@@ -371,11 +376,12 @@
                             </label>
                             <div class="file-upload file-upload-simple">
                                 <input type="file" id="documents" name="documents" accept=".jpg,.jpeg,.png,.zip">
-                                <div class="upload-placeholder">
-                                    <span>Choose File</span>
-                                    <img src="/assets/images/file-upload.png" id="documents" alt="Upload Icon" class="file-upload-icon">
+                                                                <div class="upload-placeholder">
+                                    <span><%= getFileNameOrPlaceholder(normal_case_files, 'other', 'Choose File') %></span>
+                                    <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
                                 </div>
                             </div>
+                            <div class="field-error-message"></div>
                         </div>
                     </div>
                 </div>
@@ -397,44 +403,154 @@
             loadComponent('navRail', '/components/side-menu');
         });
 
+        // Track file operations for backend processing
+        const removedFiles = new Set();
+        const fileFlags = new Map(); // Map file types to their flags: 'new', 'existing', 'remove'
+        
+        // Initialize file flags based on existing files from backend
+        function initializeFileFlags() {
+            const fileTypes = ['upper_scan', 'lower_scan', 'bite_scan', 'front', 'smiling', 'right_side', 
+                              'buccal_top', 'buccal_bottom', 'buccal_right', 'buccal_center', 'buccal_left', 
+                              'xray', 'other'];
+            
+            const backendFiles = <%- JSON.stringify(normal_case_files) %>;
+            console.log('Backend files data:', backendFiles);
+            
+            fileTypes.forEach(fileType => {
+                // Check if file exists in backend data
+                const backendFile = backendFiles.find(file => file.file_type === fileType);
+                if (backendFile) {
+                    fileFlags.set(fileType, 'existing');
+                    console.log(`File ${fileType} flagged as existing from backend data`);
+                }
+            });
+            
+            console.log('Initialized file flags:', Object.fromEntries(fileFlags));
+        }
+
+        // Function to add cancel button to file upload
+        function addCancelButton(input, uploadPlaceholder, firstSpan) {
+            let cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
+            if (!cancelBtn) {
+                cancelBtn = document.createElement('button');
+                cancelBtn.className = 'cancel-upload';
+                cancelBtn.type = 'button';
+                cancelBtn.innerHTML = '<img src="/assets/images/cancel-file-upload.svg" alt="Remove file">';
+                uploadPlaceholder.appendChild(cancelBtn);
+                
+                // Add click handler to remove file
+                cancelBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const fileType = getFileTypeFromInputId(input.id);
+                    
+                    // Update file flags based on current state
+                    if (fileType) {
+                        if (fileFlags.get(fileType) === 'existing') {
+                            // Mark existing file for removal
+                            fileFlags.set(fileType, 'remove');
+                            removedFiles.add(fileType);
+                        } else if (fileFlags.get(fileType) === 'new') {
+                            // Remove new file flag (file was just uploaded but now removed)
+                            fileFlags.delete(fileType);
+                        }
+                    }
+                    
+                    // Clear the file input
+                    input.value = '';
+                    
+                    // Reset the UI
+                    firstSpan.textContent = 'Choose File';
+                    input.parentNode.classList.remove('has-file');
+                    cancelBtn.remove();
+                    
+                    // Clear any validation state
+                    if (window.formValidation) {
+                        window.formValidation.clearValidation(input);
+                    }
+                });
+            }
+        }
+
+        // Helper function to map input IDs to file types
+        function getFileTypeFromInputId(inputId) {
+            const mapping = {
+                'upperScan': 'upper_scan',
+                'lowerScan': 'lower_scan',
+                'biteScan': 'bite_scan',
+                'xray': 'xray',
+                'documents': 'other',
+                'frontal': 'front',
+                'smile': 'smiling',
+                'profile': 'right_side',
+                'left': 'buccal_left',
+                'front': 'buccal_center',
+                'right': 'buccal_right',
+                'upper': 'buccal_top',
+                'lower': 'buccal_bottom'
+            };
+            return mapping[inputId] || null;
+        }
+
+        // Helper function to map file types to input IDs (reverse mapping)
+        function getInputIdFromFileType(fileType) {
+            const mapping = {
+                'upper_scan': 'upperScan',
+                'lower_scan': 'lowerScan',
+                'bite_scan': 'biteScan',
+                'xray': 'xray',
+                'other': 'documents',
+                'front': 'frontal',
+                'smiling': 'smile',
+                'right_side': 'profile',
+                'buccal_left': 'left',
+                'buccal_center': 'front',
+                'buccal_right': 'right',
+                'buccal_top': 'upper',
+                'buccal_bottom': 'lower'
+            };
+            return mapping[fileType] || null;
+        }
+
+        // Initialize file flags when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFileFlags();
+        });
+
+        // Initialize cancel buttons for existing files from backend
+        document.querySelectorAll('.file-upload-simple').forEach(fileUpload => {
+            const input = fileUpload.querySelector('input[type="file"]');
+            const uploadPlaceholder = fileUpload.querySelector('.upload-placeholder');
+            const firstSpan = uploadPlaceholder.querySelector('span:first-child');
+            
+            // Check if file exists from backend (span text is not "Choose File")
+            if (firstSpan && firstSpan.textContent !== 'Choose File') {
+                fileUpload.classList.add('has-file');
+                addCancelButton(input, uploadPlaceholder, firstSpan);
+            }
+        });
+
         // File upload handling
         document.querySelectorAll('.file-upload input[type="file"]').forEach(input => {
             input.addEventListener('change', function() {
                 const uploadPlaceholder = this.parentNode.querySelector('.upload-placeholder');
                 const firstSpan = uploadPlaceholder.querySelector('span:first-child');
+                const fileType = getFileTypeFromInputId(this.id);
                 
                 if (this.files.length > 0) {
+                    // Mark as new file upload
+                    if (fileType) {
+                        fileFlags.set(fileType, 'new');
+                        // Remove from removed files if it was marked for removal
+                        removedFiles.delete(fileType);
+                    }
+                    
                     if (this.parentNode.classList.contains('file-upload-simple')) {
                         firstSpan.textContent = this.files[0].name;
                         
                         // Add cancel button for uploaded file
-                        let cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
-                        if (!cancelBtn) {
-                            cancelBtn = document.createElement('button');
-                            cancelBtn.className = 'cancel-upload';
-                            cancelBtn.type = 'button';
-                            cancelBtn.innerHTML = '<img src="/assets/images/cancel-file-upload.svg" alt="Remove file">';
-                            uploadPlaceholder.appendChild(cancelBtn);
-                            
-                            // Add click handler to remove file
-                            cancelBtn.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                
-                                // Clear the file input
-                                this.value = '';
-                                
-                                // Reset the UI
-                                firstSpan.textContent = 'Choose File';
-                                this.parentNode.classList.remove('has-file');
-                                cancelBtn.remove();
-                                
-                                // Clear any validation state
-                                if (window.formValidation) {
-                                    window.formValidation.clearValidation(this);
-                                }
-                            });
-                        }
+                        addCancelButton(this, uploadPlaceholder, firstSpan);
                     } else {
                         firstSpan.textContent = this.files[0].name;
                     }
@@ -487,7 +603,7 @@
                             upload.style.backgroundImage = `url(${e.target.result})`;
                             upload.style.backgroundSize = 'cover';
                             upload.style.backgroundPosition = 'center';
-                            upload.classList.add('has-image');
+                            //upload.classList.add('has-image');
                         };
                         reader.readAsDataURL(file);
                     }
@@ -496,6 +612,15 @@
 
             input.addEventListener('change', function() {
                 if (this.files.length > 0) {
+                    // Update file flags for clinical photos
+                    const fileType = getFileTypeFromInputId(this.id);
+                    if (fileType) {
+                        fileFlags.set(fileType, 'new');
+                        // Remove from removed files if it was marked for removal
+                        removedFiles.delete(fileType);
+                        console.log(`Clinical photo ${fileType} flagged as new`);
+                    }
+                    
                     const file = this.files[0];
                     if (file.type.startsWith('image/')) {
                         const reader = new FileReader();
@@ -503,7 +628,7 @@
                             upload.style.backgroundImage = `url(${e.target.result})`;
                             upload.style.backgroundSize = 'cover';
                             upload.style.backgroundPosition = 'center';
-                            upload.classList.add('has-image');
+                            //upload.classList.add('has-image');
                         };
                         reader.readAsDataURL(file);
                     }
@@ -511,82 +636,92 @@
             });
         });
 
-        // Form submission
-        document.getElementById('addCaseForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-             // Clear any existing validation errors
+        // Validation rules
+        const validations = [
+            {
+                field: 'patientName',
+                rule: 'required',
+                message: 'Name is required.'
+            },
+            {
+                field: 'patientGender',
+                rule: 'required',
+                message: 'Gender is required.'
+            },
+            {
+                field: 'dateOfBirth',
+                rule: 'required',
+                message: 'Date of Birth is required.'
+            },
+            {
+                field: 'treatmentBrand',
+                rule: 'required',
+                message: 'Treatment Brand is required.'
+            },
+            {
+                field: 'customSN',
+                rule: 'required',
+                message: 'Custom SN is required.'
+            },
+            {
+                field: 'ipr',
+                rule: 'required',
+                message: 'IPR is required.'
+            },
+            {
+                field: 'attachments',
+                rule: 'required',
+                message: 'Attachments is required.'
+            },
+            {
+                field: 'modelType',
+                rule: 'required',
+                message: 'Model Type is required.'
+            },
+            {
+                field: 'upperScan',
+                rule: function(value, fieldElement) {
+                    // Check if new file is selected OR existing file is displayed
+                    const hasNewFile = fieldElement.files && fieldElement.files.length > 0;
+                    const uploadPlaceholder = fieldElement.parentNode.querySelector('.upload-placeholder span:first-child');
+                    const hasExistingFile = uploadPlaceholder && uploadPlaceholder.textContent !== 'Choose File';
+                    return hasNewFile || hasExistingFile;
+                },
+                message: 'Upper Scan is required.'
+            },
+            {
+                field: 'lowerScan',
+                rule: function(value, fieldElement) {
+                    // Check if new file is selected OR existing file is displayed
+                    const hasNewFile = fieldElement.files && fieldElement.files.length > 0;
+                    const uploadPlaceholder = fieldElement.parentNode.querySelector('.upload-placeholder span:first-child');
+                    const hasExistingFile = uploadPlaceholder && uploadPlaceholder.textContent !== 'Choose File';
+                    return hasNewFile || hasExistingFile;
+                },
+                message: 'Lower Scan is required.'
+            }
+        ];
+
+        // Function to handle form submission
+        async function handleFormSubmission(status, button) {
+            // Clear any existing validation errors
             formValidation.clearAllValidation('createUserForm');
             formValidation.clearFormError('createUserForm');
 
-              // Define validation rules
-              const validations = [
-                {
-                    field: 'patientName',
-                    rule: 'required',
-                    message: 'Name is required.'
-                },
-                {
-                    field: 'patientGender',
-                    rule: 'required',
-                    message: 'Gender is required.'
-                },
-                {
-                    field: 'dateOfBirth',
-                    rule: 'required',
-                    message: 'Date of Birth is required.'
-                },
-                {
-                    field: 'treatmentBrand',
-                    rule: 'required',
-                    message: 'Treatment Brand is required.'
-                },
-                {
-                    field: 'customSN',
-                    rule: 'required',
-                    message: 'Custom SN is required.'
-                },
-                {
-                    field: 'ipr',
-                    rule: 'required',
-                    message: 'IPR is required.'
-                },
-                {
-                    field: 'attachments',
-                    rule: 'required',
-                    message: 'Attachments is required.'
-                },
-                {
-                    field: 'modelType',
-                    rule: 'required',
-                    message: 'Model Type is required.'
-                },
-                {
-                    field: 'upperScan',
-                    rule: 'required',
-                    message: 'Upper Scan is required.'
-                },
-                {
-                    field: 'lowerScan',
-                    rule: 'required',
-                    message: 'Lower Scan is required.'
-                },
-                
-            ];
-            
-            // Validate all fields
-            const isValid = formValidation.validateFields(validations);
+            // For drafts, skip validation
+            //if (status === '1') {
+                // Validate all fields for submission
+                const isValid = formValidation.validateFields(validations);
+                if (!isValid) {
+                    return;
+                }
+            //}
 
-            if (!isValid) {
-                return;
-            }
-
-            // Disable submit button and show loading state
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-            submitBtn.textContent = 'Submitting Case...';
+            // Disable button and show loading state
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.classList.add('loading');
+            button.textContent = status === '1' ? 'Submitting Case...' : 'Saving Draft...';
 
             const formData = new FormData();
             formData.append('name', document.getElementById('patientName').value);
@@ -613,9 +748,21 @@
             const lowerScanFile = document.getElementById('lowerScan').files[0];
             const biteScanFile = document.getElementById('biteScan').files[0];
             
-            if (upperScanFile) formData.append('upper_scan', upperScanFile);
-            if (lowerScanFile) formData.append('lower_scan', lowerScanFile);
-            if (biteScanFile) formData.append('bite_scan', biteScanFile);
+            console.log('upperScanFile', upperScanFile);
+            console.log('lowerScanFile', lowerScanFile);
+            console.log('biteScanFile', biteScanFile);
+            if (upperScanFile) {
+                formData.append('upper_scan', upperScanFile);
+                if (!fileFlags.has('upper_scan')) fileFlags.set('upper_scan', 'new');
+            }
+            if (lowerScanFile) {
+                formData.append('lower_scan', lowerScanFile);
+                if (!fileFlags.has('lower_scan')) fileFlags.set('lower_scan', 'new');
+            }
+            if (biteScanFile) {
+                formData.append('bite_scan', biteScanFile);
+                if (!fileFlags.has('bite_scan')) fileFlags.set('bite_scan', 'new');
+            }
 
             //clinical photos - append actual files, not values
             const frontalFile = document.getElementById('frontal').files[0];
@@ -629,69 +776,105 @@
             const xrayFile = document.getElementById('xray').files[0];
             const documentsFile = document.getElementById('documents').files[0];
 
-            if (frontalFile) formData.append('front', frontalFile);
-            if (smileFile) formData.append('smiling', smileFile);
-            if (profileFile) formData.append('right_side', profileFile);
-            if (leftFile) formData.append('buccal_top', leftFile);
-            if (frontFile) formData.append('buccal_bottom', frontFile);
-            if (rightFile) formData.append('buccal_right', rightFile);
-            if (upperFile) formData.append('buccal_center', upperFile);
-            if (lowerFile) formData.append('buccal_left', lowerFile);
-            if (xrayFile) formData.append('xray', xrayFile);
-            if (documentsFile) formData.append('other', documentsFile);
+            if (frontalFile) {
+                formData.append('front', frontalFile);
+                if (!fileFlags.has('front')) fileFlags.set('front', 'new');
+            }
+            if (smileFile) {
+                formData.append('smiling', smileFile);
+                if (!fileFlags.has('smiling')) fileFlags.set('smiling', 'new');
+            }
+            if (profileFile) {
+                formData.append('right_side', profileFile);
+                if (!fileFlags.has('right_side')) fileFlags.set('right_side', 'new');
+            }
+            if (leftFile) {
+                formData.append('buccal_left', leftFile);
+                if (!fileFlags.has('buccal_left')) fileFlags.set('buccal_left', 'new');
+            }
+            if (frontFile) {
+                formData.append('buccal_center', frontFile);
+                if (!fileFlags.has('buccal_center')) fileFlags.set('buccal_center', 'new');
+            }
+            if (rightFile) {
+                formData.append('buccal_right', rightFile);
+                if (!fileFlags.has('buccal_right')) fileFlags.set('buccal_right', 'new');
+            }
+            if (upperFile) {
+                formData.append('buccal_top', upperFile);
+                if (!fileFlags.has('buccal_top')) fileFlags.set('buccal_top', 'new');
+            }
+            if (lowerFile) {
+                formData.append('buccal_bottom', lowerFile);
+                if (!fileFlags.has('buccal_bottom')) fileFlags.set('buccal_bottom', 'new');
+            }
+            if (xrayFile) {
+                formData.append('xray', xrayFile);
+                if (!fileFlags.has('xray')) fileFlags.set('xray', 'new');
+            }
+            if (documentsFile) {
+                formData.append('other', documentsFile);
+                if (!fileFlags.has('other')) fileFlags.set('other', 'new');
+            }
 
-            formData.append('xray', document.getElementById('xray').value);
-            formData.append('other', document.getElementById('documents').value);
-            formData.append('status', '0'); // 0 = draft
+            // Add case ID for update operation
+            formData.append('case_id', '<%= caseid %>');
+            formData.append('status', status);
             formData.append('category', 'New Case');
+            
+            // Add file flags information for backend to process
+            const fileFlagsObject = Object.fromEntries(fileFlags);
+            console.log('Final file flags being sent:', fileFlagsObject);
+            formData.append('file_flags', JSON.stringify(fileFlagsObject));
+            
+            // Add removed files information for backend to process (keeping for backward compatibility)
+            if (removedFiles.size > 0) {
+                formData.append('removed_files', JSON.stringify(Array.from(removedFiles)));
+            }
+
             try {
-                const response = await axios.post('/add-case', formData, {
+                console.log('Sending form data to:', '/add-case/<%= caseid %>');
+                console.log('FormData entries:');
+                for (let pair of formData.entries()) {
+                    console.log(pair[0], pair[1]);
+                }
+                
+                const response = await axios.post('/add-case/<%= caseid %>', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                })
-                .then(response => {
-                    // Redirect to cases list with success message
-                    window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
-                })
-                .catch(error => {
-                    // Show error message
-                    console.log('error', error);
-                    Toast.error('Failed to submit case. Please try again.');
-                    return;
+                }).then(response => {
+                    Toast.success(response.data.message);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 });
+
             } catch (error) {
                 console.log('error', error);
-                Toast.error('Network error. Please check your connection and try again.');
+                Toast.error(status === '1' ? 
+                    'Failed to submit case. Please try again.' : 
+                    'Failed to save draft. Please try again.');
             } finally {
                 // Reset button state
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('loading');
-                submitBtn.textContent = originalText;
+                button.disabled = false;
+                button.classList.remove('loading');
+                button.textContent = originalText;
             }
+        }
+
+        // Form submission event listeners
+        document.getElementById('submitBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleFormSubmission('1', e.target);
         });
 
-        // Save as draft
-        document.getElementById('saveDraftBtn').addEventListener('click', async () => {
-            const formData = new FormData(document.getElementById('addCaseForm'));
-            formData.append('status', '0'); // 0 = draft
-            
-            try {
-                const response = await fetch('/save-draft', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    alert('Draft saved successfully!');
-                } else {
-                    const data = await response.json();
-                    alert(data.message || 'Failed to save draft');
-                }
-            } catch (error) {
-                alert('Network error. Please try again.');
-            }
+        document.getElementById('saveDraftBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleFormSubmission('0', e.target);
         });
     </script>
 </body>
 </html>
+</html>
+

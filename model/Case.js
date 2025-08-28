@@ -122,6 +122,136 @@ class Case {
         return results;
     }
 
+    // Enhanced file upload method that handles file flags (new/existing/remove)
+    static async edit_case_file_upload_with_flags(caseid, session, files, fileFlags = {}) {
+        console.log('File flags received:', fileFlags);
+        
+        // First, handle file removals
+        for (const [fileType, flag] of Object.entries(fileFlags)) {
+            if (flag === 'remove') {
+                const deleteQuery = 'DELETE FROM file_upload_table WHERE case_id = ? AND file_type = ?';
+                await pool.query(deleteQuery, [caseid, fileType]);
+                console.log(`Removed file type: ${fileType} for case: ${caseid}`);
+            }
+        }
+
+        if (!files || files.length === 0) {
+            return { message: 'No files to process' };
+        }
+
+        // Get latest file ID for new files
+        const getFileIdQuery = 'SELECT file_id FROM file_upload_table WHERE case_id = ? ORDER BY id DESC LIMIT 1';
+        const [fileIdResult] = await pool.query(getFileIdQuery, [caseid]);
+        let latestFileId = fileIdResult.length > 0 ? fileIdResult[0].file_id : 0;
+
+        let queries = [];
+        let count = 1;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileType = file.fieldname;
+            const flag = fileFlags[fileType];
+
+            console.log(`Processing file: ${file.originalname}, type: ${fileType}, flag: ${flag}`);
+
+            if (flag === 'new' || !flag) {
+                // Check if file already exists
+                const checkQuery = 'SELECT id FROM file_upload_table WHERE case_id = ? AND file_type = ?';
+                const [existingFile] = await pool.query(checkQuery, [caseid, fileType]);
+                //console.log('existingFile', existingFile[0].id)
+                console.log('fileType', fileType)
+                console.log('file', file)
+
+                if (existingFile.length > 0) {
+                    // Update existing file - also reset limit_time_url and expired_time for new signed URL generation
+                    const updateQuery = `UPDATE file_upload_table SET 
+                        planner_id = ?, 
+                        file_name = ?, 
+                        file_originalname = ?, 
+                        file_url = ?, 
+                        updated_at = ?,
+                        limit_time_url = NULL,
+                        expired_time = NULL
+                        WHERE case_id = ? AND file_type = ?`;
+                    
+                    await pool.query(updateQuery, [
+                            session.user.id,
+                            file.key.split('.')[0], 
+                            file.originalname,
+                            file.location,
+                            new Date(),
+                            caseid,
+                            fileType
+                    ]);
+                    console.log(`Updated existing file: ${fileType} - reset limit_time_url and expired_time`);
+                } else {
+                    console.log('insert new file')
+                    // Insert new file
+                    const storeSignUrl = domainname + caseid + `/` + (latestFileId + count);
+                    const insertQuery = `INSERT INTO file_upload_table SET 
+                        planner_id = ?, 
+                        case_id = ?, 
+                        file_type = ?, 
+                        file_name = ?, 
+                        file_originalname = ?, 
+                        file_url = ?, 
+                        signedurl = ?, 
+                        file_id = ?`;
+                    
+                    await pool.query(insertQuery, [
+                            session.user.id,
+                            caseid,
+                            fileType,
+                            file.key.split('.')[0],
+                            file.originalname,
+                            file.location,
+                            storeSignUrl,
+                            latestFileId + count
+                    ]);
+                    console.log(`Inserted new file: ${fileType}`);
+                    count++;
+                }
+            }
+        }
+
+        // Execute all queries
+        for (const queryObj of queries) {
+            await pool.query(queryObj.query, queryObj.params);
+        }
+
+        return { message: 'File operations completed successfully' };
+    }
+
+    // Helper method to validate if required scan files exist based on flags
+    static async validateRequiredFiles(caseid, fileFlags = {}) {
+        const requiredFileTypes = ['upper_scan', 'lower_scan'];
+        const validationResults = {};
+
+        for (const fileType of requiredFileTypes) {
+            const flag = fileFlags[fileType];
+            
+            if (flag === 'remove') {
+                // File is being removed, so it's invalid
+                validationResults[fileType] = false;
+            } else if (flag === 'new') {
+                // New file being uploaded, so it's valid
+                validationResults[fileType] = true;
+            } else if (flag === 'existing') {
+                // File should already exist in database
+                const checkQuery = 'SELECT id FROM file_upload_table WHERE case_id = ? AND file_type = ?';
+                const [result] = await pool.query(checkQuery, [caseid, fileType]);
+                validationResults[fileType] = result.length > 0;
+            } else {
+                // No flag provided, check if file exists in database
+                const checkQuery = 'SELECT id FROM file_upload_table WHERE case_id = ? AND file_type = ?';
+                const [result] = await pool.query(checkQuery, [caseid, fileType]);
+                validationResults[fileType] = result.length > 0;
+            }
+        }
+
+        return validationResults;
+    }
+
     static async get_patient_details_data(caseid) {
         const query = 'SELECT id, case_id, name, gender, dob, email, treatment_brand, custom_sn, category, status, updated_at FROM patient_table WHERE case_id = ? LIMIT 1';
         const values = [caseid];
@@ -147,19 +277,22 @@ class Case {
         const values = [caseid];
         const [results] = await pool.query(query, values);
         //get model type from treatment_model_table
-        const model_type_query = 'SELECT model_type FROM treatment_model_table WHERE case_id = ?';
+        const model_type_query = 'SELECT model_type, product, product_arrival_date FROM treatment_model_table WHERE case_id = ?';
         const [model_type_result] = await pool.query(model_type_query, values);
         const model_type = model_type_result[0].model_type;
+        const product = model_type_result[0].product;
+        const product_arrival_date = model_type_result[0].product_arrival_date;
+        console.log('model_type_result', model_type_result)
         
         if(results.length == 0){
             throw new CustomError('No Patient Model Found', 401)
         }
-        return {results, model_type};
+        return {results, model_type, product, product_arrival_date};
     }
 
     static async get_normal_case_data(caseid) {
         let returndata = [];
-        const query = 'SELECT patient_table.id, patient_table.case_id, patient_table.name, patient_table.gender, patient_table.dob, patient_table.email, patient_table.treatment_brand, patient_table.custom_sn, patient_table.category, patient_table.status, patient_table.updated_at, treatment_model_table.crowding, treatment_model_table.deep_bite, treatment_model_table.spacing, treatment_model_table.narrow_arch, treatment_model_table.class_ii_div_1, treatment_model_table.class_ii_div_2, treatment_model_table.class_iii, treatment_model_table.open_bite, treatment_model_table.overjet, treatment_model_table.anterior_crossbite, treatment_model_table.posterior_crossbite, treatment_model_table.others, treatment_model_table.ipr, treatment_model_table.attachments, treatment_model_table.treatment_notes FROM patient_table JOIN treatment_model_table ON patient_table.case_id = treatment_model_table.case_id WHERE patient_table.case_id = ? LIMIT 1';
+        const query = 'SELECT patient_table.id, patient_table.case_id, patient_table.name, patient_table.gender, patient_table.dob, patient_table.email, patient_table.treatment_brand, patient_table.custom_sn, patient_table.category, patient_table.status, patient_table.updated_at, treatment_model_table.crowding, treatment_model_table.deep_bite, treatment_model_table.spacing, treatment_model_table.narrow_arch, treatment_model_table.class_ii_div_1, treatment_model_table.class_ii_div_2, treatment_model_table.class_iii, treatment_model_table.open_bite, treatment_model_table.overjet, treatment_model_table.anterior_crossbite, treatment_model_table.posterior_crossbite, treatment_model_table.others, treatment_model_table.ipr, treatment_model_table.attachments, treatment_model_table.treatment_notes, treatment_model_table.model_type FROM patient_table JOIN treatment_model_table ON patient_table.case_id = treatment_model_table.case_id WHERE patient_table.case_id = ? LIMIT 1';
         const value = [caseid];
         const [data_result] = await pool.query(query, value);
         if(data_result.length == 0){

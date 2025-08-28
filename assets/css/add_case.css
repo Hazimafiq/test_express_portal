@@ -401,13 +401,18 @@ body {
 }
 
 .file-upload-simple.has-file {
-    border-color: #003366;
-    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
 }
 
 .file-upload-simple.has-file .upload-placeholder span:first-child {
-    color: #003366;
+    color: var(--Colour-text-subtle, #333);
+    font-size: 14px;
+    font-style: normal;
     font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
 }
 
 /* File uploaded state with cancel functionality */
@@ -681,7 +686,7 @@ body {
     /* Sticky positioning */
     position: sticky;
     bottom: 2rem;
-    z-index: 1000;
+    z-index: 100;
     
     /* Form actions specific styling */
     display: flex;
@@ -783,6 +788,38 @@ body {
     font-weight: 500;
     line-height: 20px; /* 142.857% */
     letter-spacing: 0.28px;
+}
+
+/* Default state: placeholder text in grey */
+.form-field select {
+    color: var(--Colour-text-subtlest, #A1A1A1);
+}
+
+/* When select is focused (dropdown open), show text in black */
+.form-field select:focus {
+    color: #000000;
+}
+
+/* When select has a meaningful value selected, show it in black */
+.form-field select option:checked:not([value=""]) {
+    color: #000000;
+}
+
+/* JavaScript will add this class to change text color when a value is selected */
+.form-field select.has-value {
+    color: #000000;
+}
+
+/* Style for select options when dropdown is open */
+.form-field select option {
+    color: #000000;
+    background: #ffffff;
+}
+
+/* When an option is selected, keep it black */
+.form-field select option:checked {
+    color: #000000;
+    background: #f0f0f0;
 }
 
 /* Custom arrow icon positioned on the wrapper */

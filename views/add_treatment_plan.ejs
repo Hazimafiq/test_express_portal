@@ -21,7 +21,7 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item">Case Details C0000<%= caseId %></span>
+                <a href="/cases/<%= caseId %>" class="breadcrumb-item">Case Details <%= caseId %></a>
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
@@ -81,7 +81,7 @@
                 <!-- Form Actions Container -->
                 <div class="form-container form-actions-container">
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/cases/<%= caseId %>'">Cancel</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>

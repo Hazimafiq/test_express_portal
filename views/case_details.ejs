@@ -418,7 +418,11 @@
             const updateCaseBtn = document.getElementById('updateCaseBtn');
             if (updateCaseBtn) {
                 updateCaseBtn.addEventListener('click', () => {
-                    window.location.href = `/add-case/${window.CASE_ID}`;
+                    if('<%= patient_details.category %>' === 'New Case') {
+                        window.location.href = `/update-case/${window.CASE_ID}`;
+                    } else {
+                        window.location.href = `/update-case-stl/${window.CASE_ID}`;
+                    }
                 });
             }
 
@@ -502,7 +506,7 @@
                                                     if (data[0].overjet == 1) conditions.push('Overjet');
                                                     if (data[0].anterior_crossbite == 1) conditions.push('Anterior Crossbite');
                                                     if (data[0].posterior_crossbite == 1) conditions.push('Posterior Crossbite');
-                                                    if (data[0].others == 1) conditions.push(data[0].others);
+                                                    if (data[0].others == 1) conditions.push('Others');
                                                     return conditions.length > 0 ? conditions.join(', ') : 'None';
                                                 })()}</span>
                                             </div>
@@ -548,9 +552,11 @@
                         // Fetch attachments data
                         axios.get(`/get_patient_model?caseid=${window.CASE_ID}`)
                             .then(response => {
-                                const {results, model_type} = response.data.patient_model_details;
-                                // console.log('files', results);
-                                // console.log('patient_details', created_at);
+                                const {results, model_type, product, product_arrival_date} = response.data.patient_model_details;
+                                console.log('files', results);
+                                console.log('model_type', model_type);
+                                console.log('product', product);
+                                console.log('product_arrival_date', product_arrival_date);
                                 // Group files by type
                                 const filesByType = {
                                     'upper_scan': [],
@@ -574,7 +580,7 @@
                                     }
                                 });
 
-                                attachmentsPanel.innerHTML = generateAttachmentsHTML(filesByType, model_type);
+                                attachmentsPanel.innerHTML = generateAttachmentsHTML(filesByType, model_type, product, product_arrival_date);
                                 
                                 setupPhotoModal();
                             })
@@ -587,7 +593,7 @@
             });
 
             // Function to generate attachments HTML
-            function generateAttachmentsHTML(filesByType, model_type) {
+            function generateAttachmentsHTML(filesByType, model_type, product, product_arrival_date) {
                 const category = '<%= patient_details.category %>';
                 let html = '';
 
@@ -613,12 +619,12 @@
               
                                 <div class="model-info-item">
                                     <div class="model-type-label">Product</div>
-                                    <div class="model-type-value">Clear Aligners 0.76mm</div>
+                                    <div class="model-type-value">${product}</div>
                                 </div>
                                 
                                 <div class="model-info-item">
                                     <div class="model-type-label">Product Arrival Date</div>
-                                    <div class="model-type-value">${new Date('<%= patient_details.created_at %>').toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric'})}</div>
+                                    <div class="model-type-value">${new Date(product_arrival_date).toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric'})}</div>
                                 </div>`;
                 }
 
@@ -706,14 +712,23 @@
 
                 // Clinical Photos Section (only for New Case)
                 if (category === 'New Case') {
+                      // Face photos row
+                      const facePhotos = [...filesByType.front, ...filesByType.smiling, ...filesByType.right_side];
+                      // Intraoral photos row
+                    const intraoralPhotos = [...filesByType.buccal_right, ...filesByType.buccal_center, ...filesByType.buccal_left, ...filesByType.buccal_top, ...filesByType.buccal_bottom];
                     html += `
                     <div class="attachments-container">
                         <div class="attachment-section">
-                            <h3 class="attachment-section-title">Clinical Photos</h3>
-                            <p class="attachment-section-subtitle-with-link">Please click <a href="/download/photos/${window.CASE_ID}" class="link" id="downloadPhotosLink">here</a> to download all photos.</p>`;
+                            <h3 class="attachment-section-title">Clinical Photos</h3>`;
+                            if (facePhotos.length > 0 || intraoralPhotos.length > 0) {
+                                html += `
+                                <p class="attachment-section-subtitle-with-link">Please click <a href="/download/photos/${window.CASE_ID}" class="link" id="downloadPhotosLink">here</a> to download all photos.</p>`;
+                            } else {
+                                html += `
+                                <p class="attachment-section-subtitle">No file uploaded.</p>`;
+                            }
 
-                    // Face photos row
-                    const facePhotos = [...filesByType.front, ...filesByType.smiling, ...filesByType.right_side];
+                  
                     if (facePhotos.length > 0) {
                         html += `
                             <div class="attachment-files-row">`;
@@ -734,8 +749,7 @@
                             </div>`;
                     }
 
-                    // Intraoral photos row
-                    const intraoralPhotos = [...filesByType.buccal_right, ...filesByType.buccal_center, ...filesByType.buccal_left, ...filesByType.buccal_top, ...filesByType.buccal_bottom];
+                    
                     if (intraoralPhotos.length > 0) {
                         html += `
                             <div class="attachment-files-row">`;
@@ -764,12 +778,15 @@
                     html += `
                     <div class="attachments-container">
                         <div class="attachment-section">
-                            <h3 class="attachment-section-title">X-Ray</h3>
-                            <div class="attachment-fields">`;
+                            <h3 class="attachment-section-title">X-Ray</h3>`;
+                          
                     
-                                         if (filesByType.xray.length > 0) {
+                    if (filesByType.xray.length > 0) {
+                        html += `
+                        <div class="attachment-fields">`;
                          filesByType.xray.forEach(file => {
                              html += `
+                            
                                  <div class="attachment-field-group">
                                      <div class="attachment-input-field" onclick="window.location.href='/download/file/${window.CASE_ID}/xray'" style="cursor: pointer;">
                                          <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
@@ -778,19 +795,17 @@
                                             
                                          </div>
                                      </div>
-                                 </div>`;
+                                 </div>
+                              `;
                          });
+                         html += `
+                         </div>`;
                      } else {
                         html += `
-                                <div class="attachment-field-group">
-                                    <div class="attachment-input-field">
-                                        <span class="attachment-filename">No file uploaded.</span>
-                                    </div>
-                                </div>`;
+                                <p class="attachment-section-subtitle">No file uploaded.</p>`;
                     }
                     
                     html += `
-                            </div>
                         </div>
                     </div>`;
 
@@ -798,12 +813,13 @@
                     html += `
                     <div class="attachments-container">
                         <div class="attachment-section">
-                            <h3 class="attachment-section-title">Other Documents / Photos</h3>
-                            <div class="attachment-fields">`;
+                            <h3 class="attachment-section-title">Other Documents / Photos</h3>`;
                     
-                                         if (filesByType.other.length > 0) {
-                         filesByType.other.forEach(file => {
-                             html += `
+                        if (filesByType.other.length > 0) {
+                            html += `
+                            <div class="attachment-fields">`;
+                            filesByType.other.forEach(file => {
+                                html += `
                                  <div class="attachment-field-group">
                                      <div class="attachment-input-field" onclick="window.location.href='/download/file/${window.CASE_ID}/other'" style="cursor: pointer;">
                                          <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
@@ -813,18 +829,16 @@
                                          </div>
                                      </div>
                                  </div>`;
-                         });
+                            });
+                            html += `
+                            </div>`;
                      } else {
                         html += `
-                                <div class="attachment-field-group">
-                                    <div class="attachment-input-field">
-                                        <span class="attachment-filename">No file uploaded.</span>
-                                    </div>
-                                </div>`;
+                                <p class="attachment-section-subtitle">No file uploaded.</p>`;
                     }
                     
                     html += `
-                            </div>
+                            
                         </div>
                     </div>`;
                 }

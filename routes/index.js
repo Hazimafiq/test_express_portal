@@ -66,6 +66,26 @@ router.get('/aligners-cases', requireAuth, (req, res) => {
     });
 });
 
+// Update case route (must come before /cases/:caseId to avoid route conflicts)
+router.get('/update-case/:caseid', requireAuth, async (req, res) => {
+    const { caseid } = req.params;
+    //console.log('testt')
+    try {
+        const normal_case_details = await get_normal_case_data(caseid);
+        //console.log('normal_case_details', normal_case_details[0][0]);
+        //console.log('normal_case_details', normal_case_details[1]);
+        res.render('update_case', { 
+            caseid, 
+            normal_case_details: normal_case_details[0][0],
+            normal_case_files: normal_case_details[1],
+            user: req.session.user
+        });
+    } catch (error) {
+        console.error('Error fetching normal case details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 // Case details route
 router.get('/cases/:caseId', requireAuth, async (req, res) => {
     const { caseId } = req.params;
@@ -122,17 +142,6 @@ router.get('/download/models/:caseid', requireAuth, downloadModelFiles);
 router.get('/download/photos/:caseid', requireAuth, downloadClinicalPhotos);
 router.get('/download/file/:caseid/:filetype', requireAuth, downloadIndividualFile);
 
-router.get('/update-case', requireAuth, async (req, res) => {
-    const { caseId } = req.query;
-    try {
-        const patient_details = await get_patient_details_data(caseId);
-        res.render('update_case', { caseId, patient_details: patient_details[0] });
-    } catch (error) {
-        console.error('Error fetching patient details:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
 // Set case as draft
 router.post('/cases/:caseId/set-draft', requireAuthAPI, async (req, res) => {
     try {
@@ -170,7 +179,7 @@ router.get('/user-details/:userId', requireAuth, async (req, res) => {
     try {
         const userProfile = await get_user_profile(userId);       
         res.render('user_details', {
-            user: userProfile[0],  // userProfile is an array, take the first element
+            user: userProfile[0],  
             successMessage: success || null
         });
     } catch (error) {
@@ -185,7 +194,7 @@ router.get('/update-user/:userId', requireAuth, async (req, res) => {
     try {
         const userProfile = await get_user_profile(userId);       
         res.render('update_user', {
-            user: userProfile[0]  // userProfile is an array, take the first element
+            user: userProfile[0]  
         });
     } catch (error) {
         console.error('Error fetching user profile:', error);
