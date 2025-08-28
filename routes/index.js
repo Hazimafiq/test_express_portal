@@ -1,7 +1,7 @@
 const express = require('express');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
-const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data, get_normal_case_data, get_upload_stl_data, downloadModelFiles, downloadClinicalPhotos, downloadIndividualFile, updateCasetoDraft } = require('../controller/case');
+const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data, get_normal_case_data, get_upload_stl_data, downloadModelFiles, downloadClinicalPhotos, downloadIndividualFile, updateCasetoDraft, deleteCase } = require('../controller/case');
 const { get_file_with_signedurl } = require('../controller/file')
 const { update_comment, get_comment, update_simulation_plan, add_simulation_plan, get_simulation_plan, action_simulation_plan } = require('../controller/detail')
 
@@ -156,6 +156,9 @@ router.get('/update-case', requireAuth, async (req, res) => {
 
 // Set case as draft
 router.post('/cases/:caseId/set-draft', requireAuthAPI, updateCasetoDraft);
+
+// Set case as draft
+router.post('/cases/:caseId/delete-draft', requireAuthAPI, deleteCase);
 
 router.get('/upload-stl', requireAuth, (req, res) => {
     res.render('upload_stl');

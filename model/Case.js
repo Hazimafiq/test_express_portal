@@ -472,6 +472,16 @@ class Case {
         return results;
     }
 
+    static async deleteCase(caseId) {
+        const query = 'UPDATE patient_table SET status = "-1", updated_at = CURRENT_TIMESTAMP WHERE case_id = ?';
+        const values = [caseId];
+        const [results] = await pool.query(query, values);
+        if (results.affectedRows === 0) {
+            throw new CustomError('Case not found', 404);
+        }
+        return results;
+    }
+
     static async updateCaseStatus(caseId, status) {
         const query = 'UPDATE patient_table SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE case_id = ?';
         const values = [status, caseId];
