@@ -211,230 +211,191 @@
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
-        });
 
-        // Add new case button
-        const addNewCaseBtn = document.getElementById('addNewCaseBtn');
-        addNewCaseBtn.addEventListener('click', () => {
-            window.location.href = '/add-case';
-        });
+             // Add new case button
+            const addNewCaseBtn = document.getElementById('addNewCaseBtn');
+            addNewCaseBtn.addEventListener('click', () => {
+                window.location.href = '/add-case';
+            });
 
-        // Upload STL button
-        const uploadSTLBtn = document.getElementById('uploadSTLBtn');
-        uploadSTLBtn.addEventListener('click', () => {
-            window.location.href = '/upload-stl';
-        });
+            // Upload STL button
+            const uploadSTLBtn = document.getElementById('uploadSTLBtn');
+            uploadSTLBtn.addEventListener('click', () => {
+                window.location.href = '/upload-stl';
+            });
 
-        let currentFilters = {
-            search: '',
-            treatment_brand: '',
-            created_date: '',
-            last_updated_date: '',
-            status: 'all',
-            sortBy: 'created_at',
-            sortOrder: 'DESC',
-            limit: 10,
-            offset: 0
-        };
+            let currentFilters = {
+                search: '',
+                treatment_brand: '',
+                created_date: '',
+                last_updated_date: '',
+                status: 'all',
+                sortBy: 'created_at',
+                sortOrder: 'DESC',
+                limit: 10,
+                offset: 0
+            };
 
-        let currentPage = 1;
-        let totalCases = 0;
+            let currentPage = 1;
+            let totalCases = 0;
 
-        // Search and filter functionality
-        const searchInput = document.getElementById('searchInput');
-        const treatmentBrandFilter = document.getElementById('treatmentBrandFilter');
-        const createdDateFilter = document.getElementById('createdDateFilter');
-        const lastUpdatedFilter = document.getElementById('lastUpdatedFilter');
-        const resetFilters = document.getElementById('resetFilters');
-        const casesTableBody = document.getElementById('casesTableBody');
-        const loadingState = document.getElementById('loadingState');
-        const entriesPerPage = document.getElementById('entriesPerPage');
-        const paginationNav = document.getElementById('paginationNav');
+            // Search and filter functionality
+            const searchInput = document.getElementById('searchInput');
+            const treatmentBrandFilter = document.getElementById('treatmentBrandFilter');
+            const createdDateFilter = document.getElementById('createdDateFilter');
+            const lastUpdatedFilter = document.getElementById('lastUpdatedFilter');
+            const resetFilters = document.getElementById('resetFilters');
+            const casesTableBody = document.getElementById('casesTableBody');
+            const loadingState = document.getElementById('loadingState');
+            const entriesPerPage = document.getElementById('entriesPerPage');
+            const paginationNav = document.getElementById('paginationNav');
 
-        // Load cases from API
-        async function loadCases() {
-            try {
-                loadingState.style.display = 'block';
+            // Load cases from API
+            async function loadCases() {
+                try {
+                    loadingState.style.display = 'block';
 
-                const params = new URLSearchParams();
-                Object.keys(currentFilters).forEach(key => {
-                    if (currentFilters[key]) {
-                        params.append(key, currentFilters[key]);
-                    }
-                });
-
-                const response = await axios.get(`/get-cases?${params.toString()}`)
-                    .then(response => {
-                        const data = response.data;
-                        totalCases = data.total;
-
-                        renderCases(data.cases);
-                        updatePagination();
-                    })
-                    .catch(error => {
-                        console.error('Error loading cases:', error);
-                        Toast.error('Failed to load cases');
-                        return;
+                    const params = new URLSearchParams();
+                    Object.keys(currentFilters).forEach(key => {
+                        if (currentFilters[key]) {
+                            params.append(key, currentFilters[key]);
+                        }
                     });
 
-            } catch (error) {
-                console.error('Error loading cases:', error);
-                Toast.error('Failed to load cases');
-            } finally {
-                loadingState.style.display = 'none';
+                    const response = await axios.get(`/get-cases?${params.toString()}`)
+                        .then(response => {
+                            const data = response.data;
+                            totalCases = data.total;
+
+                            renderCases(data.cases);
+                            updatePagination();
+                        })
+                        .catch(error => {
+                            console.error('Error loading cases:', error);
+                            Toast.error('Failed to load cases');
+                            return;
+                        });
+
+                } catch (error) {
+                    console.error('Error loading cases:', error);
+                    Toast.error('Failed to load cases');
+                } finally {
+                    loadingState.style.display = 'none';
+                }
             }
-        }
 
-        // Load and update tab counts
-        async function updateTabCounts() {
-            try {
-                const params = new URLSearchParams();
-                // Only include filters that affect counts (not status, limit, offset, sortBy, sortOrder)
-                if (currentFilters.search) params.append('search', currentFilters.search);
-                if (currentFilters.treatment_brand) params.append('treatment_brand', currentFilters.treatment_brand);
-                if (currentFilters.created_date) params.append('created_date', currentFilters.created_date);
-                if (currentFilters.last_updated_date) params.append('last_updated_date', currentFilters.last_updated_date);
+            // Load and update tab counts
+            async function updateTabCounts() {
+                try {
+                    const params = new URLSearchParams();
+                    // Only include filters that affect counts (not status, limit, offset, sortBy, sortOrder)
+                    if (currentFilters.search) params.append('search', currentFilters.search);
+                    if (currentFilters.treatment_brand) params.append('treatment_brand', currentFilters.treatment_brand);
+                    if (currentFilters.created_date) params.append('created_date', currentFilters.created_date);
+                    if (currentFilters.last_updated_date) params.append('last_updated_date', currentFilters.last_updated_date);
 
-                const response = await axios.get(`/get-case-counts?${params.toString()}`);
-                const counts = response.data;
+                    const response = await axios.get(`/get-case-counts?${params.toString()}`);
+                    const counts = response.data;
 
-                // Update tab counts
-                document.querySelector('[data-status="all"] .tab-count').textContent = counts.all || 0;
-                document.querySelector('[data-status="0"] .tab-count').textContent = counts[0] || 0;
-                document.querySelector('[data-status="1"] .tab-count').textContent = counts[1] || 0;
-            } catch (error) {
-                console.error('Error loading case counts:', error);
-                Toast.error('Failed to load case counts');
+                    // Update tab counts
+                    document.querySelector('[data-status="all"] .tab-count').textContent = counts.all || 0;
+                    document.querySelector('[data-status="0"] .tab-count').textContent = counts[0] || 0;
+                    document.querySelector('[data-status="1"] .tab-count').textContent = counts[1] || 0;
+                } catch (error) {
+                    console.error('Error loading case counts:', error);
+                    Toast.error('Failed to load case counts');
+                }
             }
-        }
 
-        // Render cases in table
-        function renderCases(cases) {
-            casesTableBody.innerHTML = '';
+            // Render cases in table
+            function renderCases(cases) {
+                casesTableBody.innerHTML = '';
 
-            if (cases.length === 0) {
-                // Show empty state row within table
-                const emptyRow = document.createElement('tr');
-                emptyRow.innerHTML = `
-                        <td colspan="6" class="empty-state-cell">
-                            <div class="empty-state-content">
-                                <div class="empty-icon">
-                                    <img src="/assets/images/no-record-icon.svg" alt="No record found" class="no-record-icon">
+                if (cases.length === 0) {
+                    // Show empty state row within table
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `
+                            <td colspan="6" class="empty-state-cell">
+                                <div class="empty-state-content">
+                                    <div class="empty-icon">
+                                        <img src="/assets/images/no-record-icon.svg" alt="No record found" class="no-record-icon">
+                                    </div>
+                                    <p class="empty-message">No record found.</p>
                                 </div>
-                                <p class="empty-message">No record found.</p>
-                            </div>
+                            </td>
+                        `;
+                    casesTableBody.appendChild(emptyRow);
+                    return;
+                }
+
+                cases.forEach(caseData => {
+                    const row = document.createElement('tr');
+                    row.className = 'table-row';
+                    row.setAttribute('data-case-id', caseData.case_id);
+                    row.setAttribute('data-patient-name', caseData.name);
+                    row.setAttribute('data-category', caseData.category);
+                    row.setAttribute('data-treatment-brand', caseData.treatment_brand);
+                    row.setAttribute('data-created-at', caseData.created_at);
+                    row.setAttribute('data-last-updated', caseData.updated_at || caseData.last_updated);
+                    row.setAttribute('data-status', caseData.status);
+
+                    const formatDate = (dateString) => {
+                        if (!dateString) return '';
+                        return new Date(dateString).toLocaleDateString('en-GB');
+                    };
+
+                    row.innerHTML = `
+                        <td class="td-case-id">${escapeHtml(caseData.case_id || caseData.id)}</td>
+                        <td class="td-patient-name">${escapeHtml(caseData.name)}</td>
+                        <td class="td-category">${escapeHtml(caseData.category || 'New Case')}</td>
+                        <td class="td-treatment-brand">${escapeHtml(caseData.treatment_brand)}</td>
+                        <td class="td-created-at">${formatDate(caseData.created_at)}</td>
+                        <td class="td-last-updated">${formatDate(caseData.updated_at || caseData.last_updated)}</td>
+                        <td class="td-status">
+                            <span class="status-badge status-${caseData.status == 0 ? 'draft' : 'submitted'}">${caseData.status == 0 ? 'Draft' : 'Submitted'}</span>
                         </td>
                     `;
-                casesTableBody.appendChild(emptyRow);
-                return;
+
+                    casesTableBody.appendChild(row);
+                });
             }
 
-            cases.forEach(caseData => {
-                const row = document.createElement('tr');
-                row.className = 'table-row';
-                row.setAttribute('data-case-id', caseData.case_id);
-                row.setAttribute('data-patient-name', caseData.name);
-                row.setAttribute('data-category', caseData.category);
-                row.setAttribute('data-treatment-brand', caseData.treatment_brand);
-                row.setAttribute('data-created-at', caseData.created_at);
-                row.setAttribute('data-last-updated', caseData.updated_at || caseData.last_updated);
-                row.setAttribute('data-status', caseData.status);
+            // Escape HTML to prevent XSS
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
 
-                const formatDate = (dateString) => {
-                    if (!dateString) return '';
-                    return new Date(dateString).toLocaleDateString('en-GB');
-                };
+            // Update pagination controls
+            function updatePagination() {
+                const totalPages = Math.ceil(totalCases / currentFilters.limit);
+                paginationNav.innerHTML = '';
 
-                row.innerHTML = `
-                    <td class="td-case-id">${escapeHtml(caseData.case_id || caseData.id)}</td>
-                    <td class="td-patient-name">${escapeHtml(caseData.name)}</td>
-                    <td class="td-category">${escapeHtml(caseData.category || 'New Case')}</td>
-                    <td class="td-treatment-brand">${escapeHtml(caseData.treatment_brand)}</td>
-                    <td class="td-created-at">${formatDate(caseData.created_at)}</td>
-                    <td class="td-last-updated">${formatDate(caseData.updated_at || caseData.last_updated)}</td>
-                    <td class="td-status">
-                        <span class="status-badge status-${caseData.status == 0 ? 'draft' : 'submitted'}">${caseData.status == 0 ? 'Draft' : 'Submitted'}</span>
-                    </td>
-                `;
+                // Previous button
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'pagination-btn prev-btn';
+                prevBtn.disabled = currentPage === 1;
+                prevBtn.innerHTML = '<img src="/assets/images/left-arrow-pagination-inactive.svg" class="pagination-icon" alt="Previous">';
+                prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
+                paginationNav.appendChild(prevBtn);
 
-                casesTableBody.appendChild(row);
-            });
-        }
+                // Page numbers container
+                const numbersDiv = document.createElement('div');
+                numbersDiv.className = 'pagination-numbers';
 
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Update pagination controls
-        function updatePagination() {
-            const totalPages = Math.ceil(totalCases / currentFilters.limit);
-            paginationNav.innerHTML = '';
-
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'pagination-btn prev-btn';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.innerHTML = '<img src="/assets/images/left-arrow-pagination-inactive.svg" class="pagination-icon" alt="Previous">';
-            prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
-            paginationNav.appendChild(prevBtn);
-
-            // Page numbers container
-            const numbersDiv = document.createElement('div');
-            numbersDiv.className = 'pagination-numbers';
-
-            if (totalPages <= 1) {
-                // Show only page 1 if there's only one page
-                const pageBtn = document.createElement('button');
-                pageBtn.className = 'pagination-btn page-btn active';
-                pageBtn.textContent = '1';
-                pageBtn.setAttribute('data-page', '1');
-                pageBtn.addEventListener('click', () => goToPage(1));
-                numbersDiv.appendChild(pageBtn);
-            } else if (totalPages <= 5) {
-                // Show all pages if 5 or fewer
-                for (let i = 1; i <= totalPages; i++) {
+                if (totalPages <= 1) {
+                    // Show only page 1 if there's only one page
                     const pageBtn = document.createElement('button');
-                    pageBtn.className = 'pagination-btn page-btn';
-                    pageBtn.textContent = i;
-                    pageBtn.setAttribute('data-page', i);
-
-                    if (i === currentPage) {
-                        pageBtn.classList.add('active');
-                    }
-
-                    pageBtn.addEventListener('click', () => goToPage(i));
+                    pageBtn.className = 'pagination-btn page-btn active';
+                    pageBtn.textContent = '1';
+                    pageBtn.setAttribute('data-page', '1');
+                    pageBtn.addEventListener('click', () => goToPage(1));
                     numbersDiv.appendChild(pageBtn);
-                }
-            } else {
-                // Always show first page
-                const firstBtn = document.createElement('button');
-                firstBtn.className = 'pagination-btn page-btn';
-                firstBtn.textContent = '1';
-                firstBtn.setAttribute('data-page', '1');
-                if (currentPage === 1) {
-                    firstBtn.classList.add('active');
-                }
-                firstBtn.addEventListener('click', () => goToPage(1));
-                numbersDiv.appendChild(firstBtn);
-
-                // Show current page if it's not first or last and not adjacent to first
-                if (currentPage > 3) {
-                    const ellipsis1 = document.createElement('span');
-                    ellipsis1.className = 'pagination-ellipsis';
-                    ellipsis1.textContent = '...';
-                    numbersDiv.appendChild(ellipsis1);
-                }
-
-                // Show current page and adjacent pages (if not first or last)
-                const startPage = Math.max(2, currentPage - 1);
-                const endPage = Math.min(totalPages - 1, currentPage + 1);
-
-                for (let i = startPage; i <= endPage; i++) {
-                    if (i !== 1 && i !== totalPages) {
+                } else if (totalPages <= 5) {
+                    // Show all pages if 5 or fewer
+                    for (let i = 1; i <= totalPages; i++) {
                         const pageBtn = document.createElement('button');
                         pageBtn.className = 'pagination-btn page-btn';
                         pageBtn.textContent = i;
@@ -447,430 +408,469 @@
                         pageBtn.addEventListener('click', () => goToPage(i));
                         numbersDiv.appendChild(pageBtn);
                     }
-                }
-
-                // Show ellipsis before last page if needed
-                if (currentPage < totalPages - 2) {
-                    const ellipsis2 = document.createElement('span');
-                    ellipsis2.className = 'pagination-ellipsis';
-                    ellipsis2.textContent = '...';
-                    numbersDiv.appendChild(ellipsis2);
-                }
-
-                // Always show last page (if more than 1 page)
-                if (totalPages > 1) {
-                    const lastBtn = document.createElement('button');
-                    lastBtn.className = 'pagination-btn page-btn';
-                    lastBtn.textContent = totalPages;
-                    lastBtn.setAttribute('data-page', totalPages);
-                    if (currentPage === totalPages) {
-                        lastBtn.classList.add('active');
+                } else {
+                    // Always show first page
+                    const firstBtn = document.createElement('button');
+                    firstBtn.className = 'pagination-btn page-btn';
+                    firstBtn.textContent = '1';
+                    firstBtn.setAttribute('data-page', '1');
+                    if (currentPage === 1) {
+                        firstBtn.classList.add('active');
                     }
-                    lastBtn.addEventListener('click', () => goToPage(totalPages));
-                    numbersDiv.appendChild(lastBtn);
+                    firstBtn.addEventListener('click', () => goToPage(1));
+                    numbersDiv.appendChild(firstBtn);
+
+                    // Show current page if it's not first or last and not adjacent to first
+                    if (currentPage > 3) {
+                        const ellipsis1 = document.createElement('span');
+                        ellipsis1.className = 'pagination-ellipsis';
+                        ellipsis1.textContent = '...';
+                        numbersDiv.appendChild(ellipsis1);
+                    }
+
+                    // Show current page and adjacent pages (if not first or last)
+                    const startPage = Math.max(2, currentPage - 1);
+                    const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        if (i !== 1 && i !== totalPages) {
+                            const pageBtn = document.createElement('button');
+                            pageBtn.className = 'pagination-btn page-btn';
+                            pageBtn.textContent = i;
+                            pageBtn.setAttribute('data-page', i);
+
+                            if (i === currentPage) {
+                                pageBtn.classList.add('active');
+                            }
+
+                            pageBtn.addEventListener('click', () => goToPage(i));
+                            numbersDiv.appendChild(pageBtn);
+                        }
+                    }
+
+                    // Show ellipsis before last page if needed
+                    if (currentPage < totalPages - 2) {
+                        const ellipsis2 = document.createElement('span');
+                        ellipsis2.className = 'pagination-ellipsis';
+                        ellipsis2.textContent = '...';
+                        numbersDiv.appendChild(ellipsis2);
+                    }
+
+                    // Always show last page (if more than 1 page)
+                    if (totalPages > 1) {
+                        const lastBtn = document.createElement('button');
+                        lastBtn.className = 'pagination-btn page-btn';
+                        lastBtn.textContent = totalPages;
+                        lastBtn.setAttribute('data-page', totalPages);
+                        if (currentPage === totalPages) {
+                            lastBtn.classList.add('active');
+                        }
+                        lastBtn.addEventListener('click', () => goToPage(totalPages));
+                        numbersDiv.appendChild(lastBtn);
+                    }
                 }
+
+                paginationNav.appendChild(numbersDiv);
+
+                // Next button
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'pagination-btn next-btn';
+                nextBtn.disabled = currentPage === totalPages;
+                nextBtn.innerHTML = '<img src="/assets/images/right-arrow-pagination-active.svg" class="pagination-icon" alt="Next">';
+                nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
+                paginationNav.appendChild(nextBtn);
             }
 
-            paginationNav.appendChild(numbersDiv);
+            function goToPage(page) {
+                const totalPages = Math.ceil(totalCases / currentFilters.limit);
+                if (page < 1 || page > totalPages) return;
 
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'pagination-btn next-btn';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.innerHTML = '<img src="/assets/images/right-arrow-pagination-active.svg" class="pagination-icon" alt="Next">';
-            nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
-            paginationNav.appendChild(nextBtn);
-        }
+                currentPage = page;
+                currentFilters.offset = (page - 1) * currentFilters.limit;
+                loadCases();
+            }
 
-        function goToPage(page) {
-            const totalPages = Math.ceil(totalCases / currentFilters.limit);
-            if (page < 1 || page > totalPages) return;
-
-            currentPage = page;
-            currentFilters.offset = (page - 1) * currentFilters.limit;
-            loadCases();
-        }
-
-        // Debounce function for search input
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
+            // Debounce function for search input
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
                     clearTimeout(timeout);
-                    func(...args);
+                    timeout = setTimeout(later, wait);
                 };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        function applyFilters() {
-            currentPage = 1;
-            currentFilters.offset = 0;
-            loadCases();
-            updateTabCounts();
-        }
-
-        function performSearch() {
-            currentFilters.search = searchInput.value.trim();
-            applyFilters();
-        }
-
-        // Search event listeners
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                performSearch();
             }
-        });
 
-        // Search on search icon click
-        const searchIcon = document.querySelector('.search-icon');
-        searchIcon.addEventListener('click', () => {
-            performSearch();
-        });
+            function applyFilters() {
+                currentPage = 1;
+                currentFilters.offset = 0;
+                loadCases();
+                updateTabCounts();
+            }
 
-        // Make search icon clickable
-        searchIcon.style.cursor = 'pointer';
+            function performSearch() {
+                currentFilters.search = searchInput.value.trim();
+                applyFilters();
+            }
 
-        // Reset filters
-        resetFilters.addEventListener('click', () => {
-            searchInput.value = '';
-            treatmentBrandFilter.value = '';
-            createdDateFilter.value = '';
-            lastUpdatedFilter.value = '';
-
-            // Reset filter labels
-            const brandLabel = document.querySelector('#brandButton .chip-button-label');
-            const createdLabel = document.querySelector('#createdButton .chip-button-label');
-            const updatedLabel = document.querySelector('#updatedButton .chip-button-label');
-
-            if (brandLabel) brandLabel.textContent = 'Treatment Brand';
-            if (createdLabel) createdLabel.textContent = 'Created Date';
-            if (updatedLabel) updatedLabel.textContent = 'Last Updated Date';
-
-            // Remove selected class from all chip menu items
-            document.querySelectorAll('.chip-menu-item').forEach(menuItem => {
-                menuItem.classList.remove('selected');
+            // Search event listeners
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
             });
 
-            currentFilters.search = '';
-            currentFilters.treatment_brand = '';
-            currentFilters.created_date = '';
-            currentFilters.last_updated_date = '';
-            
-            // Reset date pickers
-            if (createdDatePicker) createdDatePicker.reset();
-            if (updatedDatePicker) updatedDatePicker.reset();
-            
-            applyFilters();
-        });
+            // Search on search icon click
+            const searchIcon = document.querySelector('.search-icon');
+            searchIcon.addEventListener('click', () => {
+                performSearch();
+            });
 
-        // Custom dropdown (Treatment Brand)
-        const brandButton = document.getElementById('brandButton');
-        const brandMenu = document.getElementById('brandMenu');
-        const nativeBrandSelect = document.getElementById('treatmentBrandFilter');
-        const brandLabel = brandButton.querySelector('.chip-button-label');
+            // Make search icon clickable
+            searchIcon.style.cursor = 'pointer';
 
-        brandButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            brandMenu.classList.toggle('open');
-        });
+            // Reset filters
+            resetFilters.addEventListener('click', () => {
+                searchInput.value = '';
+                treatmentBrandFilter.value = '';
+                createdDateFilter.value = '';
+                lastUpdatedFilter.value = '';
 
-        document.addEventListener('click', () => brandMenu.classList.remove('open'));
+                // Reset filter labels
+                const brandLabel = document.querySelector('#brandButton .chip-button-label');
+                const createdLabel = document.querySelector('#createdButton .chip-button-label');
+                const updatedLabel = document.querySelector('#updatedButton .chip-button-label');
 
-        brandMenu.querySelectorAll('.chip-menu-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const value = e.currentTarget.getAttribute('data-value');
-                const text = e.currentTarget.textContent.trim();
+                if (brandLabel) brandLabel.textContent = 'Treatment Brand';
+                if (createdLabel) createdLabel.textContent = 'Created Date';
+                if (updatedLabel) updatedLabel.textContent = 'Last Updated Date';
 
-                // Remove selected class from all items
-                brandMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                // Remove selected class from all chip menu items
+                document.querySelectorAll('.chip-menu-item').forEach(menuItem => {
                     menuItem.classList.remove('selected');
                 });
 
-                // Add selected class to clicked item
-                e.currentTarget.classList.add('selected');
-
-                nativeBrandSelect.value = value;
-                brandLabel.textContent = text || 'Treatment Brand';
-                brandMenu.classList.remove('open');
-
-                currentFilters.treatment_brand = value;
+                currentFilters.search = '';
+                currentFilters.treatment_brand = '';
+                currentFilters.created_date = '';
+                currentFilters.last_updated_date = '';
+                
+                // Reset date pickers
+                if (createdDatePicker) createdDatePicker.reset();
+                if (updatedDatePicker) updatedDatePicker.reset();
+                
                 applyFilters();
             });
-        });
 
-        // Status tabs functionality
-        const statusTabs = document.querySelectorAll('.tab-button');
-        statusTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs
-                statusTabs.forEach(t => t.classList.remove('active'));
+            // Custom dropdown (Treatment Brand)
+            const brandButton = document.getElementById('brandButton');
+            const brandMenu = document.getElementById('brandMenu');
+            const nativeBrandSelect = document.getElementById('treatmentBrandFilter');
+            const brandLabel = brandButton.querySelector('.chip-button-label');
 
-                // Add active class to clicked tab
-                tab.classList.add('active');
-
-                // Update filter
-                currentFilters.status = tab.getAttribute('data-status');
-                applyFilters();
+            brandButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                brandMenu.classList.toggle('open');
             });
-        });
 
-        // Entries per page
-        entriesPerPage.addEventListener('change', () => {
-            currentFilters.limit = parseInt(entriesPerPage.value);
-            currentPage = 1;
-            currentFilters.offset = 0;
-            loadCases();
-        });
+            document.addEventListener('click', () => brandMenu.classList.remove('open'));
 
-        // Sorting functionality
-        document.querySelectorAll('.sortable').forEach(header => {
-            header.addEventListener('click', () => {
-                const sortType = header.getAttribute('data-sort');
-                let newSortBy = sortType;
+            brandMenu.querySelectorAll('.chip-menu-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const value = e.currentTarget.getAttribute('data-value');
+                    const text = e.currentTarget.textContent.trim();
 
-                // Map frontend sort types to backend column names
-                if (sortType === 'created') newSortBy = 'created_at';
-                if (sortType === 'updated') newSortBy = 'updated_at';
+                    // Remove selected class from all items
+                    brandMenu.querySelectorAll('.chip-menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('selected');
+                    });
 
-                // Toggle sort order if same column
-                if (currentFilters.sortBy === newSortBy) {
-                    currentFilters.sortOrder = currentFilters.sortOrder === 'ASC' ? 'DESC' : 'ASC';
-                } else {
-                    currentFilters.sortBy = newSortBy;
-                    currentFilters.sortOrder = 'DESC';
+                    // Add selected class to clicked item
+                    e.currentTarget.classList.add('selected');
+
+                    nativeBrandSelect.value = value;
+                    brandLabel.textContent = text || 'Treatment Brand';
+                    brandMenu.classList.remove('open');
+
+                    currentFilters.treatment_brand = value;
+                    applyFilters();
+                });
+            });
+
+            // Status tabs functionality
+            const statusTabs = document.querySelectorAll('.tab-button');
+            statusTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    statusTabs.forEach(t => t.classList.remove('active'));
+
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+
+                    // Update filter
+                    currentFilters.status = tab.getAttribute('data-status');
+                    applyFilters();
+                });
+            });
+
+            // Entries per page
+            entriesPerPage.addEventListener('change', () => {
+                currentFilters.limit = parseInt(entriesPerPage.value);
+                currentPage = 1;
+                currentFilters.offset = 0;
+                loadCases();
+            });
+
+            // Sorting functionality
+            document.querySelectorAll('.sortable').forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortType = header.getAttribute('data-sort');
+                    let newSortBy = sortType;
+
+                    // Map frontend sort types to backend column names
+                    if (sortType === 'created') newSortBy = 'created_at';
+                    if (sortType === 'updated') newSortBy = 'updated_at';
+
+                    // Toggle sort order if same column
+                    if (currentFilters.sortBy === newSortBy) {
+                        currentFilters.sortOrder = currentFilters.sortOrder === 'ASC' ? 'DESC' : 'ASC';
+                    } else {
+                        currentFilters.sortBy = newSortBy;
+                        currentFilters.sortOrder = 'DESC';
+                    }
+
+                    // Update sort icons
+                    document.querySelectorAll('.sortable .sort-icon').forEach(icon => {
+                        icon.src = '/assets/images/sort-unsorted.svg';
+                    });
+
+                    const sortIcon = header.querySelector('.sort-icon');
+                    sortIcon.src = currentFilters.sortOrder === 'ASC' ? '/assets/images/sort-asc.svg' : '/assets/images/sort-desc.svg';
+
+                    applyFilters();
+                });
+            });
+
+            // Table row click handlers
+            document.addEventListener('click', (e) => {
+                const row = e.target.closest('.table-row');
+                if (row) {
+                    const caseId = row.querySelector('.td-case-id').textContent.trim();
+                    window.location.href = `/cases/${encodeURIComponent(caseId)}`;
+                }
+            });
+
+            // Lightweight calendar builder for date menus with range support
+            function buildCalendar(container, year, month, range) {
+                const title = container.querySelector('.date-title');
+                const grid = container.querySelector('.date-grid');
+                title.textContent = new Date(year, month).toLocaleString(undefined, { month: 'long', year: 'numeric' });
+                grid.innerHTML = '';
+                const firstDay = new Date(year, month, 1);
+                const startWeekday = (firstDay.getDay() + 6) % 7; // Mon=0
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const prevDays = new Date(year, month, 0).getDate();
+
+                // leading muted
+                for (let i = 0; i < startWeekday; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'date-cell muted';
+                    cell.textContent = prevDays - startWeekday + i + 1;
+                    grid.appendChild(cell);
                 }
 
-                // Update sort icons
-                document.querySelectorAll('.sortable .sort-icon').forEach(icon => {
-                    icon.src = '/assets/images/sort-unsorted.svg';
+                // days
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'date-cell';
+                    cell.textContent = d;
+                    cell.dataset.day = d;
+                    if (range && range.start) {
+                        if (range.end) {
+                            // Range with both start and end
+                            const start = Math.min(range.start, range.end);
+                            const end = Math.max(range.start, range.end);
+
+                            if (d === start) cell.classList.add('range-start');
+                            else if (d === end) cell.classList.add('range-end');
+                            else if (d > start && d < end) cell.classList.add('range');
+                        } else if (d === range.start) {
+                            // Single date selection (range.end is null)
+                            cell.classList.add('range-start');
+                        }
+                    }
+
+                    grid.appendChild(cell);
+                }
+
+                // trailing muted to complete weeks
+                const total = startWeekday + daysInMonth;
+                const trailing = (7 - (total % 7)) % 7;
+                for (let i = 1; i <= trailing; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'date-cell muted';
+                    cell.textContent = i;
+                    grid.appendChild(cell);
+                }
+            }
+
+            function initDateDropdown(menuId, buttonId, hiddenInputId) {
+                const menu = document.getElementById(menuId);
+                const button = document.getElementById(buttonId);
+                const input = document.getElementById(hiddenInputId);
+                let view = new Date();
+                let range = { start: null, end: null };
+
+                function render() {
+                    buildCalendar(menu, view.getFullYear(), view.getMonth(), range);
+                }
+
+                function reset() {
+                    range = { start: null, end: null };
+                    view = new Date(); // Reset to current month
+                    input.value = '';
+                    const label = button.querySelector('.chip-button-label');
+                    if (label) {
+                        // Reset label to default text based on button ID
+                        if (buttonId === 'createdButton') {
+                            label.textContent = 'Created Date';
+                        } else if (buttonId === 'updatedButton') {
+                            label.textContent = 'Last Updated Date';
+                        }
+                    }
+                    render();
+                }
+
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.date-menu').forEach(m => m.classList.remove('open'));
+                    menu.classList.add('open');
+                    render();
                 });
 
-                const sortIcon = header.querySelector('.sort-icon');
-                sortIcon.src = currentFilters.sortOrder === 'ASC' ? '/assets/images/sort-asc.svg' : '/assets/images/sort-desc.svg';
-
-                applyFilters();
-            });
-        });
-
-        // Table row click handlers
-        document.addEventListener('click', (e) => {
-            const row = e.target.closest('.table-row');
-            if (row) {
-                const caseId = row.querySelector('.td-case-id').textContent.trim();
-                window.location.href = `/cases/${encodeURIComponent(caseId)}`;
-            }
-        });
-
-        // Lightweight calendar builder for date menus with range support
-        function buildCalendar(container, year, month, range) {
-            const title = container.querySelector('.date-title');
-            const grid = container.querySelector('.date-grid');
-            title.textContent = new Date(year, month).toLocaleString(undefined, { month: 'long', year: 'numeric' });
-            grid.innerHTML = '';
-            const firstDay = new Date(year, month, 1);
-            const startWeekday = (firstDay.getDay() + 6) % 7; // Mon=0
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const prevDays = new Date(year, month, 0).getDate();
-
-            // leading muted
-            for (let i = 0; i < startWeekday; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'date-cell muted';
-                cell.textContent = prevDays - startWeekday + i + 1;
-                grid.appendChild(cell);
-            }
-
-            // days
-            for (let d = 1; d <= daysInMonth; d++) {
-                const cell = document.createElement('div');
-                cell.className = 'date-cell';
-                cell.textContent = d;
-                cell.dataset.day = d;
-                if (range && range.start) {
-                    if (range.end) {
-                        // Range with both start and end
-                        const start = Math.min(range.start, range.end);
-                        const end = Math.max(range.start, range.end);
-
-                        if (d === start) cell.classList.add('range-start');
-                        else if (d === end) cell.classList.add('range-end');
-                        else if (d > start && d < end) cell.classList.add('range');
-                    } else if (d === range.start) {
-                        // Single date selection (range.end is null)
-                        cell.classList.add('range-start');
-                    }
-                }
-
-                grid.appendChild(cell);
-            }
-
-            // trailing muted to complete weeks
-            const total = startWeekday + daysInMonth;
-            const trailing = (7 - (total % 7)) % 7;
-            for (let i = 1; i <= trailing; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'date-cell muted';
-                cell.textContent = i;
-                grid.appendChild(cell);
-            }
-        }
-
-        function initDateDropdown(menuId, buttonId, hiddenInputId) {
-            const menu = document.getElementById(menuId);
-            const button = document.getElementById(buttonId);
-            const input = document.getElementById(hiddenInputId);
-            let view = new Date();
-            let range = { start: null, end: null };
-
-            function render() {
-                buildCalendar(menu, view.getFullYear(), view.getMonth(), range);
-            }
-
-            function reset() {
-                range = { start: null, end: null };
-                view = new Date(); // Reset to current month
-                input.value = '';
-                const label = button.querySelector('.chip-button-label');
-                if (label) {
-                    // Reset label to default text based on button ID
-                    if (buttonId === 'createdButton') {
-                        label.textContent = 'Created Date';
-                    } else if (buttonId === 'updatedButton') {
-                        label.textContent = 'Last Updated Date';
-                    }
-                }
-                render();
-            }
-
-            button.addEventListener('click', (e) => {
-                e.stopPropagation();
-                document.querySelectorAll('.date-menu').forEach(m => m.classList.remove('open'));
-                menu.classList.add('open');
-                render();
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!menu.contains(e.target) && !button.contains(e.target)) {
-                    menu.classList.remove('open');
-                }
-            });
-
-            menu.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent menu from closing when clicking inside
-                const nav = e.target.closest('.date-nav');
-                if (nav) {
-                    const dir = Number(nav.dataset.dir);
-                    view.setMonth(view.getMonth() + dir);
-                    render();
-                    return;
-                }
-                const cell = e.target.closest('.date-cell');
-                if (cell && !cell.classList.contains('muted')) {
-                    const day = Number(cell.dataset.day || cell.textContent);
-
-                    if (!range.start || (range.start && range.end)) {
-                        // Start new selection - single date selected
-                        range = { start: day, end: null };
-                        console.log('First click, range:', range); // Debug
-                        //add class range-start to the cell
-                        cell.classList.add('range-start');
-                    } else if (range.start && !range.end) {
-                        // Second click - complete range selection
-                        if (day === range.start) {
-                            // Same day clicked - keep as single date selection
-                            range.end = null;
-                        } else {
-                            // Different day - create range
-                            range.end = day;
-                            if (range.start > range.end) {
-                                [range.start, range.end] = [range.end, range.start];
-                            }
-                        }
-                    }
-                    render();
-                }
-                const apply = e.target.closest('.date-apply');
-                if (apply) {
-                    if (range.start) { // Allow single date selection too
-                        const y = view.getFullYear();
-                        const m = String(view.getMonth() + 1).padStart(2, '0');
-
-                        if (range.end) {
-                            // Date range selection
-                            const startDate = String(Math.min(range.start, range.end)).padStart(2, '0');
-                            const endDate = String(Math.max(range.start, range.end)).padStart(2, '0');
-                            input.value = `${y}-${m}-${startDate}|${y}-${m}-${endDate}`;
-
-                            const label = button.querySelector('.chip-button-label');
-                            const start = new Date(y, view.getMonth(), Math.min(range.start, range.end));
-                            const end = new Date(y, view.getMonth(), Math.max(range.start, range.end));
-
-                            if (range.start === range.end) {
-                                // Single day selection
-                                label.textContent = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                            } else {
-                                // Date range
-                                const startStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                                const endStr = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                                label.textContent = `${startStr} - ${endStr}`;
-                            }
-                        } else {
-                            // Single date selection (only start date)
-                            const startDate = String(range.start).padStart(2, '0');
-                            input.value = `${y}-${m}-${startDate}|${y}-${m}-${startDate}`;
-
-                            const label = button.querySelector('.chip-button-label');
-                            const start = new Date(y, view.getMonth(), range.start);
-                            label.textContent = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                        }
-
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!menu.contains(e.target) && !button.contains(e.target)) {
                         menu.classList.remove('open');
-
-                        // Update filter and apply
-                        const targetFilter = menu.getAttribute('data-target');
-                        if (targetFilter === 'created') {
-                            currentFilters.created_date = input.value;
-                        } else if (targetFilter === 'updated') {
-                            currentFilters.last_updated_date = input.value;
-                        }
-                        applyFilters();
                     }
+                });
+
+                menu.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent menu from closing when clicking inside
+                    const nav = e.target.closest('.date-nav');
+                    if (nav) {
+                        const dir = Number(nav.dataset.dir);
+                        view.setMonth(view.getMonth() + dir);
+                        render();
+                        return;
+                    }
+                    const cell = e.target.closest('.date-cell');
+                    if (cell && !cell.classList.contains('muted')) {
+                        const day = Number(cell.dataset.day || cell.textContent);
+
+                        if (!range.start || (range.start && range.end)) {
+                            // Start new selection - single date selected
+                            range = { start: day, end: null };
+                            console.log('First click, range:', range); // Debug
+                            //add class range-start to the cell
+                            cell.classList.add('range-start');
+                        } else if (range.start && !range.end) {
+                            // Second click - complete range selection
+                            if (day === range.start) {
+                                // Same day clicked - keep as single date selection
+                                range.end = null;
+                            } else {
+                                // Different day - create range
+                                range.end = day;
+                                if (range.start > range.end) {
+                                    [range.start, range.end] = [range.end, range.start];
+                                }
+                            }
+                        }
+                        render();
+                    }
+                    const apply = e.target.closest('.date-apply');
+                    if (apply) {
+                        if (range.start) { // Allow single date selection too
+                            const y = view.getFullYear();
+                            const m = String(view.getMonth() + 1).padStart(2, '0');
+
+                            if (range.end) {
+                                // Date range selection
+                                const startDate = String(Math.min(range.start, range.end)).padStart(2, '0');
+                                const endDate = String(Math.max(range.start, range.end)).padStart(2, '0');
+                                input.value = `${y}-${m}-${startDate}|${y}-${m}-${endDate}`;
+
+                                const label = button.querySelector('.chip-button-label');
+                                const start = new Date(y, view.getMonth(), Math.min(range.start, range.end));
+                                const end = new Date(y, view.getMonth(), Math.max(range.start, range.end));
+
+                                if (range.start === range.end) {
+                                    // Single day selection
+                                    label.textContent = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                                } else {
+                                    // Date range
+                                    const startStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                                    const endStr = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                                    label.textContent = `${startStr} - ${endStr}`;
+                                }
+                            } else {
+                                // Single date selection (only start date)
+                                const startDate = String(range.start).padStart(2, '0');
+                                input.value = `${y}-${m}-${startDate}|${y}-${m}-${startDate}`;
+
+                                const label = button.querySelector('.chip-button-label');
+                                const start = new Date(y, view.getMonth(), range.start);
+                                label.textContent = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                            }
+
+                            menu.classList.remove('open');
+
+                            // Update filter and apply
+                            const targetFilter = menu.getAttribute('data-target');
+                            if (targetFilter === 'created') {
+                                currentFilters.created_date = input.value;
+                            } else if (targetFilter === 'updated') {
+                                currentFilters.last_updated_date = input.value;
+                            }
+                            applyFilters();
+                        }
+                    }
+                });
+
+                // Return object with reset method
+                return { reset };
+            }
+
+            const createdDatePicker = initDateDropdown('createdMenu', 'createdButton', 'createdDateFilter');
+            const updatedDatePicker = initDateDropdown('updatedMenu', 'updatedButton', 'lastUpdatedFilter');
+
+            // Table row click handlers
+            document.addEventListener('click', (e) => {
+                const row = e.target.closest('.table-row');
+                if (row) {
+                    const caseId = row.getAttribute('data-case-id');
+                    window.location.href = `/cases/${encodeURIComponent(caseId)}`;
                 }
             });
 
-            // Return object with reset method
-            return { reset };
-        }
 
-        const createdDatePicker = initDateDropdown('createdMenu', 'createdButton', 'createdDateFilter');
-        const updatedDatePicker = initDateDropdown('updatedMenu', 'updatedButton', 'lastUpdatedFilter');
+            // Initial load
+            loadCases();
+            updateTabCounts();
 
-        // Table row click handlers
-        document.addEventListener('click', (e) => {
-            const row = e.target.closest('.table-row');
-            if (row) {
-                const caseId = row.getAttribute('data-case-id');
-                window.location.href = `/cases/${encodeURIComponent(caseId)}`;
+            // Show success toast if message is passed via URL parameter
+            const successMessageElement = document.getElementById('success-message');
+            if (successMessageElement && successMessageElement.dataset.message) {
+                const message = successMessageElement.dataset.message;
+                Toast.success(message);
+                window.history.replaceState({}, '', window.location.pathname);
             }
         });
 
-
-        // Initial load
-        loadCases();
-        updateTabCounts();
-
-        // Show success toast if message is passed via URL parameter
-        const successMessageElement = document.getElementById('success-message');
-        if (successMessageElement && successMessageElement.dataset.message) {
-            const message = successMessageElement.dataset.message;
-            if (window.Toast) {
-                Toast.success(message);
-            }
-            window.history.replaceState({}, '', window.location.pathname);
-        }
+       
     </script>
 </body>
 

@@ -456,11 +456,11 @@
         closeDeleteModal.addEventListener('click', closeDeleteModalDialog);
 
          // Set as draft button
-         const deleteCaseBtn = document.getElementById('deleteCaseBtn');
-            if (deleteCaseBtn) {
-                deleteCaseBtn.addEventListener('click', async () => {
+         const confirmDeleteBtn = document.getElementById('confirmDelete');
+            if (confirmDeleteBtn) {
+                confirmDeleteBtn.addEventListener('click', async () => {
                     try {
-                        const response = await axios.post(`/cases/${window.CASE_ID}/delete`)
+                        const response = await axios.post(`/cases/${window.CASE_ID}/delete-draft`)
                         .then(response => {
                             //redirect to aligners case with success message
                             window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
@@ -792,8 +792,6 @@
                 }
             //}
 
-            console.log('isValid', isValid);
-            return;
 
             // Disable button and show loading state
             const originalText = button.textContent;
@@ -922,10 +920,19 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(response => {
-                    Toast.success(response.data.message);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
+                    if('<%= user.role %>' === 'superadmin') {
+                        Toast.success(response.data.message);
+                        //back to case details page
+                        setTimeout(() => {
+                            window.location.href = `/cases/<%= caseid %>`;
+                        }, 1000);
+                    } else {
+                        Toast.success(response.data.message);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                   
                 });
 
             } catch (error) {
