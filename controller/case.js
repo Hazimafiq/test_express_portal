@@ -93,14 +93,28 @@ exports.update_stl_case = async (req, res) => {
     try {
         const { name, gender, dob, email, treatment_brand, custom_sn, product, product_arrival_date, model_type, status, category } = req.body;
         const { caseid } = req.query
-        const { documents } = req.files
-        if (!name || !treatment_brand || !dob || !product || !product_arrival_date || !model_type || documents) {
+
+        const files = req.files || [];    
+
+        const filesByField = {};
+        files.forEach(file => {
+        if (!filesByField[file.fieldname]) {
+                filesByField[file.fieldname] = [];
+            }
+            filesByField[file.fieldname].push(file);
+        });
+
+        const { documents } = filesByField
+
+        if (!name || !treatment_brand || !dob || !product || !product_arrival_date || !model_type) {
             return res.status(400).json({ message: 'All fields are required' });
         }
         if (!caseid){
             const new_case = await Case.new_case(req.body, req.session);
             const new_case_stl_treatment = await Case.new_case_stl(new_case, req.body);
-            const new_case_file = await Case.new_case_file_upload(new_case, req.session, req.files);
+            if(documents){
+                const new_case_file = await Case.new_case_file_upload(new_case, req.session, req.files);
+            }
             if(status == 0){
                 res.status(201).json({ message: 'Case draft created successfully' });
             } else {                
@@ -226,6 +240,22 @@ exports.get_upload_stl_data = async (req, res) => {
         const { caseid } = req.query;
         const upload_stl_details = await Case.get_upload_stl_data(caseid);
         res.status(200).json({ upload_stl_details });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        } else {
+            console.error(err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+};
+
+// update case to other status (0 = draft, 1 = submitted)
+exports.updateCasetoDraft = async (req, res) => {
+    try {
+        const { caseId } = req.params;
+        const case_status = await Case.updateCaseStatus(caseId);
+        res.status(200).json({ message: 'Case set as draft successfully.' });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });

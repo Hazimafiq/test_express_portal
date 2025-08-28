@@ -81,14 +81,27 @@ class Case {
         return results;
     }
 
-    static async new_case_file_upload(caseid, session, files) {
+    static async new_case_file_upload(caseid, session, files, simulation_number) {
+        let query = '',
+            storesignurl = '',
+            simulationnumber = 0;
+        if (simulation_number !== null && simulation_number !== undefined) {
+            simulationnumber = simulation_number;
+        } else {
+            simulationnumber = 1;
+        }
         const getFileIdquery = 'SELECT * FROM file_upload_table WHERE case_id = ?';
-        const [checking] = await pool.query(getFileIdquery, caseid);
-        let query = '';
-        let storesignurl = '';
-        for (let i = 0; i < files.length; i++){
-            storesignurl = domainname + caseid + `/` + (i+1)
-            query += `INSERT INTO file_upload_table SET planner_id = ${session.user.id}, case_id = ${pool.escape(caseid)}, file_type = ${pool.escape(files[i].fieldname)}, file_name = ${pool.escape(files[i].key.split('.'[1]))}, file_originalname = ${pool.escape(files[i].originalname)}, file_url = ${pool.escape(files[i].location)}, signedurl = ${pool.escape(storesignurl)}, file_id = ${i+1};`
+        const [checking] = await pool.query(getFileIdquery, caseid);        
+        if (checking.length === 0) {
+            for (let i = 0; i < files.length; i++){
+                storesignurl = domainname + caseid + `/` + (i+1)
+                query += `INSERT INTO file_upload_table SET planner_id = ${session.user.id}, case_id = ${pool.escape(caseid)}, file_type = ${pool.escape(files[i].fieldname)}, file_name = ${pool.escape(files[i].key.split('.'[1]))}, file_originalname = ${pool.escape(files[i].originalname)}, file_url = ${pool.escape(files[i].location)}, signedurl = ${pool.escape(storesignurl)}, file_id = ${i+1}, simulation_number = ${simulationnumber};`
+            }
+        } else {            
+            for (let i = 0; i < files.length; i++){
+                storesignurl = domainname + caseid + `/` + (i+1)
+                query += `INSERT INTO file_upload_table SET planner_id = ${session.user.id}, case_id = ${pool.escape(caseid)}, file_type = ${pool.escape(files[i].fieldname)}, file_name = ${pool.escape(files[i].key.split('.'[1]))}, file_originalname = ${pool.escape(files[i].originalname)}, file_url = ${pool.escape(files[i].location)}, signedurl = ${pool.escape(storesignurl)}, file_id = ${checking.length + i + 1}, simulation_number = ${simulationnumber};`
+            }
         }
         const [results] = await pool.query(query);
         return results;
@@ -579,6 +592,16 @@ class Case {
         const query = 'UPDATE users_table SET fullName = ?, phoneNumber = ?, email = ?, country = ?, role = ? WHERE username = ? LIMIT 1';
         const values = [fullName, phoneNumber, email, country, role, username];
         const [results] = await pool.query(query, values);
+        return results;
+    }
+
+    static async updateCasetoDraft(caseId) {
+        const query = 'UPDATE patient_table SET status = "0", updated_at = CURRENT_TIMESTAMP WHERE case_id = ?';
+        const values = [caseId];
+        const [results] = await pool.query(query, values);
+        if (results.affectedRows === 0) {
+            throw new CustomError('Case not found', 404);
+        }
         return results;
     }
 

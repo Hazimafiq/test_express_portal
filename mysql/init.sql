@@ -97,3 +97,26 @@ CREATE TABLE file_upload_table (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE `simulation_data_table` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `case_id` VARCHAR(55) NULL,
+  `simulation_number` INT DEFAULT '1',
+  `decision` VARCHAR(55) DEFAULT 'TBD',
+  `simulation_url` TEXT DEFAULT NULL,
+  `created_time` DATETIME NULL,
+  `updated_time` DATETIME NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `comments_table` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `name` VARCHAR(255) DEFAULT NULL,
+  `case_id` VARCHAR(255) DEFAULT NULL,
+  `comments` TEXT DEFAULT NULL,
+  `comment_user_id` INT DEFAULT NULL,
+  `edit` INT DEFAULT 0,
+  PRIMARY KEY (`id`)
+);  

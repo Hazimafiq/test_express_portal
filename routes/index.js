@@ -1,8 +1,9 @@
 const express = require('express');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
-const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data, get_normal_case_data, get_upload_stl_data, downloadModelFiles, downloadClinicalPhotos, downloadIndividualFile } = require('../controller/case');
+const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data, get_normal_case_data, get_upload_stl_data, downloadModelFiles, downloadClinicalPhotos, downloadIndividualFile, updateCasetoDraft } = require('../controller/case');
 const { get_file_with_signedurl } = require('../controller/file')
+const { update_comment, get_comment, update_simulation_plan, add_simulation_plan, get_simulation_plan, action_simulation_plan } = require('../controller/detail')
 
 const router = express.Router();
 
@@ -119,11 +120,31 @@ router.get('/add-case', requireAuth, (req, res) => {
     res.render('add_case');
 });
 
+// Add new normal case api
 router.post('/add-case', requireAuth, update_case);
 router.post('/add-case/:caseid', requireAuth, update_case);
 
+// Add new stl upload api
 router.post('/add-case-stl', requireAuth, update_stl_case);
 router.post('/add-case-stl/:caseid', requireAuth, update_stl_case);
+
+// Add new comment api
+router.post('/update-comment', requireAuth, update_comment);
+
+// Get case id all comments
+router.get('/get-comment/:caseid', requireAuth, get_comment);
+
+// Add simulation plan
+router.post('/add-simulation-plan', requireAuth, add_simulation_plan);
+
+// Upload simulation link and upload ipr file
+router.post('/update-simulation-plan', requireAuth, update_simulation_plan);
+
+// Get simulation plan data
+router.get('/get-simulation-plan', requireAuth, get_simulation_plan);
+
+// Approve or Revoke simulation plan
+router.post('/action-simulation-plan', requireAuth, action_simulation_plan);
 
 // Get all cases with filtering, searching, and sorting
 router.get('/get-cases', requireAuth, getAllCases);
@@ -143,16 +164,7 @@ router.get('/download/photos/:caseid', requireAuth, downloadClinicalPhotos);
 router.get('/download/file/:caseid/:filetype', requireAuth, downloadIndividualFile);
 
 // Set case as draft
-router.post('/cases/:caseId/set-draft', requireAuthAPI, async (req, res) => {
-    try {
-        const { caseId } = req.params;
-        
-        res.status(200).json({ message: 'Case set as draft successfully' });
-    } catch (error) {
-        console.error('Error setting case as draft:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
+router.post('/cases/:caseId/set-draft', requireAuthAPI, updateCasetoDraft);
 
 router.get('/upload-stl', requireAuth, (req, res) => {
     res.render('upload_stl');
