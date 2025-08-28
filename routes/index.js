@@ -87,6 +87,25 @@ router.get('/update-case/:caseid', requireAuth, async (req, res) => {
     }
 });
 
+// Update upload stl route
+router.get('/update-upload-stl/:caseid', requireAuth, async (req, res) => {
+    const { caseid } = req.params;
+    try {
+        const upload_stl_details = await get_upload_stl_data(caseid);
+        //console.log('normal_case_details', normal_case_details[0][0]);
+        //console.log('normal_case_details', upload_stl_details[1]);
+        res.render('update_upload_stl', { 
+            caseid, 
+            upload_stl_details: upload_stl_details[0][0],
+            upload_stl_files: upload_stl_details[1],
+            user: req.session.user
+        });
+    } catch (error) {
+        console.error('Error fetching normal case details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 // Case details route
 router.get('/cases/:caseId', requireAuth, async (req, res) => {
     const { caseId } = req.params;

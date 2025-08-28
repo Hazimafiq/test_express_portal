@@ -421,7 +421,7 @@
                     if('<%= patient_details.category %>' === 'New Case') {
                         window.location.href = `/update-case/${window.CASE_ID}`;
                     } else {
-                        window.location.href = `/update-case-stl/${window.CASE_ID}`;
+                        window.location.href = `/update-upload-stl/${window.CASE_ID}`;
                     }
                 });
             }
@@ -431,10 +431,12 @@
             if (setDraftBtn) {
                 setDraftBtn.addEventListener('click', async () => {
                     try {
-                        const response = await axios.post(`/cases/${window.CASE_ID}/set-draft`)
+                        const response = await axios.post(`/cases/${window.CASE_ID}/set-draft?status=0`)
                         .then(response => {
                             Toast.success(response.data.message);
-                            window.location.reload();
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
 
                         })
                         .catch(error => {
@@ -571,6 +573,7 @@
                                     'buccal_top': [],
                                     'buccal_bottom': [],
                                     'xray': [],
+                                    'documents': [],
                                     'other': []
                                 };
 
@@ -688,19 +691,20 @@
                             <span class="attachment-field-label documents-stl">Documents</span>
                             <div class="attachment-fields stl">`;
                     
-                                         // Show all STL documents
-                     const stlFiles = [...filesByType.upper_scan, ...filesByType.lower_scan, ...filesByType.bite_scan];
-                     stlFiles.forEach(file => {
-                         html += `
-                                 <div class="attachment-field-group">
-                                     <div class="attachment-input-field" onclick="window.location.href='/download/file/${window.CASE_ID}/${file.file_type}'" style="cursor: pointer;">
-                                         <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                         <span class="attachment-filename">${file.file_originalname || file.file_name}</span>
-                                         <div class="download-link" title="Download ${file.file_type.replace('_', ' ').toUpperCase()}">
-                                         </div>
-                                     </div>
-                                 </div>`;
-                     });
+                                // Show all document files
+                                if (filesByType.documents && filesByType.documents.length > 0) {
+                                    filesByType.documents.forEach(file => {
+                                        html += `
+                                            <div class="attachment-field-group">
+                                                <div class="attachment-input-field" onclick="window.location.href='${file.signedurl}'" style="cursor: pointer;">
+                                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                                    <span class="attachment-filename">${file.file_originalname || file.file_name.split('/').pop()}</span>
+                                                    <div class="download-link" title="Download Document">
+                                                    </div>
+                                                </div>
+                                            </div>`;
+                                    });
+                                }
                     
                     html += `
                             </div>`;

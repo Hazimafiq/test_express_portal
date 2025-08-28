@@ -30,7 +30,16 @@
 
             <!-- Page Header -->
             <div class="page-header">
-                <h1 class="page-title">Update Case</h1>
+                <div class="page-header-left">
+                    <div class="title-badges-row">
+                        <h1 class="page-title">Update Case</h1>
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <% if (user && user.role === 'superadmin') { %>
+                        <button class="btn btn-delete" id="deleteCaseBtn">Delete Case</button>
+                    <% } %>
+                </div>
             </div>
 
             <!-- Add Case Form -->
@@ -394,6 +403,24 @@
             </form>
         </div>
     </main>
+      <!-- Delete Case Modal -->
+      <div class="modal-overlay" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-header activate-modal-header">
+                <h3 class="modal-title">Confirm to Delete?</h3>
+                <button class="modal-close" id="closeDeleteModal">
+                    <img src="/assets/images/x-icon.svg" alt="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">You will not be able to recover this case once it is deleted.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="cancelDelete">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmDelete">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
     <script src="/assets/js/jquery.js"></script>
     <script src="/assets/js/axios.min.js"></script>
     <script src="/assets/js/toast.js"></script>
@@ -402,6 +429,54 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
         });
+
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteBtn = document.getElementById('deleteCaseBtn');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const confirmDelete = document.getElementById('confirmDelete');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+
+        deleteBtn.addEventListener('click', () => {
+            deleteModal.classList.add('show');
+        });
+
+        // Close modal functions
+        function closeDeleteModalDialog() {
+            deleteModal.classList.remove('show');
+        }
+            
+        cancelDelete.addEventListener('click', closeDeleteModalDialog);
+            
+        confirmDelete.addEventListener('click', closeDeleteModalDialog);
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                closeDeleteModalDialog();
+            }
+        });
+        closeDeleteModal.addEventListener('click', closeDeleteModalDialog);
+
+         // Set as draft button
+         const deleteCaseBtn = document.getElementById('deleteCaseBtn');
+            if (deleteCaseBtn) {
+                deleteCaseBtn.addEventListener('click', async () => {
+                    try {
+                        const response = await axios.post(`/cases/${window.CASE_ID}/delete`)
+                        .then(response => {
+                            //redirect to aligners case with success message
+                            window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
+                        })
+                        .catch(error => {
+                            console.error('Failed to delete case', error);
+                            Toast.error(error.response.data.message || 'Failed to delete case');
+                        });
+
+                        
+                    } catch (error) {
+                        console.error('Error deleting case:', error);
+                        Toast.error(error.response.data.message || 'Failed to delete case');
+                    }
+                });
+            }
 
         // Track file operations for backend processing
         const removedFiles = new Set();
@@ -716,6 +791,9 @@
                     return;
                 }
             //}
+
+            console.log('isValid', isValid);
+            return;
 
             // Disable button and show loading state
             const originalText = button.textContent;

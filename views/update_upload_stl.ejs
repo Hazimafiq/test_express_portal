@@ -25,12 +25,12 @@
                 <span class="breadcrumb-separator">
                     <img src="/assets/images/breadcrumb-arrow.svg" alt="Breadcrumb Arrow">
                 </span>
-                <span class="breadcrumb-item active">Upload STL</span>
+                <span class="breadcrumb-item active">Update Case</span>
             </nav>
 
             <!-- Page Header -->
             <div class="page-header">
-                <h1 class="page-title">Upload STL</h1>
+                <h1 class="page-title">Update Case</h1>
             </div>
 
             <!-- Upload STL Form -->
@@ -45,26 +45,26 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Name</span>
                                 </label>
-                                <input type="text" id="patientName" name="patientName" placeholder="Input here">
+                                <input type="text" id="patientName" name="patientName" placeholder="Input here" value="<%= upload_stl_details.name %>">
                             </div>
                             <div class="form-field">
                                 <label for="patientGender">Gender</label>
                                 <div class="select-wrapper">
-                                    <select id="patientGender" name="patientGender">
+                                    <select id="patientGender" name="patientGender" value="<%= upload_stl_details.gender %>">
                                         <option value="">Select</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Prefer not to say">Prefer not to say</option>
+                                        <option value="Male" <%= upload_stl_details.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                                        <option value="Female" <%= upload_stl_details.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                                        <option value="Prefer not to say" <%= upload_stl_details.gender === 'Prefer not to say' ? 'selected' : '' %>>Prefer not to say</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-field">
                                 <label for="dateOfBirth">Date of Birth</label>
-                                <input type="date" id="dateOfBirth" name="dateOfBirth" data-date-picker>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" data-date-picker value="<%= upload_stl_details.dob %>">
                             </div>
                             <div class="form-field">
                                 <label for="email">Email</label>
-                                <input type="email" id="email" name="email" placeholder="Input here">
+                                <input type="email" id="email" name="email" placeholder="Input here" value="<%= upload_stl_details.email %>">
                             </div>
                             <div class="form-field">
                                 <label for="treatmentBrand">
@@ -72,18 +72,18 @@
                                     <span class="label-text">Treatment Brand</span>
                                 </label>
                                 <div class="select-wrapper">
-                                    <select id="treatmentBrand" name="treatmentBrand">
+                                    <select id="treatmentBrand" name="treatmentBrand" value="<%= upload_stl_details.treatment_brand %>">
                                         <option value="">Select</option>
-                                        <option value="DCA Pro">DCA Pro</option>
-                                        <option value="Diamond Aligner">Diamond Aligner</option>
-                                        <option value="OEM-Plain">OEM-Plain</option>
-                                        <option value="OEM-Clinic Brand">OEM-Clinic Brand</option>
+                                        <option value="DCA Pro" <%= upload_stl_details.treatment_brand === 'DCA Pro' ? 'selected' : '' %>>DCA Pro</option>
+                                        <option value="Diamond Aligner" <%= upload_stl_details.treatment_brand === 'Diamond Aligner' ? 'selected' : '' %>>Diamond Aligner</option>
+                                        <option value="OEM-Plain" <%= upload_stl_details.treatment_brand === 'OEM-Plain' ? 'selected' : '' %>>OEM-Plain</option>
+                                        <option value="OEM-Clinic Brand" <%= upload_stl_details.treatment_brand === 'OEM-Clinic Brand' ? 'selected' : '' %>>OEM-Clinic Brand</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-field">
                                 <label for="customSN">Custom SN</label>
-                                <input type="text" id="customSN" name="customSN" placeholder="Input here">
+                                <input type="text" id="customSN" name="customSN" placeholder="Input here" value="<%= upload_stl_details.custom_sn %>">
                             </div>
                         </div>
                     </div>
@@ -100,12 +100,12 @@
                                     <span class="label-text">Product</span>
                                 </label>
                                 <div class="select-wrapper">
-                                    <select id="product" name="product">
+                                    <select id="product" name="product" value="<%= upload_stl_details.product %>">
                                         <option value="">Select</option>
-                                        <option value="Clear Aligners 0.76mm">Clear Aligners 0.76mm</option>
-                                        <option value="Retainer 1.0mm">Retainer 1.0mm</option>
-                                        <option value="Retainer 1.3mm / Soft Nightguard 1.3mm">Retainer 1.3mm / Soft Nightguard 1.3mm</option>
-                                        <option value="Soft Nightguard 2.0mm">Soft Nightguard 2.0mm</option>
+                                        <option value="Clear Aligners 0.76mm" <%= upload_stl_details.product === 'Clear Aligners 0.76mm' ? 'selected' : '' %>>Clear Aligners 0.76mm</option>
+                                        <option value="Retainer 1.0mm" <%= upload_stl_details.product === 'Retainer 1.0mm' ? 'selected' : '' %>>Retainer 1.0mm</option>
+                                        <option value="Retainer 1.3mm / Soft Nightguard 1.3mm" <%= upload_stl_details.product === 'Retainer 1.3mm / Soft Nightguard 1.3mm' ? 'selected' : '' %>>Retainer 1.3mm / Soft Nightguard 1.3mm</option>
+                                        <option value="Soft Nightguard 2.0mm" <%= upload_stl_details.product === 'Soft Nightguard 2.0mm' ? 'selected' : '' %>>Soft Nightguard 2.0mm</option>
                                     </select>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                     </span>
                                 </label>
                                 <div class="date-wrapper">
-                                    <input type="date" id="productArrivalDate" name="productArrivalDate" data-date-picker data-min-date="" data-placeholder="Select">
+                                    <input type="date" id="productArrivalDate" name="productArrivalDate" data-date-picker data-min-date="" data-placeholder="Select" value="<%= upload_stl_details.product_arrival_date %>">
                                 </div>
                             </div>
                         </div>
@@ -137,10 +137,10 @@
                                 <span class="label-text">Model Type</span>
                             </label>
                             <div class="select-wrapper">
-                                <select id="modelType" name="modelType">
+                                <select id="modelType" name="modelType" value="<%= upload_stl_details.model_type %>">
                                     <option value="">Select</option>
-                                    <option value="Digital Model">Digital Model</option>
-                                    <option value="Plaster Model">Plaster Model</option>
+                                    <option value="Digital Model" <%= upload_stl_details.model_type === 'Digital Model' ? 'selected' : '' %>>Digital Model</option>
+                                    <option value="Plaster Model" <%= upload_stl_details.model_type === 'Plaster Model' ? 'selected' : '' %>>Plaster Model</option>
                                 </select>
                             </div>
                         </div>
@@ -186,6 +186,31 @@
             
             // Initialize custom date pickers
             //initializeCustomDatePickers();
+            
+            // Initialize with existing files from backend
+            // Get files from a global variable that we'll define in a script tag above
+            const backendFiles = <%- JSON.stringify(upload_stl_files || []) %>;
+            
+            if (backendFiles && backendFiles.length > 0) {
+                // Process backend files
+                uploadedFiles = backendFiles.map(file => {
+                    const fileName = file.file_name.split('/').pop();
+                    // Initialize all existing files as 'unchanged'
+                    fileStatuses[file.id] = 'unchanged';
+                    return {
+                        //id: 'existing_' + file.file_name.replace(/[^a-zA-Z0-9]/g, '_'),
+                        name: fileName,
+                        id: file.id,
+                        signedurl: file.signedurl,
+                        isExisting: true,
+                        fileType: file.file_type
+                    };
+                });
+                
+                // Display existing files
+                renderFilesList();
+                updateUploadPlaceholder();
+            }
         });
         
         // function initializeCustomDatePickers() {
@@ -204,7 +229,12 @@
         // }
 
         // File upload handling - Multi-file support
+        // Initialize with empty array
         let uploadedFiles = [];
+        // Track file statuses: new, existing (unchanged), or removed
+        let fileStatuses = {};
+        
+        // We'll initialize this with backend data in DOMContentLoaded
         
         // Helper function to format file size
         function formatFileSize(bytes) {
@@ -221,6 +251,17 @@
             return '/assets/images/document-icon.svg'; // Using existing document icon
         }
         
+        // Helper function to truncate filename with ellipsis if too long
+        function truncateFilename(filename, maxLength = 100) {
+            if (filename.length <= maxLength) return filename;
+            
+            const extension = filename.split('.').pop();
+            const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
+            const truncatedName = nameWithoutExt.substring(0, maxLength - extension.length - 3) + '...';
+            
+            return truncatedName + '.' + extension;
+        }
+        
         // Helper function to add file to the list
         function addFileToList(file) {
             const fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -229,27 +270,55 @@
                 file: file,
                 name: file.name,
                 size: file.size,
-                type: file.type
+                type: file.type,
+                isNew: true
             };
+            
+            // Mark as new in our tracking
+            fileStatuses[fileId] = 'new';
             
             uploadedFiles.push(fileData);
             renderFilesList();
             updateUploadPlaceholder();
             
             // Clear validation error when files are added
-            if (uploadedFiles.length > 0) {
+            if (uploadedFiles.filter(f => fileStatuses[f.id] !== 'removed').length > 0) {
                 formValidation.clearValidation('documents');
             }
         }
         
         // Helper function to remove file from the list
         function removeFileFromList(fileId) {
-            uploadedFiles = uploadedFiles.filter(f => f.id !== fileId);
+            console.log('fileId', fileId);
+            console.log('uploadedFiles to removed', uploadedFiles);
+            
+            // Convert fileId to number if it's a numeric string
+            const numericId = parseInt(fileId);
+            const idToCompare = isNaN(numericId) ? fileId : numericId;
+            
+            // Use loose equality (==) to match both string and number IDs
+            const fileToRemove = uploadedFiles.find(f => f.id == idToCompare);
+            console.log('fileToRemove', fileToRemove);
+            
+            if (fileToRemove && fileToRemove.isExisting) {
+                // Mark existing file as 'removed' in our tracking object
+                fileStatuses[fileToRemove.id] = 'removed';
+            } else if (fileToRemove) {
+                // For new files, completely remove them
+                uploadedFiles = uploadedFiles.filter(f => f.id != idToCompare);
+            }
+            
+            // Always update the display after modifying the files list
             renderFilesList();
             updateUploadPlaceholder();
             
             // Show validation error if no files remain
-            if (uploadedFiles.length === 0) {
+            const remainingFiles = uploadedFiles.filter(f => {
+                if (!f.isExisting) return true; // Count all new files
+                return fileStatuses[f.id] !== 'removed'; // Only count non-removed existing files
+            });
+            
+            if (remainingFiles.length === 0) {
                 formValidation.showError('documents', 'Documents are required.');
             }
         }
@@ -259,24 +328,49 @@
             const filesContainer = document.getElementById('filesContainer');
             const uploadedFilesList = document.getElementById('uploadedFilesList');
             
-            if (uploadedFiles.length === 0) {
+            // Filter out files marked as removed for display purposes
+            const filesToDisplay = uploadedFiles.filter(f => {
+                if (!f.isExisting) return true; // Keep all new files
+                // For existing files, check if they're marked as removed
+                return fileStatuses[f.id] !== 'removed';
+            });
+            
+            if (filesToDisplay.length === 0) {
                 uploadedFilesList.style.display = 'none';
                 return;
             }
             
             uploadedFilesList.style.display = 'block';
             
-            filesContainer.innerHTML = uploadedFiles.map(fileData => `
-                <div class="file-item" data-file-id="${fileData.id}">
-                    <div class="file-info">
-                        <img src="${getFileIcon(fileData.name)}" alt="File" class="file-icon">
-                        <p class="file-name">${fileData.name}</p>
-                    </div>
-                    <button type="button" class="cancel-upload" onclick="removeFileFromList('${fileData.id}')">
-                        <img src="/assets/images/cancel-file-upload.svg" alt="Remove file">
-                    </button>
-                </div>
-            `).join('');
+            filesContainer.innerHTML = filesToDisplay.map(fileData => {
+                // Different display for existing files vs newly uploaded files
+                console.log('fileData.isExisting', fileData);
+                if (fileData.isExisting) {
+                    return `
+                        <div class="file-item" data-file-id="${fileData.id}">
+                            <div class="file-info">
+                                <img src="${getFileIcon(fileData.name)}" alt="File" class="file-icon">
+                                <p class="file-name" title="${fileData.name}">${truncateFilename(fileData.name)}</p>
+                            </div>
+                           <button type="button" class="cancel-upload" onclick="removeFileFromList('${fileData.id}')">
+                                <img src="/assets/images/cancel-file-upload.svg" alt="Remove file">
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="file-item" data-file-id="${fileData.id}">
+                            <div class="file-info">
+                                <img src="${getFileIcon(fileData.name)}" alt="File" class="file-icon">
+                                <p class="file-name" title="${fileData.name}">${truncateFilename(fileData.name)}</p>
+                            </div>
+                            <button type="button" class="cancel-upload" onclick="removeFileFromList('${fileData.id}')">
+                                <img src="/assets/images/cancel-file-upload.svg" alt="Remove file">
+                            </button>
+                        </div>
+                    `;
+                }
+            }).join('');
         }
         
         // Helper function to update upload placeholder text
@@ -372,7 +466,14 @@
             },
             {
                 field: 'documents',
-                rule: () => uploadedFiles.length > 0,
+                rule: () => {
+                    // Check for files that are actually available (not marked as removed)
+                    const availableFiles = uploadedFiles.filter(f => {
+                        if (!f.isExisting) return true; // Count all new files
+                        return fileStatuses[f.id] !== 'removed'; // Only count non-removed existing files
+                    });
+                    return availableFiles.length > 0;
+                },
                 message: 'Documents are required.'
             }
         ];
@@ -385,6 +486,7 @@
 
             // Validate all fields for both draft and submit
             const isValid = formValidation.validateFields(validations);
+            console.log('isValid', isValid);
             if (!isValid) {
                 return;
             }
@@ -406,22 +508,58 @@
             formData.append('product_arrival_date', document.getElementById('productArrivalDate').value);
             formData.append('model_type', document.getElementById('modelType').value);
             
-            // Add uploaded files
-            uploadedFiles.forEach((fileData, index) => {
-                formData.append('documents', fileData.file);
+            // Create a file flags object to track status of each file by ID
+            const fileFlags = {};
+            
+            // Process all files including those marked for removal
+            uploadedFiles.forEach((fileData) => {
+                if (fileData.isExisting) {
+                    // For existing files, check status
+                    const status = fileStatuses[fileData.id] || 'unchanged';
+                    
+                    // Create flag entry using file ID as the key
+                    fileFlags[fileData.id] = status === 'removed' ? 'remove' : 'existing';
+                    
+                    // Only add to formData if not removed
+                    if (status !== 'removed') {
+                        formData.append('existingFiles', fileData.id);
+                    }
+                } else {
+                    // For new files, send the actual file and mark as new
+                    formData.append('documents', fileData.file);
+                    // For new files, we'll use a temporary ID in the flags
+                    if (fileData.id) {
+                        fileFlags['new_' + fileData.id] = 'new';
+                    }
+                }
             });
+            
+            console.log('File flags to send:', fileFlags);
+            
+            
+            // Add file flags to the form data
+            formData.append('file_flags', JSON.stringify(fileFlags));
             formData.append('status', status);
             formData.append('category', 'Upload STL');
 
+            console.log('FormData entries:');
+                for (let pair of formData.entries()) {
+                    console.log(pair[0], pair[1]);
+                }
+
             try {
-                const response = await axios.post('/add-case-stl', formData, {
+                const response = await axios.post('/add-case-stl/<%= caseid %>', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
+                }).then(response => {
+                   Toast.success(response.data.message);
+                   setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 });
                 
-                // Redirect to cases list with success message
-                window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
+               
             } catch (error) {
                 console.log('error', error);
                 if (error.response) {

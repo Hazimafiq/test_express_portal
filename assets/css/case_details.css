@@ -159,7 +159,6 @@ body {
 }
 
 .btn-revoke {
-  border-radius: 8px;
   border: 1px solid var(--Colour-border-danger-light, #E27A71);
   color: var(--Colour-text-danger, #D4382B);
   background: transparent;

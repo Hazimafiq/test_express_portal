@@ -172,8 +172,8 @@ class Case {
                 const checkQuery = 'SELECT id FROM file_upload_table WHERE case_id = ? AND file_type = ?';
                 const [existingFile] = await pool.query(checkQuery, [caseid, fileType]);
                 //console.log('existingFile', existingFile[0].id)
-                console.log('fileType', fileType)
-                console.log('file', file)
+                //console.log('fileType', fileType)
+                //console.log('file', file)
 
                 if (existingFile.length > 0) {
                     // Update existing file - also reset limit_time_url and expired_time for new signed URL generation
@@ -231,6 +231,90 @@ class Case {
         for (const queryObj of queries) {
             await pool.query(queryObj.query, queryObj.params);
         }
+
+        return { message: 'File operations completed successfully' };
+    }
+
+    static async edit_upload_stl_file_upload_with_flags(caseid, session, files, fileFlags = {}) {
+        console.log('File flags received:', fileFlags);
+        
+        // First, handle file removals
+        for (const [id, flag] of Object.entries(fileFlags)) {
+            if (flag === 'remove') {
+                const deleteQuery = 'DELETE FROM file_upload_table WHERE id = ? AND case_id = ?';
+                await pool.query(deleteQuery, [id, caseid]);
+                console.log(`Removed file id: ${id} for case: ${caseid}`);
+            }
+        }
+
+        if (!files || files.length === 0) {
+            return { message: 'No files to process' };
+        }
+
+        // Get latest file ID for new files
+        const getFileIdQuery = 'SELECT file_id FROM file_upload_table WHERE case_id = ? ORDER BY id DESC LIMIT 1';
+        const [fileIdResult] = await pool.query(getFileIdQuery, [caseid]);
+        let latestFileId = fileIdResult.length > 0 ? fileIdResult[0].file_id : 0;
+
+        let queries = [];
+        let count = 1;
+
+        for (const file of files) {
+            const fileType = file.fieldname;
+            const flag = fileFlags[fileType] || 'new'; // Default to 'new' if no flag specified
+            
+            console.log(`Processing file: ${file.originalname}, type: ${fileType}, flag: ${flag}`);
+            
+            if (flag === 'new') {
+                console.log('insert new file')
+                // Insert new file
+                const storeSignUrl = domainname + caseid + `/` + (latestFileId + count);
+                const insertQuery = `INSERT INTO file_upload_table SET 
+                    planner_id = ?, 
+                    case_id = ?, 
+                    file_type = ?, 
+                    file_name = ?, 
+                    file_originalname = ?, 
+                    file_url = ?, 
+                    signedurl = ?, 
+                    file_id = ?`;
+                
+                await pool.query(insertQuery, [
+                        session.user.id,
+                        caseid,
+                        fileType,
+                        file.key.split('.')[0],
+                        file.originalname,
+                        file.location,
+                        storeSignUrl,
+                        latestFileId + count
+                ]);
+                console.log(`Inserted new file: ${fileType}`);
+            } else if (flag === 'existing') {
+                    // Update existing file - also reset limit_time_url and expired_time for new signed URL generation
+                    const updateQuery = `UPDATE file_upload_table SET 
+                        planner_id = ?, 
+                        file_name = ?, 
+                        file_originalname = ?, 
+                        file_url = ?, 
+                        updated_at = ?,
+                        limit_time_url = NULL,
+                        expired_time = NULL
+                        WHERE case_id = ? AND file_type = ?`;
+                    
+                    await pool.query(updateQuery, [
+                            session.user.id,
+                            file.key.split('.')[0], 
+                            file.originalname,
+                            file.location,
+                            new Date(),
+                            caseid,
+                            fileType
+                    ]);
+                    console.log(`Updated existing file: ${fileType} - reset limit_time_url and expired_time`);
+             }
+        }
+       
 
         return { message: 'File operations completed successfully' };
     }
@@ -324,13 +408,13 @@ class Case {
 
     static async get_upload_stl_data(caseid) {
         let returndata = [];
-        const basic_query = 'SELECT id, case_id, name, gender, dob, email, treatment_brand, custom_sn, category, status, updated_at FROM patient_table WHERE case_id = ? LIMIT 1';
+        const basic_query = 'SELECT patient_table.id, patient_table.case_id, patient_table.name, patient_table.gender, patient_table.dob, patient_table.email, patient_table.treatment_brand, patient_table.custom_sn, patient_table.category, patient_table.status, patient_table.updated_at, treatment_model_table.product, treatment_model_table.product_arrival_date, treatment_model_table.model_type FROM patient_table JOIN treatment_model_table ON patient_table.case_id = treatment_model_table.case_id WHERE patient_table.case_id = ? LIMIT 1';
         const basic_values = [caseid];
         const [data_result] = await pool.query(basic_query, basic_values);
         if(data_result.length == 0){
             throw new CustomError('No Patient Found', 401)
         }
-        const file_query = 'SELECT file_type, file_name, signedurl FROM file_upload_table WHERE case_id = ?';
+        const file_query = 'SELECT id, file_type, file_name, signedurl FROM file_upload_table WHERE case_id = ?';
         const file_value = [caseid];
         const [file_results] = await pool.query(file_query, file_value);
         if(file_results.length == 0){

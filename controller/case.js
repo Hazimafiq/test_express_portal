@@ -91,8 +91,8 @@ exports.update_case = async (req, res) => {
 // Update case, if with case_id query, then means edit, else means new case, status code 0 = draft, status 1 = submitted
 exports.update_stl_case = async (req, res) => {
     try {
-        const { name, gender, dob, email, treatment_brand, custom_sn, product, product_arrival_date, model_type, status, category } = req.body;
-        const { caseid } = req.query
+        const { name, gender, dob, email, treatment_brand, custom_sn, product, product_arrival_date, model_type, status, category, file_flags } = req.body;
+        const { caseid } = req.params
 
         const files = req.files || [];    
 
@@ -105,6 +105,17 @@ exports.update_stl_case = async (req, res) => {
         });
 
         const { documents } = filesByField
+
+        // Parse file flags if provided
+        let parsedFileFlags = {};
+        if (file_flags) {
+            try {
+                parsedFileFlags = JSON.parse(file_flags);
+                console.log('Parsed file flags:', parsedFileFlags);
+            } catch (err) {
+                console.error('Error parsing file flags:', err);
+            }
+        }
 
         if (!name || !treatment_brand || !dob || !product || !product_arrival_date || !model_type) {
             return res.status(400).json({ message: 'All fields are required' });
@@ -123,7 +134,14 @@ exports.update_stl_case = async (req, res) => {
         } else {
             const edit_case = await Case.edit_case(caseid, req.body)
             const edit_case_stl_treatment = await Case.edit_case_stl(caseid, req.body)
-            const edit_case_file = await Case.edit_case_file_upload(caseid, req.session, req.files);
+            
+            // Get existing file IDs from the form data
+            const existingFileIds = req.body.existingFiles ? 
+                (Array.isArray(req.body.existingFiles) ? req.body.existingFiles : [req.body.existingFiles]) : [];
+            
+            // Use the enhanced file upload method that handles file operations by ID
+            const edit_case_file = await Case.edit_upload_stl_file_upload_with_flags(caseid, req.session, req.files, parsedFileFlags, existingFileIds);
+            
             if(status == 0){
                 res.status(201).json({ message: 'Case draft updated successfully' });
             } else {                
@@ -237,15 +255,25 @@ exports.get_normal_case_data = async (req, res) => {
 // Get patient upload stl data
 exports.get_upload_stl_data = async (req, res) => {
     try {
-        const { caseid } = req.query;
+        const caseid = typeof req === 'object' && req.query ? req.query.caseid : req;
         const upload_stl_details = await Case.get_upload_stl_data(caseid);
-        res.status(200).json({ upload_stl_details });
-    } catch (err) {
-        if (err instanceof CustomError) {
-            return res.status(err.statusCode).json({ message: err.message });
+        if (res) {
+            res.status(200).json({ upload_stl_details });
         } else {
-            console.error(err);
-            return res.status(500).json({ message: 'Internal server error' });
+            return upload_stl_details;
+        }
+    } catch (err) {
+        if (res) {
+            // HTTP request error handling
+            if (err instanceof CustomError) {
+                return res.status(err.statusCode).json({ message: err.message });
+            } else {
+                console.error(err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        } else {
+            // Direct call error handling - rethrow the error
+            throw err;
         }
     }
 };
@@ -254,8 +282,9 @@ exports.get_upload_stl_data = async (req, res) => {
 exports.updateCasetoDraft = async (req, res) => {
     try {
         const { caseId } = req.params;
-        const case_status = await Case.updateCaseStatus(caseId);
-        res.status(200).json({ message: 'Case set as draft successfully.' });
+        const { status } = req.query;
+        const case_status = await Case.updateCaseStatus(caseId, status);
+        res.status(200).json({ message: 'Case status has been changed to draft.' });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.statusCode).json({ message: err.message });
