@@ -109,12 +109,14 @@ router.get('/update-upload-stl/:caseid', requireAuth, async (req, res) => {
 // Case details route
 router.get('/cases/:caseId', requireAuth, async (req, res) => {
     const { caseId } = req.params;
+    const { success } = req.query;
     try {
         const patient_details = await get_patient_details_data(caseId);
         res.render('case_details', {
             caseId,
             patient_details: patient_details[0],
-            user: req.session.user
+            user: req.session.user,
+            successMessage: success || null
         });
     } catch (error) {
         console.error('Error fetching patient details:', error);

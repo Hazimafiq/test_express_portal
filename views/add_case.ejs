@@ -698,7 +698,7 @@
                 // Redirect to cases list with success message
                 window.location.href = `/aligners-cases?success=${encodeURIComponent(response.data.message)}`;
             } catch (error) {
-                console.log('error', error);
+                console.error('Error adding case:', error);
                 Toast.error(status === '1' ? 
                     'Failed to submit case. Please try again.' : 
                     'Failed to save draft. Please try again.');

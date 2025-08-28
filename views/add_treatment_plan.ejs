@@ -6,6 +6,8 @@
     <title>Add Treatment Plan - Doctor Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/add_treatment_plan.css">
+    <link rel="stylesheet" href="/assets/css/validation.css">
+    <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
 <body>
@@ -59,7 +61,7 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">IPR <span class="pdf-required">(*PDF)</span></span>
                                 </label>
-                                <div class="file-upload-container">
+                                <!-- <div class="file-upload-container">
                                     <input 
                                         type="file" 
                                         id="iprFile" 
@@ -71,8 +73,15 @@
                                         <span class="file-placeholder">Choose File</span>
                                         <img src="/assets/images/file-upload.png" alt="Document Icon" class="file-icon">
                                     </label>
+                                </div> -->
+                                <div class="file-upload file-upload-simple">
+                                    <input type="file" id="iprFile" name="iprFile" accept=".pdf">
+                                    <div class="upload-placeholder">
+                                        <span>Choose File</span>
+                                        <img src="/assets/images/file-upload.png" alt="Upload Icon" class="file-upload-icon">
+                                    </div>
                                 </div>
-                                
+                                <div class="field-error-message"></div>
                             </div>
                         </div>
                     </div>
@@ -81,91 +90,153 @@
                 <!-- Form Actions Container -->
                 <div class="form-container form-actions-container">
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/cases/<%= caseId %>'">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
     </main>
-
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <script>
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
-        });
 
-        // File upload functionality
-        document.getElementById('iprFile').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const placeholder = document.querySelector('.file-placeholder');
-            const fileUploadLabel = document.querySelector('.file-upload-label');
-            
-            if (file) {
-                placeholder.textContent = file.name;
-                
-                // Add cancel button for uploaded file
-                let cancelBtn = fileUploadLabel.querySelector('.cancel-upload');
-                if (!cancelBtn) {
-                    cancelBtn = document.createElement('button');
-                    cancelBtn.className = 'cancel-upload';
-                    cancelBtn.type = 'button';
-                    cancelBtn.innerHTML = '<img src="/assets/images/cancel-file-upload.svg" alt="Remove file">';
+          // File upload handling
+            document.querySelectorAll('.file-upload input[type="file"]').forEach(input => {
+                input.addEventListener('change', function() {
+                    const uploadPlaceholder = this.parentNode.querySelector('.upload-placeholder');
+                    const firstSpan = uploadPlaceholder.querySelector('span:first-child');
                     
-                    // Hide the file icon
-                    const fileIcon = fileUploadLabel.querySelector('.file-icon');
-                    if (fileIcon) {
-                        fileIcon.style.display = 'none';
+                    if (this.files.length > 0) {
+                        if (this.parentNode.classList.contains('file-upload-simple')) {
+                            firstSpan.textContent = this.files[0].name;
+                            
+                            // Add cancel button for uploaded file
+                            let cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
+                            if (!cancelBtn) {
+                                cancelBtn = document.createElement('button');
+                                cancelBtn.className = 'cancel-upload';
+                                cancelBtn.type = 'button';
+                                cancelBtn.innerHTML = '<img src="/assets/images/cancel-file-upload.svg" alt="Remove file">';
+                                uploadPlaceholder.appendChild(cancelBtn);
+                                
+                                // Add click handler to remove file
+                                cancelBtn.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    
+                                    // Clear the file input
+                                    this.value = '';
+                                    
+                                    // Reset the UI
+                                    firstSpan.textContent = 'Choose File';
+                                    this.parentNode.classList.remove('has-file');
+                                    cancelBtn.remove();
+                                    
+                                    // Clear any validation state
+                                    if (window.formValidation) {
+                                        window.formValidation.clearValidation(this);
+                                    }
+                                });
+                            }
+                        } else {
+                            firstSpan.textContent = this.files[0].name;
+                        }
+                        this.parentNode.classList.add('has-file');
+                    } else {
+                        firstSpan.textContent = 'Choose File';
+                        this.parentNode.classList.remove('has-file');
+                        
+                        // Remove cancel button if it exists
+                        const cancelBtn = uploadPlaceholder.querySelector('.cancel-upload');
+                        if (cancelBtn) {
+                            cancelBtn.remove();
+                        }
                     }
-                    
-                    fileUploadLabel.appendChild(cancelBtn);
-                    
-                    // Add click handler to remove file
-                    cancelBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        // Clear the file input
-                        this.value = '';
-                        
-                        // Reset the UI
-                        placeholder.textContent = 'Choose File';
-                        cancelBtn.remove();
-                        
-                        // Show the file icon again
-                        if (fileIcon) {
-                            fileIcon.style.display = 'block';
+                });
+            });
+
+            // Form submission
+            document.querySelector('.treatment-plan-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+             
+                // Clear any existing validation errors
+                formValidation.clearAllValidation('treatmentPlanForm');
+                formValidation.clearFormError('treatmentPlanForm');
+
+                 // Define validation rules
+                const validations = [
+                    {
+                        field: 'simulationUrl',
+                        rule: 'required',
+                        message: 'Simulation URL is required.'
+                    },
+                    {
+                        field: 'iprFile',
+                        rule: () => document.getElementById('iprFile').files.length > 0,
+                        message: 'IPR is required.'
+                    }
+                ];
+
+                // Validate all fields
+                const isValid = formValidation.validateFields(validations);
+                if (!isValid) {
+                    return;
+                }
+
+                 // Disable submit button and show loading state
+                const submitBtn = document.getElementById('submitBtn');
+                const originalText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+                submitBtn.textContent = 'Submitting...';
+
+                const formData = new FormData();
+                formData.append('simulationUrl', document.getElementById('simulationUrl').value);
+                formData.append('iprFile', document.getElementById('iprFile').files[0]);
+                formData.append('caseId', '<%= caseId %>');
+                formData.append('simulationNumber', 1);
+
+                try {
+                    const response = await axios.post('/add-simulation-plan?caseid=<%= caseId %>', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
                         }
-                        
-                        // Clear any validation state
-                        if (window.formValidation) {
-                            window.formValidation.clearValidation(this);
-                        }
+                    })
+                    .then(response => {
+                        // Show success message
+                        formValidation.clearAllValidation('treatmentPlanForm');
+                        formValidation.clearFormError('treatmentPlanForm');
+                        // Redirect to case details page with success message
+                        window.location.href = `/cases/<%= caseId %>?success=${encodeURIComponent(response.data.message)}#simulations`;
+                    }).catch(error => {
+                        console.error('Error adding treatment plan:', error);
+                        Toast.error(error.response.data.message);
+                        return;
                     });
+                } catch (error) {
+                    Toast.error('Network error. Please check your connection and try again.');
+                    return;
+                } finally {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('loading');
+                    submitBtn.textContent = originalText;
                 }
-            } else {
-                placeholder.textContent = 'Choose File';
-                
-                // Remove cancel button if it exists
-                const cancelBtn = fileUploadLabel.querySelector('.cancel-upload');
-                if (cancelBtn) {
-                    cancelBtn.remove();
-                }
-                
-                // Show the file icon again
-                const fileIcon = fileUploadLabel.querySelector('.file-icon');
-                if (fileIcon) {
-                    fileIcon.style.display = 'block';
-                }
-            }
+
+            });
+
+            // Cancel button
+            document.getElementById('cancelBtn').addEventListener('click', () => {
+                window.location.href = `/cases/<%= caseId %>#simulations`;
+            });
         });
 
-        // Form submission
-        document.querySelector('.treatment-plan-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Handle form submission here
-            console.log('Form submitted');
-        });
+     
     </script>
 </body>
 </html>

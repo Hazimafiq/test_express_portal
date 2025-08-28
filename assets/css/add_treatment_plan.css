@@ -16,10 +16,9 @@
 
 /* Main Content */
 .main-content {
-    flex: 1;
-    margin-left: 56px;
-    width: calc(100% - 56px);
-    transition: margin-left 0.3s ease, width 0.3s ease;
+    margin-left: 56px; 
+    padding: 24px 0; 
+    transition: margin-left 0.3s ease;
 }
 
 .main-content.expanded {
@@ -29,7 +28,7 @@
 
 .content-container {
     width: 100%;
-    padding: 2rem;
+    padding: 0 32px;
 }
 
 /* Breadcrumb */
@@ -58,8 +57,12 @@
 }
 
 .breadcrumb-item.active {
-    color: #1f2937;
+    color: var(--Colour-text-brand, #036);
+    font-size: 14px;
+    font-style: normal;
     font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
 }
 
 .breadcrumb-separator {
@@ -186,58 +189,157 @@
     letter-spacing: 0.28px;
 }
 
-/* File Upload Styling */
-.file-upload-container {
-    position: relative;
-    max-width: 50%;
+/* Upload Styling */
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 24px;
+    column-gap: 32px;
 }
 
-.file-input {
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    z-index: 2;
-}
-
-.file-upload-label {
+.upload-field {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 8px 16px;
-    border: 1px solid var(--Colour-border-input, #E8F3FF);
-    border-radius: 8px;
-    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
-    cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 455.5px;
 }
 
-.file-upload-label:hover {
-    border-color: #003366;
-}
-
-.file-input:focus + .file-upload-label {
-    border-color: #003366;
-    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
-}
-
-.file-placeholder {
-    color: var(--Colour-text-subtlest, #A1A1A1);
+.upload-field label {
+    color: var(--Colour-text-accent-grey, #767676);
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
     letter-spacing: 0.28px;
 }
 
-.file-icon {
-    width: 16px;
-    height: 16px;
-    opacity: 0.6;
+.file-upload {
+    position: relative;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
 
+.file-upload:hover {
+    border-color: #003366;
+    background: #f0f7ff;
+}
+
+.file-upload.has-file {
+    border-color: #10b981;
+    background: #f0fdf4;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #6b7280;
+}
+
+.upload-icon {
+    font-size: 24px;
+}
+
+.upload-placeholder span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Simple File Upload Style (for X-Ray and Documents) */
+.file-upload-simple {
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
+    height: 36px;
+    width: 455.5px;
+    padding: 8px 16px;
+    /* display: flex;
+    gap: 10px; */
+    align-items: center;
+    align-self: stretch;
+}
+
+.file-upload-simple .upload-placeholder {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-upload-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.file-upload-simple:hover {
+    border-color: #003366;
+    background: white;
+}
+
+.file-upload-simple.has-file {
+    border-radius: 8px;
+    border: 1px solid var(--Colour-border-input, #E8F3FF);
+    background: var(--Colour-background-input-default, rgba(255, 255, 255, 0.60));
+}
+
+.file-upload-simple.has-file .upload-placeholder span:first-child {
+    color: var(--Colour-text-subtle, #333);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+}
+
+/* File uploaded state with cancel functionality */
+.file-upload-simple.has-file .upload-placeholder {
+    position: relative;
+}
+
+.file-upload-simple.has-file .upload-placeholder .file-upload-icon {
+    display: none;
+}
+
+.file-upload-simple.has-file .upload-placeholder .cancel-upload {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-upload-simple.has-file .upload-placeholder .cancel-upload:hover {
+    opacity: 0.7;
+}
+
+.file-upload-simple.has-file .upload-placeholder .cancel-upload img {
+    width: 16px;
+    height: 16px;
+}
 /* Cancel upload button */
 .cancel-upload {
     background: none;

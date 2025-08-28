@@ -45,6 +45,7 @@ async function initializeNavRail() {
             '/aligners-cases',
             '/cases',
             '/update-case',
+            '/add-treatment-plan',
             '/cases/:id/delete',
             '/cases/:id/approve',
             '/cases/:id/revoke',

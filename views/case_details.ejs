@@ -13,6 +13,12 @@
     </script>
 </head>
 <body>
+     <!-- Hidden success message element -->
+    <% if (successMessage) { %>
+        <div id="success-message" data-message="<%= successMessage %>" style="display: none;"></div>
+    <% } %>
+    <!-- Top header hidden for rail layout -->
+    <header class="header" aria-hidden="true"></header>
     <!-- Navigation Rail Component -->
     <div id="navRail"></div>
 
@@ -110,8 +116,8 @@
 
             <!-- Treatment Details Panel -->
             <section class="tab-panel hidden" id="panel-treatments">
-                <!-- Clinical Data Section -->
-                <div class="treatment-container">
+                <!-- treatment Data Section -->
+                <!-- <div class="treatment-container">
                     <h3 class="treatment-section-title">Clinical Data</h3>
                     <div class="treatment-content">
                         <div class="treatment-field">
@@ -131,7 +137,6 @@
                     </div>
                 </div>
                 
-                <!-- Treatment Notes Section -->
                 <div class="treatment-container">
                     <h3 class="treatment-section-title">Treatment Notes</h3>
                     <div class="treatment-content">
@@ -147,136 +152,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </section>
             <section class="tab-panel hidden" id="panel-simulations">
-                <div class="simulations-container">
-                    <div class="simulation-plan">
-                        <div class="plan-header">
-                            <h2 class="plan-title">Plan 1</h2>
-                            <span class="pill-badge badge-green" id="badgeStatus">Approved</span>
-                            <button class="btn btn-revoke" id="revokeBtn">Revoke</button>
-                        </div>
-                        <!-- Example without badge:
-                        <div class="plan-header no-badge">
-                            <h2 class="plan-title">Plan 2</h2>
-                        </div>
-                        -->
-                        <div class="plan-divider"></div>
-                        <p class="plan-instruction">Please click the box to view simulation or download document.</p>
-                        
-                        <div class="simulation-details">
-                            <div class="detail-item">
-                                <label>Date Uploaded</label>
-                                <span class="detail-value">23/07/2025</span>
-                            </div>
-                            
-                            <div class="detail-item">
-                                <label>Simulation URL</label>
-                                <div class="url-field">
-                                    <img src="/assets/images/external-link-icon.svg" alt="External Link" class="field-icon">
-                                    <span class="url-text">https://dca.patientalignerplan.com/Viewer/show.html?mlink...</span>
-                                </div>
-                            </div>
-                            
-                            <div class="detail-item">
-                                <label>IPR (*PDF)</label>
-                                <div class="pdf-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="pdf-text">17350043-RKE-7808.pdf</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="simulations-container">
-                    <div class="simulation-plan">
-                        <div class="plan-header">
-                            <h2 class="plan-title">Plan 2</h2>
-                            <button class="btn btn-approve" id="approveBtn">Approve</button>
-                        </div>
-                        <!-- Example without badge:
-                        <div class="plan-header no-badge">
-                            <h2 class="plan-title">Plan 2</h2>
-                        </div>
-                        -->
-                        <div class="plan-divider"></div>
-                        <p class="plan-instruction">Please click the box to view simulation or download document.</p>
-                        
-                        <div class="simulation-details">
-                            <div class="detail-item">
-                                <label>Date Uploaded</label>
-                                <span class="detail-value">23/07/2025</span>
-                            </div>
-                            
-                            <div class="detail-item">
-                                <label>Simulation URL</label>
-                                <div class="url-field">
-                                    <img src="/assets/images/external-link-icon.svg" alt="External Link" class="field-icon">
-                                    <span class="url-text">https://dca.patientalignerplan.com/Viewer/show.html?mlink...</span>
-                                </div>
-                            </div>
-                            
-                            <div class="detail-item">
-                                <label>IPR (*PDF)</label>
-                                <div class="pdf-field">
-                                    <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
-                                    <span class="pdf-text">17350043-RKE-7808.pdf</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
+                <!-- Content will be dynamically populated by JavaScript -->
             </section>
             <section class="tab-panel hidden" id="panel-comments">
-                <div class="comments-section">
-                    <!-- Comment Item 1 -->
-                    <div class="comment-container">
-                        <div class="comment-item">
-                            <div class="comment-avatar">K</div>
-                            <div class="comment-content">
-                                <div class="comment-header">
-                                    <span class="comment-author">Khoo Ming Sheng</span>
-                                    <span class="comment-time">07/09/2025 10:52</span>
-                                </div>
-                                <div class="comment-text">
-                                    Pls fabricate ULT+ UL set 1-5 +before model<br>
-                                    Use DCA Lab<br>
-                                    ETD before 21 October 2024
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Comment Item 2 -->
-                    <div class="comment-container">
-                        <div class="comment-item">
-                            <div class="comment-avatar">K</div>
-                            <div class="comment-content">
-                                <div class="comment-header">
-                                    <span class="comment-author">Khoo Ming Sheng</span>
-                                    <span class="comment-time">07/09/2025 14:02</span>
-                                </div>
-                                <div class="comment-text">
-                                    Pls fabricate UL set 6-18<br>
-                                    Use DCA Lab<br>
-                                    ETD before 17 November 2024
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Comment Input Section -->
-                    <div class="comment-input-section">
-                        <label class="comment-label">Comment</label>
-                        <div class="comment-input-container">
-                            <textarea class="comment-input" placeholder="Post a comment here"></textarea>
-                            <button class="btn btn-primary comment-submit">Send</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- Comments will be loaded dynamically -->
             </section>
             <section class="tab-panel hidden" id="panel-attachments">
                 <div class="loading">Loading attachments...</div>
@@ -354,57 +236,78 @@
             loadComponent('navRail', '/components/side-menu');
 
             const created_at = '<%= patient_details.created_at %>';
+            
+            // Modal elements - these exist in the HTML
             const approveModal = document.getElementById('approveModal');
-            const approveBtn = document.getElementById('approveBtn');
-            const cancelApprove = document.getElementById('cancelApprove');
-            const confirmApprove = document.getElementById('confirmApprove');
-            const closeApproveModal = document.getElementById('closeApproveModal');
-
             const revokeModal = document.getElementById('revokeModal');
-            const revokeBtn = document.getElementById('revokeBtn');
-            const cancelRevoke = document.getElementById('cancelRevoke');
-            const confirmRevoke = document.getElementById('confirmRevoke');
+            const closeApproveModal = document.getElementById('closeApproveModal');
             const closeRevokeModal = document.getElementById('closeRevokeModal');
 
-            approveBtn.addEventListener('click', () => {
-                approveModal.classList.add('show');
-            });
-
-            // Close modal functions
-            function closeApproveModalDialog() {
-                approveModal.classList.remove('show');
+            // Set up modal close functionality
+            if (closeApproveModal) {
+                closeApproveModal.addEventListener('click', () => {
+                    approveModal.classList.remove('show');
+                });
             }
-            
-            cancelApprove.addEventListener('click', closeApproveModalDialog);
-            
-            confirmApprove.addEventListener('click', closeApproveModalDialog);
-            approveModal.addEventListener('click', (e) => {
-                if (e.target === approveModal) {
-                    closeApproveModalDialog();
-                }
-            });
 
-            closeApproveModal.addEventListener('click', closeApproveModalDialog);
-
-            revokeBtn.addEventListener('click', () => {
-                revokeModal.classList.add('show');
-            });
-
-            // Close modal functions
-            function closeModalDialog() {
-                revokeModal.classList.remove('show');
+            if (closeRevokeModal) {
+                closeRevokeModal.addEventListener('click', () => {
+                    revokeModal.classList.remove('show');
+                });
             }
-            
-            cancelRevoke.addEventListener('click', closeModalDialog);
-            
-            confirmRevoke.addEventListener('click', closeModalDialog);
-            revokeModal.addEventListener('click', (e) => {
-                if (e.target === revokeModal) {
-                    closeModalDialog();
-                }
-            });
 
-            closeRevokeModal.addEventListener('click', closeModalDialog);
+            // Set up modal confirm and cancel buttons
+            const cancelApprove = document.getElementById('cancelApprove');
+            const confirmApprove = document.getElementById('confirmApprove');
+            const cancelRevoke = document.getElementById('cancelRevoke');
+            const confirmRevoke = document.getElementById('confirmRevoke');
+
+            if (cancelApprove) {
+                cancelApprove.addEventListener('click', () => {
+                    approveModal.classList.remove('show');
+                });
+            }
+
+            if (confirmApprove) {
+                confirmApprove.addEventListener('click', () => {
+                    const simulationId = approveModal.getAttribute('data-simulation-id');
+                    if (simulationId) {
+                        approveSimulation(simulationId);
+                    }
+                });
+            }
+
+            if (cancelRevoke) {
+                cancelRevoke.addEventListener('click', () => {
+                    revokeModal.classList.remove('show');
+                });
+            }
+
+            if (confirmRevoke) {
+                confirmRevoke.addEventListener('click', () => {
+                    const simulationId = revokeModal.getAttribute('data-simulation-id');
+                    if (simulationId) {
+                        revokeSimulation(simulationId);
+                    }
+                });
+            }
+
+            // Close modals when clicking outside
+            if (approveModal) {
+                approveModal.addEventListener('click', (e) => {
+                    if (e.target === approveModal) {
+                        approveModal.classList.remove('show');
+                    }
+                });
+            }
+
+            if (revokeModal) {
+                revokeModal.addEventListener('click', (e) => {
+                    if (e.target === revokeModal) {
+                        revokeModal.classList.remove('show');
+                    }
+                });
+            }
 
             // Add treatment plan button
             const addPlanBtn = document.getElementById('addPlanBtn');
@@ -545,6 +448,48 @@
                             });
                     }
 
+                    if(tab === 'simulations') {
+                        // Show loading state
+                        const simulationsPanel = document.getElementById('panel-simulations');
+                        simulationsPanel.innerHTML = '<div class="loading">Loading simulations...</div>';
+
+                        // Fetch simulations data
+                        axios.get(`/get-simulation-plan?caseid=${window.CASE_ID}`)
+                            .then(response => {
+                                const data = response.data.simulation_details;
+                                console.log('simulations', data);
+                                
+                                if (!data || data.length === 0) {
+                                    // Show empty state
+                                    simulationsPanel.innerHTML = generateSimulationsEmptyState();
+                                } else {
+                                    // Show simulations data
+                                    simulationsPanel.innerHTML = generateSimulationsHTML(data);
+                                    
+                                    // Set up event listeners for approve/revoke buttons
+                                    setupSimulationButtons();
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error fetching simulations:', error);
+                                if(error.response?.data?.message != 'No this simulation id') {
+                                    Toast.error(error.response?.data?.message || 'Failed to fetch simulations');
+                                }
+                                // Show empty state on error
+                                simulationsPanel.innerHTML = generateSimulationsEmptyState();
+                                
+                            });
+                    }
+
+                    if (tab === 'comments') {
+                        // Show loading state
+                        const commentsPanel = document.getElementById('panel-comments');
+                        commentsPanel.innerHTML = '<div class="loading">Loading comments...</div>';
+
+                           // Load comments
+                          loadComments();
+                    }
+
                     // Fetch attachments when attachments tab is clicked
                     if (tab === 'attachments') {
                         // Show loading state
@@ -594,6 +539,33 @@
                     }
                 });
             });
+
+            // Handle URL fragment to open specific tab on page load
+            function openTabFromFragment() {
+                const hash = window.location.hash.substring(1); // Remove the # symbol
+                if (hash && panels[hash]) {
+                    // Find the tab button for this panel
+                    const targetTab = document.querySelector(`[data-tab="${hash}"]`);
+                    if (targetTab) {
+                        // Remove active class from all tabs
+                        tabEls.forEach(b => b.classList.remove('active'));
+                        // Add active class to target tab
+                        targetTab.classList.add('active');
+                        
+                        // Show/hide panels
+                        Object.entries(panels).forEach(([key, el]) => {
+                            if (!el) return;
+                            el.classList.toggle('hidden', key !== hash);
+                        });
+
+                        // Trigger the tab click event to load content
+                        targetTab.click();
+                    }
+                }
+            }
+
+            // Call the function when page loads
+            openTabFromFragment();
 
             // Function to generate attachments HTML
             function generateAttachmentsHTML(filesByType, model_type, product, product_arrival_date) {
@@ -850,6 +822,218 @@
                 return html;
             }
             
+            // Function to generate simulations HTML
+            function generateSimulationsHTML(simulations) {
+                let html = '';
+                
+                simulations.forEach((simulation, index) => {
+                    const indexNumber = index + 1;
+                    html += `
+                        <div class="simulations-container">
+                            <div class="simulation-plan">
+                                <div class="plan-header">
+                                    <h2 class="plan-title">Plan ${indexNumber}</h2>
+                                    ${simulation.decision === 'Approved' ? `<span class="pill-badge badge-green">${simulation.decision}</span>` : ''}
+                                    ${simulation.decision === 'Approved' ? '<button class="btn btn-revoke" data-simulation-id="' + indexNumber + '">Revoke</button>' : ''}
+                                    ${!simulation.decision || simulation.decision !== 'Approved' ? '<button class="btn btn-approve" data-simulation-id="' + indexNumber + '">Approve</button>' : ''}
+                                </div>
+                                <div class="plan-divider"></div>
+                                <p class="plan-instruction">Please click the box to view simulation or download document.</p>
+                                
+                                <div class="simulation-details">
+                                    <div class="detail-item">
+                                        <label>Date Uploaded</label>
+                                        <span class="detail-value">${new Date(simulation.created_time || simulation.upload_date).toLocaleDateString('en-GB')}</span>
+                                    </div>
+                                    
+                                    ${simulation.simulation_url ? `
+                                    <div class="detail-item">
+                                        <label>Simulation URL</label>
+                                        <div class="url-field" onclick="window.open('${simulation.simulation_url}', '_blank')" style="cursor: pointer;">
+                                            <img src="/assets/images/external-link-icon.svg" alt="External Link" class="field-icon">
+                                            <span class="url-text">${simulation.simulation_url}</span>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${simulation.file_name ? `
+                                    <div class="detail-item">
+                                        <label>IPR (*PDF)</label>
+                                        <div class="pdf-field" onclick="window.location.href='${simulation.signedurl}'" style="cursor: pointer;">
+                                            <img src="/assets/images/document-icon.svg" alt="Document" class="field-icon">
+                                            <span class="pdf-text">${simulation.file_name}</span>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                return html;
+            }
+
+            function generateCommentsHTML(comments) {
+                let html = '';
+                
+                if (!comments || comments.length === 0) {
+                    return html; // Return empty string if no comments
+                }
+                
+                comments.forEach(comment => {
+                    // Format date as DD/MM/YYYY HH:MM
+                    const date = new Date(comment.created_time || comment.updated_time);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                    
+                    // Replace newlines with <br> to preserve formatting
+                    const formattedComment = comment.comments ? comment.comments.replace(/\n/g, '<br>') : '';
+                    
+                    html += `
+                         <div class="comment-container">
+                            <div class="comment-item">
+                                <div class="comment-avatar">${comment.name.charAt(0)}</div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <span class="comment-author">${comment.name}</span>
+                                        <span class="comment-time">${formattedDate}</span>
+                                    </div>
+                                    <div class="comment-text">
+                                        ${formattedComment}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                return html;
+            }
+
+            // The sendCommentBtn event listener is now attached in the loadComments function
+            
+            // Extract the sendComment function to be able to reuse it
+            function sendComment() {
+                const comment = document.querySelector('.comment-input').value;
+                if (!comment.trim()) {
+                    Toast.error('Please enter a comment');
+                    return;
+                }
+                
+                const sendCommentBtn = document.getElementById('sendCommentBtn');
+                sendCommentBtn.textContent = 'Sending...';
+                sendCommentBtn.classList.add('loading');
+                
+                axios.post(`/update-comment?caseid=${window.CASE_ID}`, { comments: comment })
+                    .then(response => {
+                        document.querySelector('.comment-input').value = '';
+                        sendCommentBtn.textContent = 'Send';
+                        sendCommentBtn.classList.remove('loading');
+                        
+                        // Fetch updated comments
+                        axios.get(`/get-comment/${window.CASE_ID}`)
+                            .then(response => {
+                                const comments = response.data.save_comment;
+                                const commentsContainer = document.getElementById('comments-container');
+                                
+                                // Update only the comments container, not the entire section
+                                if (comments && comments.length > 0) {
+                                    commentsContainer.innerHTML = generateCommentsHTML(comments);
+                                } else {
+                                    commentsContainer.innerHTML = '<p class="no-comments-message">No comments yet. Be the first to comment!</p>';
+                                }
+                                
+                                Toast.success('Comment added successfully');
+                                
+                                // Scroll to the bottom of the comments to see the new comment
+                                commentsContainer.scrollTop = commentsContainer.scrollHeight;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching comments:', error);
+                                Toast.error('Failed to refresh comments');
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error sending comment:', error);
+                        sendCommentBtn.textContent = 'Send';
+                        sendCommentBtn.classList.remove('loading');
+                        Toast.error(error.response?.data?.message || 'Failed to send comment');
+                    });
+            }
+            
+            // Function to generate simulations empty state
+            function generateSimulationsEmptyState() {
+                return `
+                    <div class="simulations-empty-state">
+                        <div class="info-banner">
+                            <div class="info-icon">
+                                <span><img src="/assets/images/info.svg" alt="Info" style="width: 16.21px; height: 16.21px;"></span>
+                            </div>
+                            <p class="info-text">There is no treatment plan has been added.</p>
+                        </div>
+                        <div class="empty-content-panel">
+                            <div class="empty-icon">
+                                <img src="/assets/images/no-record-icon.svg" alt="No record found" class="no-record-icon">
+                            </div>
+                            <p class="empty-message">No record found.</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Function to load comments
+            function loadComments() {
+                const commentsPanel = document.getElementById('panel-comments');
+                
+                // Create a structure with separate containers for comments and input
+                commentsPanel.innerHTML = `
+                    <div class="comments-section">
+                        <!-- Comments will be loaded here -->
+                        <div id="comments-container"></div>
+                        
+                        <!-- Fixed Comment Input Section -->
+                        <div class="comment-input-section">
+                            <label class="comment-label">Comment</label>
+                            <div class="comment-input-container">
+                                <textarea class="comment-input" placeholder="Post a comment here"></textarea>
+                                <button class="btn btn-primary comment-submit" id="sendCommentBtn">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Attach event listener to the send button - only after the button exists in the DOM
+                const sendCommentBtn = document.getElementById('sendCommentBtn');
+                if (sendCommentBtn) {
+                    sendCommentBtn.addEventListener('click', sendComment);
+                }
+                
+                // Fetch comments from the server
+                axios.get(`/get-comment/${window.CASE_ID}`)
+                    .then(response => {
+                        const comments = response.data.save_comment;
+                        const commentsContainer = document.getElementById('comments-container');
+                        
+                        if (comments && comments.length > 0) {
+                            // If we have comments, update the comments container
+                            commentsContainer.innerHTML = generateCommentsHTML(comments);
+                        } else {
+                            // Show empty state
+                            commentsContainer.innerHTML = '<p class="no-comments-message">No comments yet. Be the first to comment!</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching comments:', error);
+                        // Show error message in comments container
+                        document.getElementById('comments-container').innerHTML = 
+                            '<p class="comments-error">Failed to load comments. Please try again later.</p>';
+                    });
+            }
+            
             // Global variables for photo modal
             let clinicalPhotoFiles = [];
             const photoModal = document.getElementById('photoModal');
@@ -1020,6 +1204,181 @@
                     document.removeEventListener('keydown', handleKeyNavigation);
                 }
             });
+            
+            // Function to set up simulation button event listeners
+            function setupSimulationButtons() {
+                // Set up approve buttons
+                const approveButtons = document.querySelectorAll('.btn-approve');
+                approveButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const simulationId = button.getAttribute('data-simulation-id');
+                        showApproveModal(simulationId);
+                    });
+                });
+
+                // Set up revoke buttons
+                const revokeButtons = document.querySelectorAll('.btn-revoke');
+                revokeButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const simulationId = button.getAttribute('data-simulation-id');
+                        showRevokeModal(simulationId);
+                    });
+                });
+            }
+
+            // Function to show approve modal
+            function showApproveModal(simulationId) {
+                const approveModal = document.getElementById('approveModal');
+                if (approveModal) {
+                    // Store the simulation ID for the confirm action
+                    approveModal.setAttribute('data-simulation-id', simulationId);
+                    approveModal.classList.add('show');
+                }
+            }
+
+            // Function to show revoke modal
+            function showRevokeModal(simulationId) {
+                const revokeModal = document.getElementById('revokeModal');
+                if (revokeModal) {
+                    // Store the simulation ID for the confirm action
+                    revokeModal.setAttribute('data-simulation-id', simulationId);
+                    revokeModal.classList.add('show');
+                }
+            }
+
+            // Simulation action functions
+            async function approveSimulation(simulationId) {
+                try {
+                    const response = await axios.post(`/action-simulation-plan?caseid=${window.CASE_ID}&simulation_number=${simulationId}&action=Approved`, {
+                    }).then(response => {
+                        if (response.status === 201) {
+                            //close modal
+                            const approveModal = document.getElementById('approveModal');
+                            approveModal.classList.remove('show');
+                            Toast.success(response.data.message);
+                            
+                            // Update UI instead of reloading
+                            updateSimulationUI(simulationId, 'Approved');
+                        } else {
+                            Toast.error(response.data.message);
+                        }
+                    });
+                } catch (error) {
+                    console.log('error', error);
+                    if (error.response && error.response.data && error.response.data.message) {
+                        Toast.error(error.response.data.message);
+                    } else {
+                        Toast.error('Network error. Please try again.');
+                    }
+                }
+            }
+            
+            async function revokeSimulation(simulationId) {
+                try {
+                    const response = await axios.post(`/action-simulation-plan?caseid=${window.CASE_ID}&simulation_number=${simulationId}&action=Revoke`, {
+                    }).then(response => {
+                        if (response.status === 201) {
+                            //close modal
+                            const revokeModal = document.getElementById('revokeModal');
+                            revokeModal.classList.remove('show');
+                            Toast.success(response.data.message);
+                            
+                            // Update UI instead of reloading
+                            updateSimulationUI(simulationId, 'Revoke');
+                        } else {
+                            Toast.error(response.data.message);
+                        }
+                    });
+                } catch (error) {
+                    console.log('error', error);
+                    if (error.response && error.response.data && error.response.data.message) {
+                        Toast.error(error.response.data.message);
+                    } else {
+                        Toast.error('Network error. Please try again.');
+                    }
+                }
+                
+            }
+
+            // Function to update simulation UI without page reload
+            function updateSimulationUI(simulationId, action) {
+                // Find the simulation container based on the simulationId
+                const simulationContainer = document.querySelector(`.btn-${action === 'Approved' ? 'approve' : 'revoke'}[data-simulation-id="${simulationId}"]`).closest('.simulation-plan');
+                
+                if (!simulationContainer) return;
+                
+                // Get the plan header element
+                const planHeader = simulationContainer.querySelector('.plan-header');
+                
+                if (action === 'Approved') {
+                    // Update UI for Approved action
+                    
+                    // Remove existing approve button
+                    const approveBtn = simulationContainer.querySelector('.btn-approve');
+                    if (approveBtn) approveBtn.remove();
+                    
+                    // Add status badge if not exists
+                    let statusBadge = planHeader.querySelector('.pill-badge');
+                    if (!statusBadge) {
+                        statusBadge = document.createElement('span');
+                        statusBadge.className = 'pill-badge badge-green';
+                        statusBadge.textContent = 'Approved';
+                        planHeader.appendChild(statusBadge);
+                    } else {
+                        statusBadge.textContent = 'Approved';
+                    }
+                    
+                    // Add revoke button if not exists
+                    if (!simulationContainer.querySelector('.btn-revoke')) {
+                        const revokeBtn = document.createElement('button');
+                        revokeBtn.className = 'btn btn-revoke';
+                        revokeBtn.setAttribute('data-simulation-id', simulationId);
+                        revokeBtn.textContent = 'Revoke';
+                        planHeader.appendChild(revokeBtn);
+                        
+                        // Add event listener to the new button
+                        revokeBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            showRevokeModal(simulationId);
+                        });
+                    }
+                } else if (action === 'Revoke') {
+                    // Update UI for Revoke action
+                    
+                    // Remove existing revoke button
+                    const revokeBtn = simulationContainer.querySelector('.btn-revoke');
+                    if (revokeBtn) revokeBtn.remove();
+                    
+                    // Remove status badge if exists
+                    const statusBadge = planHeader.querySelector('.pill-badge');
+                    if (statusBadge) statusBadge.remove();
+                    
+                    // Add approve button if not exists
+                    if (!simulationContainer.querySelector('.btn-approve')) {
+                        const approveBtn = document.createElement('button');
+                        approveBtn.className = 'btn btn-approve';
+                        approveBtn.setAttribute('data-simulation-id', simulationId);
+                        approveBtn.textContent = 'Approve';
+                        planHeader.appendChild(approveBtn);
+                        
+                        // Add event listener to the new button
+                        approveBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            showApproveModal(simulationId);
+                        });
+                    }
+                }
+            }
+
+             // Show success toast if message is passed via URL parameter
+             const successMessageElement = document.getElementById('success-message');
+            if (successMessageElement && successMessageElement.dataset.message) {
+                const message = successMessageElement.dataset.message;
+                Toast.success(message);
+                window.history.replaceState({}, '', window.location.pathname);
+            }
         });
     </script>
 </body>
