@@ -203,9 +203,31 @@ exports.get_upload_stl_data = async (req, res) => {
 
 // update case to other status (0 = draft, 1 = submitted)
 exports.updateCasetoDraft = async (req, res) => {
+    if(req.session.user.role != 'admin'){
+        return res.status(401).json({ message: 'You have no permission to do this action.' });
+    }
     try {
         const { caseId } = req.params;
         const case_status = await Case.updateCaseStatus(caseId);
+        res.status(200).json({ message: 'Case set as draft successfully.' });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.statusCode).json({ message: err.message });
+        } else {
+            console.error(err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+};
+
+// update case to other status (0 = draft, 1 = submitted)
+exports.deleteCase = async (req, res) => {
+    if(req.session.user.role != 'admin'){
+        return res.status(401).json({ message: 'You have no permission to do this action.' });
+    }
+    try {
+        const { caseId } = req.params;
+        const case_status = await Case.deleteCase(caseId);
         res.status(200).json({ message: 'Case set as draft successfully.' });
     } catch (err) {
         if (err instanceof CustomError) {
