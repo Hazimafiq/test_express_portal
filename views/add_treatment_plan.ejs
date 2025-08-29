@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/assets/css/toast.css">
     <script src="/assets/js/components.js"></script>
 </head>
+
 <body>
     <!-- Navigation Rail Component -->
     <div id="navRail"></div>
@@ -40,7 +41,7 @@
                 <!-- Form Container -->
                 <div class="form-container">
                     <div class="form-section">
-                        <h2 class="section-title">Plan <span class="plan-number">1</span></h2>
+                        <h2 class="section-title">Plan <span class="plan-number"></span></h2>
                         <div class="form-content">
                             <div class="form-field">
                                 <label for="simulationUrl" class="form-label">
@@ -104,6 +105,10 @@
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
+
+            const url = new URL(window.location.href);
+            const simulationNumber = url.searchParams.get('simulation_number');
+            document.querySelector('.plan-number').textContent = simulationNumber;
 
           // File upload handling
             document.querySelectorAll('.file-upload input[type="file"]').forEach(input => {
@@ -196,14 +201,14 @@
                 submitBtn.textContent = 'Submitting...';
 
                 const formData = new FormData();
-                formData.append('simulationUrl', document.getElementById('simulationUrl').value);
-                formData.append('iprFile', document.getElementById('iprFile').files[0]);
-                formData.append('caseId', '<%= caseId %>');
-                formData.append('simulationNumber', 1);
                 const url = new URL(window.location.href);
                 const patientName = url.searchParams.get('patient_name');
                 formData.append('name', patientName);
-
+                formData.append('simulation_url', document.getElementById('simulationUrl').value);
+                formData.append('ipr', document.getElementById('iprFile').files[0]);
+                formData.append('caseId', '<%= caseId %>');
+                formData.append('simulationNumber', simulationNumber);
+       
                 try {
                     const response = await axios.post('/add-simulation-plan?caseid=<%= caseId %>', formData, {
                         headers: {
