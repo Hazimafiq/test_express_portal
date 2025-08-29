@@ -236,6 +236,17 @@
             loadComponent('navRail', '/components/side-menu');
 
             const created_at = '<%= patient_details.created_at %>';
+            // Variable to store simulations data
+            let simulationsData = [];
+            // Load simulations data on page load
+            axios.get(`/get-simulation-plan?caseid=${window.CASE_ID}`)
+                .then(response => {
+                    simulationsData = response.data.simulation_details || [];
+                })
+                .catch(error => {
+                    console.error('Error fetching simulations:', error);
+                    simulationsData = [];
+                });
             
             // Modal elements - these exist in the HTML
             const approveModal = document.getElementById('approveModal');
@@ -309,11 +320,15 @@
                 });
             }
 
+         
+            
             // Add treatment plan button
             const addPlanBtn = document.getElementById('addPlanBtn');
             if (addPlanBtn) {
                 addPlanBtn.addEventListener('click', () => {
-                    window.location.href = `/add-treatment-plan/${window.CASE_ID}?patient_name=<%= patient_details.name %>`;
+                    // Use the already loaded simulations data or default to 1
+                    const nextSimulationNumber = simulationsData.length + 1;
+                    window.location.href = `/add-treatment-plan/${window.CASE_ID}?patient_name=<%= patient_details.name %>&simulation_number=${nextSimulationNumber}`;
                 });
             }
 
@@ -459,6 +474,9 @@
                                 const data = response.data.simulation_details;
                                 console.log('simulations', data);
                                 
+                                // Store the simulations data for use elsewhere
+                                simulationsData = data || [];
+                                
                                 if (!data || data.length === 0) {
                                     // Show empty state
                                     simulationsPanel.innerHTML = generateSimulationsEmptyState();
@@ -477,7 +495,8 @@
                                 }
                                 // Show empty state on error
                                 simulationsPanel.innerHTML = generateSimulationsEmptyState();
-                                
+                                // Reset simulations data on error
+                                simulationsData = [];
                             });
                     }
 
