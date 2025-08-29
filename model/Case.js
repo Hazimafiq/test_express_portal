@@ -31,14 +31,14 @@ class Case {
         return case_id_value;
     }
 
-    static async edit_case(caseid, { name, gender, dob, email, treatment_brand, custom_sn }) {
+    static async edit_case(caseid, { name, gender, dob, email, treatment_brand, custom_sn, status }) {
         const check_case_id = 'SELECT * FROM patient_table WHERE case_id = ?';
         const [exist_case_id] = await pool.query(check_case_id, caseid);
         if (exist_case_id.length < 1) {
             throw new CustomError('No this case id', 400);
         }
-        const query = `UPDATE patient_table SET name = ?, gender = ?, dob = ?, email = ?, treatment_brand = ?, custom_sn = ?, updated_at = ? WHERE case_id = ?`;
-        const values = [name.trim(), gender, dob, email.trim(), treatment_brand, custom_sn, new Date(), caseid];
+        const query = `UPDATE patient_table SET name = ?, gender = ?, dob = ?, email = ?, treatment_brand = ?, custom_sn = ?, updated_at = ?, status = ? WHERE case_id = ?`;
+        const values = [name.trim(), gender, dob, email.trim(), treatment_brand, custom_sn, new Date(), status, caseid];
         const [results] = await pool.query(query, values);
         return results;
     }
