@@ -69,7 +69,7 @@
                         </div>
                         <div class="profile-field">
                             <label>Role</label>
-                            <span><%= user.role || '-' %></span>
+                            <span><%= user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase() || '-' %></span>
                         </div>
                     </div>
 
@@ -91,7 +91,7 @@
                         </div>
                         <div class="profile-field">
                             <label>Country</label>
-                            <span><%= user.country || '-' %></span>
+                            <span><%= user.country.charAt(0).toUpperCase() + user.country.slice(1).toLowerCase() || '-' %></span>
                         </div>
                     </div>
                 </div>

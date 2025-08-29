@@ -280,8 +280,8 @@
 
                     row.innerHTML = `
                         <td class="td-name">${escapeHtml(user.fullName)}</td>
-                        <td class="td-country">${escapeHtml(user.country)}</td>
-                        <td class="td-role">${escapeHtml(user.role)}</td>
+                        <td class="td-country">${escapeHtml(user.country.charAt(0).toUpperCase() + user.country.slice(1).toLowerCase())}</td>
+                        <td class="td-role">${escapeHtml(user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase())}</td>
                         <td class="td-created-at">${formatDate(user.created_at)}</td>
                         <td class="td-last-login">${formatDate(user.last_login)}</td>
                         <td class="td-status">

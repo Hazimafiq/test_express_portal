@@ -243,12 +243,13 @@ body {
 .chip-menu-item:hover { background: #f5f7fa; }
 
 .chip-menu-item.selected {
-  background: #036;
-  color: white;
+  background: #f5f7fa;
+  color: #036;
 }
 
 .chip-menu-item.selected:hover {
-  background: #024c82;
+  background: #f5f7fa;
+  color: #036;
 }
 
 /* Date dropdown styles */
