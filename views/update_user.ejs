@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create User - Doctor Portal</title>
+    <title>Update User - Express Portal</title>
     <link rel="stylesheet" href="/assets/css/side_menu.css">
     <link rel="stylesheet" href="/assets/css/create_user.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
@@ -395,24 +395,21 @@
 
             // Handle deactivate confirmation
             confirmDeactivate.addEventListener('click', async () => {
-                try {
-                    const formData = {
+                const formData = {
                         userId: '<%= user.id %>'
                     }
-                    const response = await axios.post('/deactivate-user', formData);
-                    if (response.status === 200) {
+                    const response = await axios.post('/deactivate-user', formData)
+                    .then(response => {
                         // Redirect to user details page with success message
                         window.location.href = `/user-details/${formData.userId}?success=${encodeURIComponent(response.data.message)}`;
-                    } else {
-                        Toast.error(response.data.message || 'Failed to deactivate user');
-                    }
-                } catch (error) {
-                    if (error.response && error.response.data && error.response.data.message) {
-                        Toast.error(error.response.data.message);
-                    } else {
-                        Toast.error('Network error. Please try again.');
-                    }
-                }
+                    }).catch(error => {
+                        console.error(error);
+                        if (error.response && error.response.data && error.response.data.message) {
+                            Toast.error(error.response.data.message);
+                        } else {
+                            Toast.error('Network error. Please try again.');
+                        }
+                    });
             });
 
              // Close modal with Escape key
@@ -426,25 +423,21 @@
         if('<%= user.status %>' === 'inactive') {
             // Handle delete confirmation
             confirmDelete.addEventListener('click', async () => {
-                try {
-                    const formData = {
+                const formData = {
                         userId: '<%= user.id %>'
                     }
-                    const response = await axios.post('/delete-user', formData);
-                    if (response.status === 200) {
+                    const response = await axios.post('/delete-user', formData)
+                    .then(response => {
                         // Redirect to user management page with success message
                         window.location.href = `/user-management?success=${encodeURIComponent(response.data.message)}`;
-                    } else {
-                        Toast.error(response.data.message || 'Failed to delete user');
-                    }   
-                } catch (error) {
-                    console.error(error);
-                    if (error.response && error.response.data && error.response.data.message) {
-                        Toast.error(error.response.data.message);
-                    } else {
-                        Toast.error('Network error. Please try again.');
-                    }
-                }
+                    }).catch(error => {
+                        console.error(error);
+                        if (error.response && error.response.data && error.response.data.message) {
+                            Toast.error(error.response.data.message);
+                        } else {
+                            Toast.error('Network error. Please try again.');
+                        }
+                    });
             });
 
             // Show modal when delete button is clicked

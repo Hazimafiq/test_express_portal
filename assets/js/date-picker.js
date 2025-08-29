@@ -264,9 +264,11 @@ class CustomDatePicker {
         this.updateCalendar();
         this.close();
         
-        // Trigger change event
-        const event = new Event('change', { bubbles: true });
-        this.input.dispatchEvent(event);
+        // Trigger both change and input events to ensure validation system catches it
+        const changeEvent = new Event('change', { bubbles: true });
+        const inputEvent = new Event('input', { bubbles: true });
+        this.input.dispatchEvent(changeEvent);
+        this.input.dispatchEvent(inputEvent);
     }
     
     updateInputDisplay() {
@@ -306,9 +308,21 @@ class CustomDatePicker {
             this.selectedDate = new Date(value);
             this.updateInputDisplay();
             this.updateCalendar();
+            
+            // Trigger events when value is set programmatically
+            const changeEvent = new Event('change', { bubbles: true });
+            const inputEvent = new Event('input', { bubbles: true });
+            this.input.dispatchEvent(changeEvent);
+            this.input.dispatchEvent(inputEvent);
         } else {
             this.selectedDate = null;
             this.updateInputDisplay();
+            
+            // Trigger events when value is cleared
+            const changeEvent = new Event('change', { bubbles: true });
+            const inputEvent = new Event('input', { bubbles: true });
+            this.input.dispatchEvent(changeEvent);
+            this.input.dispatchEvent(inputEvent);
         }
     }
     

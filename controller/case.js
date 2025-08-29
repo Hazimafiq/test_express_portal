@@ -118,7 +118,6 @@ exports.update_stl_case = async (req, res) => {
                 console.error('Error parsing file flags:', err);
             }
         }
-
         if (!name || !treatment_brand || !dob || !product || !product_arrival_date || !model_type) {
             return res.status(400).json({ message: 'All fields are required' });
         }

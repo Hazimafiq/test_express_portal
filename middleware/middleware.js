@@ -17,6 +17,13 @@ exports.requireAuthAPI = (req, res, next) => {
     next();
 };
 
+exports.requireAdminRoleAPI = (req, res, next) => {
+    if (!req.session.user.role === 'doctor') {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+};
+
 
 /**
  * Middleware to check for "Remember Me" token and automatically log in the user

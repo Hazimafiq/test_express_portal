@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Portal - Login</title>
+    <title>Login - Express Portal</title>
     <link rel="stylesheet" href="/assets/css/login.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
     <link rel="stylesheet" href="/assets/css/toast.css">
@@ -159,7 +159,6 @@
         //submit form
         document.querySelector('.login-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            console.log('Form submitted');
               // Clear existing validation
             formValidation.clearAllValidation('loginForm');
             formValidation.clearFormError('loginForm');
@@ -169,7 +168,7 @@
                 {
                     field: 'username',
                     rule: 'required',
-                    message: 'Name is required.'
+                    message: 'Username is required.'
                 },
                 {
                     field: 'password',
@@ -197,13 +196,14 @@
                 password: password,
                 rememberMe: rememberMe
             }).then(response => {
-                console.log(response);
-                if (response.status === 200) {
-                    window.location.href = '/aligners-cases';
-                }
+                window.location.href = '/aligners-cases';
             }).catch(error => {
                 console.log(error);
-                Toast.error('Invalid username or password');
+                if (error.response && error.response.data && error.response.data.message) {
+                    Toast.error(error.response.data.message);
+                } else {
+                    Toast.error('Network error. Please try again.');
+                }
             });
 
 
