@@ -61,7 +61,7 @@ class Detail {
             return simulation_number;
         }
     }
-    
+
     static async get_simulation_plan(caseid) {
         const check_case_id = 'SELECT * FROM patient_table WHERE case_id = ?';
         const [checking] = await pool.query(check_case_id, caseid);
@@ -69,7 +69,7 @@ class Detail {
             throw new CustomError('No this case id', 400);
         }
 
-        const check_plan_id = 'SELECT simulation_data_table.simulation_number, simulation_data_table.simulation_url, simulation_data_table.created_time, file_upload_table.file_name, file_upload_table.file_originalname, file_upload_table.file_type, file_upload_table.signedurl, file_upload_table.simulation_number FROM simulation_data_table JOIN file_upload_table ON simulation_data_table.case_id = file_upload_table.case_id AND simulation_data_table.simulation_number = file_upload_table.simulation_number  WHERE simulation_data_table.case_id = ? AND file_upload_table.file_type = "ipr";';
+        const check_plan_id = 'SELECT simulation_data_table.simulation_number, simulation_data_table.simulation_url, simulation_data_table.created_time, file_upload_table.file_name, file_upload_table.file_originalname, file_upload_table.file_type, file_upload_table.signedurl, file_upload_table.simulation_number FROM simulation_data_table JOIN file_upload_table ON simulation_data_table.case_id = file_upload_table.case_id AND simulation_data_table.simulation_number = file_upload_table.simulation_number  WHERE simulation_data_table.case_id = ? AND file_upload_table.file_type = "iprFile";';
         const check_plan_values = [caseid];
         const [plan_checking] = await pool.query(check_plan_id, check_plan_values);
         if (plan_checking.length === 0) {
