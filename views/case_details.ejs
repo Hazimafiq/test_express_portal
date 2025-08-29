@@ -871,7 +871,7 @@
                                     ${simulation.simulation_url ? `
                                     <div class="detail-item">
                                         <label>Simulation URL</label>
-                                        <div class="url-field" onclick="window.open('${simulation.simulation_url}', '_blank')" style="cursor: pointer;">
+                                        <div class="url-field" onclick="window.open('<%= simulationBaseUrl %>/simulation?url=${simulation.simulation_url}', '_blank')" style="cursor: pointer;">
                                             <img src="/assets/images/external-link-icon.svg" alt="External Link" class="field-icon">
                                             <span class="url-text">${simulation.simulation_url}</span>
                                         </div>
