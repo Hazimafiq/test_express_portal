@@ -137,14 +137,13 @@ class Case {
 
     // Enhanced file upload method that handles file flags (new/existing/remove)
     static async edit_case_file_upload_with_flags(caseid, session, files, fileFlags = {}) {
-        console.log('File flags received:', fileFlags);
+        //console.log('File flags received:', fileFlags);
         
-        // First, handle file removals
         for (const [fileType, flag] of Object.entries(fileFlags)) {
             if (flag === 'remove') {
                 const deleteQuery = 'DELETE FROM file_upload_table WHERE case_id = ? AND file_type = ?';
                 await pool.query(deleteQuery, [caseid, fileType]);
-                console.log(`Removed file type: ${fileType} for case: ${caseid}`);
+                //console.log(`Removed file type: ${fileType} for case: ${caseid}`);
             }
         }
 
@@ -165,7 +164,7 @@ class Case {
             const fileType = file.fieldname;
             const flag = fileFlags[fileType];
 
-            console.log(`Processing file: ${file.originalname}, type: ${fileType}, flag: ${flag}`);
+            //console.log(`Processing file: ${file.originalname}, type: ${fileType}, flag: ${flag}`);
 
             if (flag === 'new' || !flag) {
                 // Check if file already exists
@@ -196,9 +195,9 @@ class Case {
                             caseid,
                             fileType
                     ]);
-                    console.log(`Updated existing file: ${fileType} - reset limit_time_url and expired_time`);
+                    //console.log(`Updated existing file: ${fileType} - reset limit_time_url and expired_time`);
                 } else {
-                    console.log('insert new file')
+                    //console.log('insert new file')
                     // Insert new file
                     const storeSignUrl = domainname + caseid + `/` + (latestFileId + count);
                     const insertQuery = `INSERT INTO file_upload_table SET 
@@ -221,7 +220,7 @@ class Case {
                             storeSignUrl,
                             latestFileId + count
                     ]);
-                    console.log(`Inserted new file: ${fileType}`);
+                    //console.log(`Inserted new file: ${fileType}`);
                     count++;
                 }
             }
@@ -236,14 +235,14 @@ class Case {
     }
 
     static async edit_upload_stl_file_upload_with_flags(caseid, session, files, fileFlags = {}) {
-        console.log('File flags received:', fileFlags);
+        //console.log('File flags received:', fileFlags);
         
         // First, handle file removals
         for (const [id, flag] of Object.entries(fileFlags)) {
             if (flag === 'remove') {
                 const deleteQuery = 'DELETE FROM file_upload_table WHERE id = ? AND case_id = ?';
                 await pool.query(deleteQuery, [id, caseid]);
-                console.log(`Removed file id: ${id} for case: ${caseid}`);
+                //console.log(`Removed file id: ${id} for case: ${caseid}`);
             }
         }
 
@@ -263,10 +262,10 @@ class Case {
             const fileType = file.fieldname;
             const flag = fileFlags[fileType] || 'new'; // Default to 'new' if no flag specified
             
-            console.log(`Processing file: ${file.originalname}, type: ${fileType}, flag: ${flag}`);
+            //console.log(`Processing file: ${file.originalname}, type: ${fileType}, flag: ${flag}`);
             
             if (flag === 'new') {
-                console.log('insert new file')
+                //console.log('insert new file')
                 // Insert new file
                 const storeSignUrl = domainname + caseid + `/` + (latestFileId + count);
                 const insertQuery = `INSERT INTO file_upload_table SET 
@@ -289,7 +288,7 @@ class Case {
                         storeSignUrl,
                         latestFileId + count
                 ]);
-                console.log(`Inserted new file: ${fileType}`);
+                //console.log(`Inserted new file: ${fileType}`);
             } else if (flag === 'existing') {
                     // Update existing file - also reset limit_time_url and expired_time for new signed URL generation
                     const updateQuery = `UPDATE file_upload_table SET 
@@ -311,7 +310,7 @@ class Case {
                             caseid,
                             fileType
                     ]);
-                    console.log(`Updated existing file: ${fileType} - reset limit_time_url and expired_time`);
+                    //console.log(`Updated existing file: ${fileType} - reset limit_time_url and expired_time`);
              }
         }
        
@@ -379,7 +378,6 @@ class Case {
         const model_type = model_type_result[0].model_type;
         const product = model_type_result[0].product;
         const product_arrival_date = model_type_result[0].product_arrival_date;
-        console.log('model_type_result', model_type_result)
         
         if(results.length == 0){
             throw new CustomError('No Patient Model Found', 401)
@@ -502,7 +500,7 @@ class Case {
         }
         
         // Add sorting
-        const validSortColumns = ['created_at', 'last_updated'];
+        const validSortColumns = ['created_at', 'updated_at'];
         const validSortOrders = ['ASC', 'DESC'];
         
         if (validSortColumns.includes(sortBy) && validSortOrders.includes(sortOrder.toUpperCase())) {

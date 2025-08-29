@@ -5,7 +5,7 @@ const CustomError = require('../errors/CustomError');
 exports.register = async (req, res) => {
     try {
         const { username, fullName, phoneNumber, email, clinic, address, country, password, confirmPassword, role, postcode, city, state } = req.body;
-        if (!username || !password || !confirmPassword || !role || !fullName || !phoneNumber || !email || !country || !clinic || !postcode || !city || !state || !address ) {
+        if (!username || !password || !confirmPassword || !role || !fullName || !phoneNumber || !email || !country || !clinic ) {
             return res.status(400).json({ message: 'All fields are required' });
         }
         if (password !== confirmPassword) {
@@ -26,12 +26,45 @@ exports.register = async (req, res) => {
 // Login user
 exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, rememberMe } = req.body;
         if (!username || !password) {
             return res.status(400).json({ message: 'Username and password are required' });
         }
         const user = await User.login(username, password);
         req.session.user = user;
+        
+        if (rememberMe === 'on' || rememberMe === true) {
+            
+            // Extend the session to 30 days
+            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+            
+            // Generate a remember me token
+            const { token, expiresAt } = await User.generateRememberToken(user.id);
+            
+            // Set a secure HTTP-only cookie with the token
+            // Cookie will expire at the same time as the token
+            res.cookie('remember_token', token, {
+                httpOnly: true,
+                secure: process.env.STATUS === 'production', 
+                expires: expiresAt,
+                sameSite: 'lax',
+                path: '/',
+                maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds (backup to expires)
+            });
+        } else {
+            
+            // Ensure the session is set to 24 hours (in case it was modified elsewhere)
+            req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
+            
+            // Clear any existing remember me token
+            res.clearCookie('remember_token', {
+                httpOnly: true,
+                secure: process.env.STATUS === 'production',
+                path: '/',
+                sameSite: 'lax'
+            });
+        }
+        
         res.status(200).json({ message: 'Login successful', user });
     } catch (err) {
         if (err instanceof CustomError) {
@@ -101,14 +134,32 @@ exports.changePassword = async (req, res) => {
 };
 
 // Logout user
-exports.logout = (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Session destruction error:', err);
-            return res.status(500).json({ message: 'Internal server error' });
+exports.logout = async (req, res) => {
+    try {
+        // Clear remember me token if user is logged in
+        if (req.session.user && req.session.user.id) {
+            await User.clearRememberToken(req.session.user.id);
         }
-        res.json({ message: 'Logged out successfully' });
-    });
+        
+        // Clear the remember_token cookie
+        res.clearCookie('remember_token', {
+            httpOnly: true,
+            secure: process.env.STATUS === 'production',
+            path: '/'
+        });
+        
+        // Destroy the session
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Session destruction error:', err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+            res.json({ message: 'Logged out successfully' });
+        });
+    } catch (err) {
+        console.error('Logout error:', err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 };
 
 // Get all users with filtering, searching, and sorting

@@ -1,3 +1,6 @@
+// Load environment variables first
+require('dotenv').config();
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -5,7 +8,6 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const multer = require('multer');
 const path = require('path');
-require('dotenv').config();
 const staticLogStream = require('fs').createWriteStream(path.join(__dirname, 'static.log'), { flags: 'a' });
 const appLogStream = require('fs').createWriteStream(path.join(__dirname, 'app.log'), { flags: 'a' });
 const indexRouter = require('./routes/index');
@@ -141,9 +143,16 @@ app.use(
         secret: '33labs_portal_secret',
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: false }, // Set to true if using HTTPS
+        cookie: { 
+            secure: false, // Set to true if using HTTPS
+            maxAge: 24 * 60 * 60 * 1000 // Default to 24 hours in milliseconds
+        }
     })
 );
+
+// Import and apply remember me middleware
+const { rememberMeMiddleware } = require('./middleware/middleware');
+app.use(rememberMeMiddleware);
 
 // Global middleware to make user session data available in all templates
 app.use((req, res, next) => {

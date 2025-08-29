@@ -47,13 +47,13 @@
                     <div class="subtitle" id="submittedSubtitle">Last updated on <script>document.write(new Date('<%= patient_details.updated_at %>').toLocaleDateString('en-GB', {day: '2-digit', month: 'numeric', year: 'numeric'}));</script></div>
                 </div>
                 <div class="page-actions">
-                    <% if (user && user.role === 'superadmin') { %>
+                    <% if (user && user.role != 'doctor') { %>
                         <button class="btn btn-outline" id="addPlanBtn">Add Treatment Plan</button>
                     <% } %>
                     
                     <% if (patient_details.status == 0) { %>
                         <button class="btn btn-primary" id="updateCaseBtn">Update Case</button>
-                    <% } else if (patient_details.status == 1 && user && user.role === 'superadmin') { %>
+                    <% } else if (patient_details.status == 1 && user && user.role != 'doctor') { %>
                         <button class="btn btn-primary" id="setDraftBtn">Set as Draft</button>
                     <% } %>
                 </div>

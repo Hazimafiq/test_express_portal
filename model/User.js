@@ -1,4 +1,5 @@
 const argon2 = require('argon2');
+const crypto = require('crypto');
 const pool = require('../utils/mysql');
 const CustomError = require('../errors/CustomError');
 
@@ -30,6 +31,56 @@ class User {
         await pool.query(updateLoginQuery, [user.id]);
         
         return user;
+    }
+    
+    static async generateRememberToken(userId) {
+        const token = crypto.randomBytes(64).toString('hex');
+        
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 30);
+        
+        const query = 'UPDATE users_table SET remember_token = ?, token_expires_at = ? WHERE id = ?';
+        const values = [token, expiresAt, userId];
+        await pool.query(query, values);
+        
+        return { token, expiresAt };
+    }
+    
+    static async validateRememberToken(token) {
+        if (!token) return null;
+        
+        const query = 'SELECT * FROM users_table WHERE remember_token = ? AND token_expires_at > NOW() LIMIT 1';
+        const values = [token];
+
+        try {
+            const [results] = await pool.query(query, values);
+            
+            if (results.length === 0) {
+                
+                // Debug: Check if token exists but is expired
+                const checkExpiredQuery = 'SELECT * FROM users_table WHERE remember_token = ? LIMIT 1';
+                const [expiredResults] = await pool.query(checkExpiredQuery, [token]);
+                if (expiredResults.length > 0) {
+                    console.log('Token exists but expired. Expiry date:', expiredResults[0].token_expires_at);
+                    console.log('Current server time:', new Date());
+                }
+                
+                return null;
+            }
+            
+            return results[0];
+        } catch (error) {
+            console.error('Error validating remember token:', error);
+            return null;
+        }
+    }
+    
+    static async clearRememberToken(userId) {
+        const query = 'UPDATE users_table SET remember_token = NULL, token_expires_at = NULL WHERE id = ?';
+        const values = [userId];
+        await pool.query(query, values);
+        
+        return { message: 'Remember token cleared' };
     }
 
     static async changePassword(username, oldPassword, newPassword) {
