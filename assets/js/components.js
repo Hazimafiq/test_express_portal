@@ -23,11 +23,10 @@ async function initializeNavRail() {
     const userManagementNav = document.getElementById('userManagementNav');
     if (userManagementNav) {
         const userRole = userManagementNav.getAttribute('data-user-role');
-        console.log('[NavRail] User role:', userRole);
+        //console.log('[NavRail] User role:', userRole);
         // Role-based visibility logic can be added here if needed
     }
     
-    // Define route groups for navigation highlighting
     const routeGroups = {
         '/user-management': [
             '/user-management',
@@ -79,8 +78,8 @@ async function initializeNavRail() {
     // Set active nav item based on current path and route groups
     const currentPath = window.location.pathname;
     const activeRouteGroup = getActiveRouteGroup(currentPath);
-    console.log('[NavRail] Current path:', currentPath);
-    console.log('[NavRail] Active route group:', activeRouteGroup);
+    //console.log('[NavRail] Current path:', currentPath);
+    //console.log('[NavRail] Active route group:', activeRouteGroup);
     
     // Top-level items
     document.querySelectorAll('.rail-btn').forEach(btn => {
@@ -215,7 +214,7 @@ async function initializeNavRail() {
     }
 
     // Handle logout click
-    const logoutBtn = document.querySelector('.logout-item');
+    const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             try {

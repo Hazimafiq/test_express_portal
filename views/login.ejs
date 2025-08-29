@@ -189,9 +189,13 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
+            // Get remember me checkbox value
+            const rememberMe = document.querySelector('input[name="remember"]').checked;
+            
             axios.post('/login', {
                 username: username,
-                password: password
+                password: password,
+                rememberMe: rememberMe
             }).then(response => {
                 console.log(response);
                 if (response.status === 200) {

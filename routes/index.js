@@ -1,4 +1,5 @@
 const express = require('express');
+const { requireAuth, requireAuthAPI } = require('../middleware/middleware');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
 const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data, get_normal_case_data, get_upload_stl_data, downloadModelFiles, downloadClinicalPhotos, downloadIndividualFile, updateCasetoDraft, deleteCase } = require('../controller/case');
@@ -7,28 +8,25 @@ const { update_comment, get_comment, update_simulation_plan, add_simulation_plan
 
 const router = express.Router();
 
-// Authentication middleware
-const requireAuth = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-    next();
-};
-
-// API authentication middleware (returns JSON instead of redirect)
-const requireAuthAPI = (req, res, next) => {
-    if (!req.session.user) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-    next();
-};
-
 router.use((req, res, next) => {
     res.locals.user = req.session.user ? [req.session.user] : null;
     next();
 });
+
+// Root route - redirect to login or aligners-cases based on authentication
+router.get('/', (req, res) => {
+    if (req.session && req.session.user) {
+        return res.redirect('/aligners-cases');
+    }
+    return res.redirect('/login');
+});
+
 // Login route
 router.get('/login', (req, res) => {
+    // If user is already logged in, redirect to aligners-cases
+    if (req.session && req.session.user) {
+        return res.redirect('/aligners-cases');
+    }
     res.render('login');
 });
 router.post('/login', login);
