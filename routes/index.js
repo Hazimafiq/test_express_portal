@@ -278,25 +278,4 @@ router.get('/simulation', (req, res) => {
     res.render('simulation');
 });
 
-//testing ui routes
-// Toast route
-router.get('/test-toast', (req, res) => {
-    res.render('test/test-toast');
-});
-
-// Validation route
-router.get('/test-validation', (req, res) => {
-    res.render('test/test-validation');
-});
-
-// Select validation test route
-router.get('/test-select-validation', (req, res) => {
-    res.render('test/test-select-validation');
-});
-
-// Email template preview route
-router.get('/email-preview', (req, res) => {
-    res.render('email_preview');
-});
-
 module.exports = router;
