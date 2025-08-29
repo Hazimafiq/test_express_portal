@@ -331,34 +331,44 @@
                             <h3 class="subsection-title">Clinical Photos</h3>
                             <p class="upload-instructions">Please click on the images below to upload photos</p>
                             <div class="photo-grid">
+                                <%
+                                // Define photo configurations
+                                const facePhotos = [
+                                    { id: 'frontal', dataType: 'frontal', fileType: 'front', defaultImage: '/assets/images/full-face-front.png' },
+                                    { id: 'smile', dataType: 'smile', fileType: 'smiling', defaultImage: '/assets/images/full-smiling-face.png' },
+                                    { id: 'profile', dataType: 'profile', fileType: 'right_side', defaultImage: '/assets/images/right-side-profile.png' }
+                                ];
+                                
+                                const teethPhotos = [
+                                    { id: 'left', dataType: 'left', fileType: 'buccal_left', defaultImage: '/assets/images/buccal-left.png' },
+                                    { id: 'front', dataType: 'front', fileType: 'buccal_center', defaultImage: '/assets/images/bretracted-anterior-frontal.png' },
+                                    { id: 'right', dataType: 'right', fileType: 'buccal_right', defaultImage: '/assets/images/buccal-right.png' },
+                                    { id: 'upper', dataType: 'upper', fileType: 'buccal_top', defaultImage: '/assets/images/mandibular-occlusal.png' },
+                                    { id: 'lower', dataType: 'lower', fileType: 'buccal_bottom', defaultImage: '/assets/images/maxillary-occlusal.png' }
+                                ];
+                                
+                                // Helper function to get file URL by type
+                                function getFileUrlByType(files, fileType, defaultImage) {
+                                    if (!files || !Array.isArray(files)) return defaultImage;
+                                    const file = files.find(file => file.file_type === fileType);
+                                    return file ? file.signedurl : defaultImage;
+                                }
+                                %>
+                                
                                 <div class="photo-row">
-                                    <div class="photo-upload face-photo" data-type="frontal" style="background-image: url('<%= normal_case_files && normal_case_files[3] && normal_case_files[3].file_type === 'front' ? normal_case_files[3].signedurl : '/assets/images/full-face-front.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="frontal" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'front', 'Choose File') : 'Choose File' %>">
+                                    <% facePhotos.forEach(photo => { %>
+                                    <div class="photo-upload face-photo" data-type="<%= photo.dataType %>" style="background-image: url('<%= getFileUrlByType(normal_case_files, photo.fileType, photo.defaultImage) %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="<%= photo.id %>" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, photo.fileType, 'Choose File') : 'Choose File' %>">
                                     </div>
-                                    <div class="photo-upload face-photo" data-type="smile" style="background-image: url('<%= normal_case_files && normal_case_files[4] && normal_case_files[4].file_type === 'smiling' ? normal_case_files[4].signedurl : '/assets/images/full-smiling-face.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="smile" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'smiling', 'Choose File') : 'Choose File' %>">
-                                    </div>
-                                    <div class="photo-upload face-photo" data-type="profile" style="background-image: url('<%= normal_case_files && normal_case_files[5] && normal_case_files[5].file_type === 'right_side' ? normal_case_files[5].signedurl : '/assets/images/right-side-profile.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="profile" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'right_side', 'Choose File') : 'Choose File' %>">
-                                    </div>
+                                    <% }); %>
                                 </div>
                                 
                                 <div class="photo-row">
-                                    <div class="photo-upload teeth-photo" data-type="left" style="background-image: url('<%= normal_case_files && normal_case_files[10] && normal_case_files[10].file_type === 'buccal_left' ? normal_case_files[10].signedurl : '/assets/images/buccal-left.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="left" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'buccal_left', 'Choose File') : 'Choose File' %>">
+                                    <% teethPhotos.forEach(photo => { %>
+                                    <div class="photo-upload teeth-photo" data-type="<%= photo.dataType %>" style="background-image: url('<%= getFileUrlByType(normal_case_files, photo.fileType, photo.defaultImage) %>'); background-size: cover; background-position: center;">
+                                        <input type="file" id="<%= photo.id %>" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, photo.fileType, 'Choose File') : 'Choose File' %>">
                                     </div>
-                                    <div class="photo-upload teeth-photo" data-type="front" style="background-image: url('<%= normal_case_files && normal_case_files[9] && normal_case_files[9].file_type === 'buccal_center' ? normal_case_files[9].signedurl : '/assets/images/bretracted-anterior-frontal.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="front" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'buccal_center', 'Choose File') : 'Choose File' %>">
-                                    </div>
-                                    <div class="photo-upload teeth-photo" data-type="right" style="background-image: url('<%= normal_case_files && normal_case_files[8] && normal_case_files[8].file_type === 'buccal_right' ? normal_case_files[8].signedurl : '/assets/images/buccal-right.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="right" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'buccal_right', 'Choose File') : 'Choose File' %>">
-                                    </div>
-                                    <div class="photo-upload teeth-photo" data-type="upper" style="background-image: url('<%= normal_case_files && normal_case_files[6] && normal_case_files[6].file_type === 'buccal_top' ? normal_case_files[6].signedurl : '/assets/images/mandibular-occlusal.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="upper" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'buccal_top', 'Choose File') : 'Choose File' %>">
-                                    </div>
-                                    <div class="photo-upload teeth-photo" data-type="lower" style="background-image: url('<%= normal_case_files && normal_case_files[7] && normal_case_files[7].file_type === 'buccal_bottom' ? normal_case_files[7].signedurl : '/assets/images/maxillary-occlusal.png' %>'); background-size: cover; background-position: center;">
-                                        <input type="file" id="lower" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, 'buccal_bottom', 'Choose File') : 'Choose File' %>">
-                                    </div>
+                                    <% }); %>
                                 </div>
                             </div>
                         </div>
@@ -732,11 +742,6 @@
                 field: 'treatmentBrand',
                 rule: 'required',
                 message: 'Treatment Brand is required.'
-            },
-            {
-                field: 'customSN',
-                rule: 'required',
-                message: 'Custom SN is required.'
             },
             {
                 field: 'ipr',

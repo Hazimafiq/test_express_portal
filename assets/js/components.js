@@ -575,6 +575,14 @@ class FormValidation {
             field.addEventListener('change', () => {
                 this.clearValidation(field);
             });
+        } else if (field.hasAttribute('data-date-picker')) {
+            // For custom date pickers - listen for both change and input events
+            field.addEventListener('change', () => {
+                this.clearValidation(field);
+            });
+            field.addEventListener('input', () => {
+                this.clearValidation(field);
+            });
         } else {
             // For text inputs, textareas, etc.
             field.addEventListener('input', () => {
@@ -787,4 +795,27 @@ if (typeof loadComponent === 'function') {
         await originalLoadComponent(elementId, componentPath);
         initializeSelectColors();
     };
+}
+
+// Initialize validation for custom date pickers when they're created
+if (typeof CustomDatePicker !== 'undefined') {
+    const originalCustomDatePicker = CustomDatePicker;
+    CustomDatePicker = function(inputElement, options = {}) {
+        const instance = new originalCustomDatePicker(inputElement, options);
+        
+        // Ensure validation system is aware of this date picker
+        if (window.formValidation) {
+            // Bind validation events after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                window.formValidation.bindClearErrorEvents(inputElement);
+            }, 100);
+        }
+        
+        return instance;
+    };
+    
+    // Copy static methods if they exist
+    if (originalCustomDatePicker.initializeDatePickers) {
+        CustomDatePicker.initializeDatePickers = originalCustomDatePicker.initializeDatePickers;
+    }
 }

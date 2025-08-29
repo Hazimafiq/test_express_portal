@@ -238,6 +238,8 @@
             const created_at = '<%= patient_details.created_at %>';
             // Variable to store simulations data
             let simulationsData = [];
+
+            if('<%= patient_details.category %>' === 'New Case') {
             // Load simulations data on page load
             axios.get(`/get-simulation-plan?caseid=${window.CASE_ID}`)
                 .then(response => {
@@ -245,8 +247,9 @@
                 })
                 .catch(error => {
                     console.error('Error fetching simulations:', error);
-                    simulationsData = [];
-                });
+                        simulationsData = [];
+                    });
+            }
             
             // Modal elements - these exist in the HTML
             const approveModal = document.getElementById('approveModal');
@@ -472,7 +475,7 @@
                         axios.get(`/get-simulation-plan?caseid=${window.CASE_ID}`)
                             .then(response => {
                                 const data = response.data.simulation_details;
-                                console.log('simulations', data);
+                                //console.log('simulations', data);
                                 
                                 // Store the simulations data for use elsewhere
                                 simulationsData = data || [];
@@ -1272,17 +1275,13 @@
                 try {
                     const response = await axios.post(`/action-simulation-plan?caseid=${window.CASE_ID}&simulation_number=${simulationId}&action=Approved`, {
                     }).then(response => {
-                        if (response.status === 201) {
-                            //close modal
-                            const approveModal = document.getElementById('approveModal');
-                            approveModal.classList.remove('show');
-                            Toast.success(response.data.message);
+                        //close modal
+                        const approveModal = document.getElementById('approveModal');
+                        approveModal.classList.remove('show');
+                        Toast.success(response.data.message);
                             
-                            // Update UI instead of reloading
-                            updateSimulationUI(simulationId, 'Approved');
-                        } else {
-                            Toast.error(response.data.message);
-                        }
+                        // Update UI instead of reloading
+                        updateSimulationUI(simulationId, 'Approved');
                     });
                 } catch (error) {
                     console.log('error', error);
@@ -1298,17 +1297,13 @@
                 try {
                     const response = await axios.post(`/action-simulation-plan?caseid=${window.CASE_ID}&simulation_number=${simulationId}&action=Revoke`, {
                     }).then(response => {
-                        if (response.status === 201) {
-                            //close modal
-                            const revokeModal = document.getElementById('revokeModal');
-                            revokeModal.classList.remove('show');
-                            Toast.success(response.data.message);
+                        //close modal
+                        const revokeModal = document.getElementById('revokeModal');
+                        revokeModal.classList.remove('show');
+                        Toast.success(response.data.message);
                             
-                            // Update UI instead of reloading
-                            updateSimulationUI(simulationId, 'Revoke');
-                        } else {
-                            Toast.error(response.data.message);
-                        }
+                        // Update UI instead of reloading
+                        updateSimulationUI(simulationId, 'Revoke');
                     });
                 } catch (error) {
                     console.log('error', error);

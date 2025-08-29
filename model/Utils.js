@@ -22,11 +22,14 @@ class Utils {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>33Labs New Case Notification</title>
                     <style>
+                        html {
+                            background-color: #F7F7F7 !important;
+                        }
                         body {
                             margin: 0;
                             padding: 20px;
                             font-family: Arial, sans-serif;
-                            background-color: #f8f8f8 !important;
+                            background-color: #F7F7F7 !important;
                         }
                         .email-container {
                             max-width: 684px;
@@ -115,27 +118,33 @@ class Utils {
                     </style>
                 </head>
                 <body>
-                    <div class="email-container">
-                        <div class="header">
-                            <h1 class="logo"><img src="${loginUrl}/assets/images/email_logo.png" alt="33LABS Logo" class="logo" width="72px" height="19px"></h1>
-                        </div>
-                        
-                        <div class="icon-section">
-                            <div class="document-icon">
-                                <img src="${loginUrl}/assets/images/email-new-case-icon.svg" alt="New Case Icon" class="new-case-icon" width="72px" height="72px">
-                            </div>
-                        </div>
-                        
-                        <div class="content">
-                            <h2 class="headline">You have 1 new case.</h2>
-                            <p class="subheadline">Login to view the case details and proceed to next process.</p>
-                            <a href="${loginUrl}/cases/${caseid}" class="cta-button">Check Now</a>
-                        </div>
-                    </div>
-                    
-                    <div class="footer">
-                        The email message was auto-generated. Please do not respond. If you have any questions while using our platform, our dedicated support team is here to assist you. Please feel free to reach out to us at <a href="mailto:hello@email.com">hello@email.com</a>.
-                    </div>
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #F7F7F7;">
+                        <tr>
+                            <td align="center" style="padding: 20px;">
+                                <div class="email-container">
+                                    <div class="header">
+                                        <h1 class="logo"><img src="https://2025-por-33labs.s3.ap-southeast-1.amazonaws.com/email-image/email_logo.png" alt="33LABS Logo" class="logo" width="72px" height="19px"></h1>
+                                    </div>
+                                    
+                                    <div class="icon-section">
+                                        <div class="document-icon">
+                                            <img src="https://2025-por-33labs.s3.ap-southeast-1.amazonaws.com/email-image/email-new-case-icon.png" alt="New Case Icon" class="new-case-icon" width="72px" height="72px">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="content">
+                                        <h2 class="headline">You have 1 new case.</h2>
+                                        <p class="subheadline">Login to view the case details and proceed to next process.</p>
+                                        <a href="${loginUrl}/cases/${caseid}" class="cta-button">Check Now</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="footer">
+                                    The email message was auto-generated. Please do not respond. If you have any questions while using our platform, our dedicated support team is here to assist you. Please feel free to reach out to us at <a href="mailto:hello@email.com">hello@email.com</a>.
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </body>
                 </html>`;
 

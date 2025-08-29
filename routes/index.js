@@ -1,5 +1,5 @@
 const express = require('express');
-const { requireAuth, requireAuthAPI } = require('../middleware/middleware');
+const { requireAuth, requireAuthAPI, requireAdminRoleAPI } = require('../middleware/middleware');
 const { register, login, changePassword, logout, get_user_profile, getAllUsers, getUserCounts, changePasswordUser, activateUser, deactivateUser, edit_user, deleteUser } = require('../controller/user');
 const path = require('path');
 const { update_case, update_stl_case, getAllCases, getCaseCounts, get_patient_details_data, get_patient_treatment_details_data, get_patient_model_data, get_normal_case_data, get_upload_stl_data, downloadModelFiles, downloadClinicalPhotos, downloadIndividualFile, updateCasetoDraft, deleteCase } = require('../controller/case');
@@ -68,11 +68,8 @@ router.get('/aligners-cases', requireAuth, (req, res) => {
 // Update case route (must come before /cases/:caseId to avoid route conflicts)
 router.get('/update-case/:caseid', requireAuth, async (req, res) => {
     const { caseid } = req.params;
-    //console.log('testt')
     try {
         const normal_case_details = await get_normal_case_data(caseid);
-        //console.log('normal_case_details', normal_case_details[0][0]);
-        //console.log('normal_case_details', normal_case_details[1]);
         res.render('update_case', { 
             caseid, 
             normal_case_details: normal_case_details[0][0],
@@ -190,7 +187,7 @@ router.get('/upload-stl', requireAuth, (req, res) => {
 });
 
 // User management route
-router.get('/user-management', requireAuth, async (req, res) => {
+router.get('/user-management', requireAuth, requireAdminRoleAPI, async (req, res) => {
     const { success } = req.query; 
     res.render('user_management', {
         user: req.session.user,
@@ -199,12 +196,12 @@ router.get('/user-management', requireAuth, async (req, res) => {
 });
 
 // Create user route
-router.get('/create-user', requireAuth, (req, res) => {
+router.get('/create-user', requireAuth, requireAdminRoleAPI, (req, res) => {
     res.render('create_user');
 });
 
 // User details route
-router.get('/user-details/:userId', requireAuth, async (req, res) => {
+router.get('/user-details/:userId', requireAuth, requireAdminRoleAPI, async (req, res) => {
     const { userId } = req.params;
     const { success } = req.query; 
     try {
@@ -220,7 +217,7 @@ router.get('/user-details/:userId', requireAuth, async (req, res) => {
 });
 
 // Update user route
-router.get('/update-user/:userId', requireAuth, async (req, res) => {
+router.get('/update-user/:userId', requireAuth, requireAdminRoleAPI, async (req, res) => {
     const { userId } = req.params;
     try {
         const userProfile = await get_user_profile(userId);       
@@ -234,7 +231,7 @@ router.get('/update-user/:userId', requireAuth, async (req, res) => {
 });
 
 // Update user route
-router.put('/update-user', requireAuth, edit_user);
+router.put('/update-user', requireAuth, requireAdminRoleAPI, edit_user);
 
 // Get current user info route
 router.get('/api/current-user', requireAuth, (req, res) => {
@@ -244,22 +241,22 @@ router.get('/api/current-user', requireAuth, (req, res) => {
 });
 
 // Get all users with filtering, searching, and sorting
-router.get('/get-users', requireAuth, getAllUsers);
+router.get('/get-users', requireAuth, requireAdminRoleAPI, getAllUsers);
 
 // Get user counts by status
-router.get('/get-user-counts', requireAuth, getUserCounts);
+router.get('/get-user-counts', requireAuth, requireAdminRoleAPI, getUserCounts);
 
 // Change password for user
-router.post('/change-password-user', requireAuth, changePasswordUser);
+router.post('/change-password-user', requireAuth, requireAdminRoleAPI, changePasswordUser);
 
 // Activate user
-router.post('/activate-user', requireAuth, activateUser);
+router.post('/activate-user', requireAuth, requireAdminRoleAPI, activateUser);
 
 // Deactivate user
-router.post('/deactivate-user', requireAuth, deactivateUser);
+router.post('/deactivate-user', requireAuth, requireAdminRoleAPI, deactivateUser);
 
 // Delete user
-router.post('/delete-user', requireAuth, deleteUser);
+router.post('/delete-user', requireAuth, requireAdminRoleAPI, deleteUser);
 
 // Side menu component route - renders with user data
 router.get('/components/side-menu', requireAuth, (req, res) => {
@@ -276,27 +273,6 @@ router.get('/', (req, res) => {
 // Default route
 router.get('/simulation', (req, res) => {
     res.render('simulation');
-});
-
-//testing ui routes
-// Toast route
-router.get('/test-toast', (req, res) => {
-    res.render('test/test-toast');
-});
-
-// Validation route
-router.get('/test-validation', (req, res) => {
-    res.render('test/test-validation');
-});
-
-// Select validation test route
-router.get('/test-select-validation', (req, res) => {
-    res.render('test/test-select-validation');
-});
-
-// Email template preview route
-router.get('/email-preview', (req, res) => {
-    res.render('email_preview');
 });
 
 module.exports = router;
