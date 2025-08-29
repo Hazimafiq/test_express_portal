@@ -293,4 +293,10 @@ router.get('/test-validation', (req, res) => {
 router.get('/test-select-validation', (req, res) => {
     res.render('test/test-select-validation');
 });
+
+// Email template preview route
+router.get('/email-preview', (req, res) => {
+    res.render('email_preview');
+});
+
 module.exports = router;

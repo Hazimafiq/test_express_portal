@@ -920,7 +920,7 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(response => {
-                    if('<%= user.role %>' === 'superadmin') {
+                    if('<%= user.role %>' != 'doctor') {
                         Toast.success(response.data.message);
                         //back to case details page
                         setTimeout(() => {
