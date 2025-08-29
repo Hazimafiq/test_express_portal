@@ -116,9 +116,9 @@
 
 
             if (result) {
-                $('#simulationIframe').html(`<iframe src="https://onyx.orthorobot.com/webviewer/main.html` + result[0] + `" border="0"></iframe>`)
+                $('#simulationIframe').html(`<iframe src="<%= onyxBaseUrl %>/webviewer/main.html` + result[0] + `" border="0"></iframe>`)
             } else {
-                $('#simulationIframe').html(`<iframe src="https://drclearaligners.xyz/onyx/Viewer/show.html` + result[0] + `" border="0"></iframe>`)
+                $('#simulationIframe').html(`<iframe src="<%= drClearAlignersUrl %>/onyx/Viewer/show.html` + result[0] + `" border="0"></iframe>`)
             }
         })
     </script>

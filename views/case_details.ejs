@@ -865,13 +865,13 @@
                                 <div class="simulation-details">
                                     <div class="detail-item">
                                         <label>Date Uploaded</label>
-                                        <span class="detail-value">${new Date(simulation.created_time || simulation.upload_date).toLocaleDateString('en-GB')}</span>
+                                        <span class="detail-value">${simulation.created_time !== null ? new Date(simulation.created_time).toLocaleDateString('en-GB') : '-'}</span>
                                     </div>
                                     
                                     ${simulation.simulation_url ? `
                                     <div class="detail-item">
                                         <label>Simulation URL</label>
-                                        <div class="url-field" onclick="window.open('${simulation.simulation_url}', '_blank')" style="cursor: pointer;">
+                                        <div class="url-field" onclick="window.open('<%= simulationBaseUrl %>/simulation?url=${simulation.simulation_url}', '_blank')" style="cursor: pointer;">
                                             <img src="/assets/images/external-link-icon.svg" alt="External Link" class="field-icon">
                                             <span class="url-text">${simulation.simulation_url}</span>
                                         </div>

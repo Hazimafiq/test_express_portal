@@ -204,8 +204,8 @@
                 const url = new URL(window.location.href);
                 const patientName = url.searchParams.get('patient_name');
                 formData.append('name', patientName);
-                formData.append('simulation_url', document.getElementById('simulationUrl').value);
-                formData.append('ipr', document.getElementById('iprFile').files[0]);
+                formData.append('simulationUrl', document.getElementById('simulationUrl').value);
+                formData.append('iprFile', document.getElementById('iprFile').files[0]);
                 formData.append('caseId', '<%= caseId %>');
                 formData.append('simulationNumber', simulationNumber);
        

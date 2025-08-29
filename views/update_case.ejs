@@ -426,6 +426,11 @@
                                     <% facePhotos.forEach(photo => { %>
                                     <div class="photo-upload face-photo" data-type="<%= photo.dataType %>" style="background-image: url('<%= getFileUrlByType(normal_case_files, photo.fileType, photo.defaultImage) %>'); background-size: cover; background-position: center;">
                                         <input type="file" id="<%= photo.id %>" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, photo.fileType, 'Choose File') : 'Choose File' %>">
+                                        <% if (getFileUrlByType(normal_case_files, photo.fileType, photo.defaultImage) !== photo.defaultImage) { %>
+                                        <div class="clear-photo" style="display: block;">×</div>
+                                        <% } else { %>
+                                        <div class="clear-photo" style="display: none;">×</div>
+                                        <% } %>
                                     </div>
                                     <% }); %>
                                 </div>
@@ -434,6 +439,11 @@
                                     <% teethPhotos.forEach(photo => { %>
                                     <div class="photo-upload teeth-photo" data-type="<%= photo.dataType %>" style="background-image: url('<%= getFileUrlByType(normal_case_files, photo.fileType, photo.defaultImage) %>'); background-size: cover; background-position: center;">
                                         <input type="file" id="<%= photo.id %>" accept="image/*" style="display: none;" value="<%= normal_case_files ? getFileNameOrPlaceholder(normal_case_files, photo.fileType, 'Choose File') : 'Choose File' %>">
+                                        <% if (getFileUrlByType(normal_case_files, photo.fileType, photo.defaultImage) !== photo.defaultImage) { %>
+                                        <div class="clear-photo" style="display: block;">×</div>
+                                        <% } else { %>
+                                        <div class="clear-photo" style="display: none;">×</div>
+                                        <% } %>
                                     </div>
                                     <% }); %>
                                 </div>
@@ -683,6 +693,26 @@
             return mapping[fileType] || null;
         }
 
+        // Helper function to get photo configuration by input ID
+        function getPhotoConfigById(inputId) {
+            const facePhotos = [
+                { id: 'frontal', dataType: 'frontal', fileType: 'front', defaultImage: '/assets/images/full-face-front.png' },
+                { id: 'smile', dataType: 'smile', fileType: 'smiling', defaultImage: '/assets/images/full-smiling-face.png' },
+                { id: 'profile', dataType: 'profile', fileType: 'right_side', defaultImage: '/assets/images/right-side-profile.png' }
+            ];
+            
+            const teethPhotos = [
+                { id: 'left', dataType: 'left', fileType: 'buccal_left', defaultImage: '/assets/images/buccal-left.png' },
+                { id: 'front', dataType: 'front', fileType: 'buccal_center', defaultImage: '/assets/images/brettracted-anterior-frontal.png' },
+                { id: 'right', dataType: 'right', fileType: 'buccal_right', defaultImage: '/assets/images/buccal-right.png' },
+                { id: 'upper', dataType: 'upper', fileType: 'buccal_top', defaultImage: '/assets/images/mandibular-occlusal.png' },
+                { id: 'lower', dataType: 'lower', fileType: 'buccal_bottom', defaultImage: '/assets/images/maxillary-occlusal.png' }
+            ];
+            
+            const allPhotos = [...facePhotos, ...teethPhotos];
+            return allPhotos.find(photo => photo.id === inputId) || null;
+        }
+
         // Initialize file flags when page loads
         document.addEventListener('DOMContentLoaded', () => {
             initializeFileFlags();
@@ -741,6 +771,7 @@
         // Clinical photos drag and drop
         document.querySelectorAll('.photo-upload').forEach(upload => {
             const input = upload.querySelector('input[type="file"]');
+            const clearButton = upload.querySelector('.clear-photo');
             
             upload.addEventListener('click', () => {
                 input.click();
@@ -801,9 +832,52 @@
                             //upload.classList.add('has-image');
                         };
                         reader.readAsDataURL(file);
+                        
+                        // Show clear button for newly uploaded file
+                        if (clearButton) {
+                            clearButton.style.display = 'block';
+                        }
                     }
                 }
             });
+
+            // Handle clear button click for clinical photos
+            if (clearButton) {
+                clearButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    const fileType = getFileTypeFromInputId(input.id);
+                    if (fileType) {
+                        // Check if this was an existing file from backend
+                        const hasExistingFile = upload.style.backgroundImage && 
+                            !upload.style.backgroundImage.includes('data:image') && 
+                            !upload.style.backgroundImage.includes('Choose File');
+                        
+                        if (hasExistingFile) {
+                            // Mark existing file for removal
+                            fileFlags.set(fileType, 'remove');
+                            removedFiles.add(fileType);
+                            console.log(`Clinical photo ${fileType} marked for removal`);
+                        } else {
+                            // Remove new file flag if it was just uploaded
+                            fileFlags.delete(fileType);
+                            console.log(`Clinical photo ${fileType} removed from new files`);
+                        }
+                    }
+                    
+                    // Clear the file input
+                    input.value = '';
+                    
+                    // Reset the background image to default
+                    const photoConfig = getPhotoConfigById(input.id);
+                    if (photoConfig) {
+                        upload.style.backgroundImage = `url('${photoConfig.defaultImage}')`;
+                    }
+                    
+                    // Hide the clear button
+                    clearButton.style.display = 'none';
+                });
+            }
         });
 
         // Validation rules
