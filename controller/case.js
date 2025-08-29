@@ -282,7 +282,7 @@ exports.get_upload_stl_data = async (req, res) => {
 
 // update case to other status (0 = draft, 1 = submitted)
 exports.updateCasetoDraft = async (req, res) => {
-    if(req.session.user.role != 'admin'){
+    if(req.session.user.role != 'admin' && req.session.user.role != 'superadmin'){
         return res.status(401).json({ message: 'You have no permission to do this action.' });
     }
     try {
