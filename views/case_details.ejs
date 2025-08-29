@@ -313,7 +313,7 @@
             const addPlanBtn = document.getElementById('addPlanBtn');
             if (addPlanBtn) {
                 addPlanBtn.addEventListener('click', () => {
-                    window.location.href = `/add-treatment-plan/${window.CASE_ID}`;
+                    window.location.href = `/add-treatment-plan/${window.CASE_ID}?patient_name=<%= patient_details.name %>`;
                 });
             }
 

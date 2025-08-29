@@ -200,6 +200,9 @@
                 formData.append('iprFile', document.getElementById('iprFile').files[0]);
                 formData.append('caseId', '<%= caseId %>');
                 formData.append('simulationNumber', 1);
+                const url = new URL(window.location.href);
+                const patientName = url.searchParams.get('patient_name');
+                formData.append('name', patientName);
 
                 try {
                     const response = await axios.post('/add-simulation-plan?caseid=<%= caseId %>', formData, {

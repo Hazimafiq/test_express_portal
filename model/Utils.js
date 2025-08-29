@@ -13,22 +13,150 @@ const transporter = nodemailer.createTransport({
 class Utils {
     static async new_case_notification(caseid) {
         try {
+            const loginUrl = process.env.BASE_URL;
+            const htmlTemplate = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>33Labs New Case Notification</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 20px;
+                            font-family: Arial, sans-serif;
+                            background-color: #f8f8f8;
+                        }
+                        .email-container {
+                            max-width: 684px;
+                            margin: 0 auto;
+                            padding: 33px 36px 32px 36px;
+                            background: var(--Colour-base-white, #FFF);
+                            overflow: hidden;
+                        }
+                        .header {
+                            text-align: center;
+                        }
+                        .logo {
+                            color: #338877;
+                            font-size: 28px;
+                            font-weight: bold;
+                            margin: 0;
+                        }
+                        .icon-section {
+                            text-align: center;
+                            margin-top: 32px;
+                            margin-bottom: 24px;
+                        }
+                        .document-icon {
+                            position: relative;
+                            display: inline-block;
+                            width: 72px;
+                            height: 72px;
+                        }
+                        .content {
+                            text-align: center;
+                        }
+                        .headline {
+                            color: var(--Colour-text-subtle, #333);
+                            font-size: 20px;
+                            font-weight: 700;
+                            line-height: 24px;
+                            letter-spacing: 0.4px;
+                            margin-bottom: 8px;
+                        }
+                        .subheadline {
+                            color: var(--Colour-text-accent-grey, #767676);
+                            font-size: 16px;
+                            font-weight: 500;
+                            line-height: 20px;
+                            letter-spacing: 0.32px;
+                            margin-bottom: 48px;
+                        }
+                        .cta-button {
+                            display: inline-block;
+                            border-radius: 8px;
+                            background: var(--Colour-background-brand-primary-default, #036);
+                            color: white;
+                            text-decoration: none;
+                            padding: 8px 16px;
+                            color: #FFF;
+                            font-size: 14px;
+                            font-weight: 700;
+                            line-height: 20px;
+                            letter-spacing: 0.28px;
+                            transition: background-color 0.3s ease;
+                        }
+                        .cta-button:hover {
+                            background-color: #036;
+                        }
+                        .footer {
+                            text-align: center;
+                            max-width: 684px;
+                            margin: 20px auto;
+                            color: var(--Colour-text-subtlest, #A1A1A1);
+                            font-size: 12px;
+                            font-weight: 500;
+                            line-height: 16px;
+                            letter-spacing: 0.24px;
+                        }
+                        .footer a {
+                            color: #3483E4;
+                            font-size: 12px;
+                            font-weight: 700;
+                            line-height: 16px;
+                            letter-spacing: 0.24px;
+                            text-decoration: none;
+                        }
+                        .footer a:hover {
+                            color: #3483E4;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-container">
+                        <div class="header">
+                            <h1 class="logo"><img src="/assets/images/email_logo.png" alt="33LABS Logo" class="logo" width=""72px" height=""19px"></h1>
+                        </div>
+                        
+                        <div class="icon-section">
+                            <div class="document-icon">
+                                <img src="/assets/images/email-new-case-icon.svg" alt="New Case Icon" class="new-case-icon" width="72px" height="72px">
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <h2 class="headline">You have 1 new case.</h2>
+                            <p class="subheadline">Login to view the case details and proceed to next process.</p>
+                            <a href="${loginUrl}/case/${caseid}" class="cta-button">Check Now</a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer">
+                        The email message was auto-generated. Please do not respond. If you have any questions while using our platform, our dedicated support team is here to assist you. Please feel free to reach out to us at <a href="mailto:hello@email.com">hello@email.com</a>.
+                    </div>
+                </body>
+                </html>`;
+
             const mailOptions = {
                 from: 'donotreply@drclearaligners.com',
-                to: 'dickson.it@drclearaligners.com',
+                to: 'dickson.it@drclearaligners.com, hazim.it@drclearaligners.com',
                 // bcc: 'larokrss1@gmail.com',
                 subject: '33Labs New Case',
-                text: 'New Case Submitted:' + caseid,
+                html: htmlTemplate,
+                text: 'New Case Submitted: ' + caseid + '\n\nYou have 1 new case. Login to view the case details and proceed to next process.',
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.error(error);
                 } else {
+                    console.log('Email sent successfully:', info.messageId);
                 }
             });
         } catch (err) {
-            console.error(error);
+            console.error(err);
             // return sendToDiscord('Sendmail error(forgotpassword):' + err);
         }
     }
