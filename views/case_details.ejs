@@ -865,7 +865,7 @@
                                 <div class="simulation-details">
                                     <div class="detail-item">
                                         <label>Date Uploaded</label>
-                                        <span class="detail-value">${new Date(simulation.created_time || simulation.upload_date).toLocaleDateString('en-GB')}</span>
+                                        <span class="detail-value">${simulation.created_time !== null ? new Date(simulation.created_time).toLocaleDateString('en-GB') : '-'}</span>
                                     </div>
                                     
                                     ${simulation.simulation_url ? `
