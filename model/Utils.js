@@ -32,7 +32,7 @@ class Utils {
                             max-width: 684px;
                             margin: 0 auto;
                             padding: 33px 36px 32px 36px;
-                            background: var(--Colour-base-white, #FFF);
+                            background: #FFFFFF;
                             overflow: hidden;
                         }
                         .header {
@@ -59,7 +59,7 @@ class Utils {
                             text-align: center;
                         }
                         .headline {
-                            color: var(--Colour-text-subtle, #333);
+                            color: #333333;
                             font-size: 20px;
                             font-weight: 700;
                             line-height: 24px;
@@ -67,7 +67,7 @@ class Utils {
                             margin-bottom: 8px;
                         }
                         .subheadline {
-                            color: var(--Colour-text-accent-grey, #767676);
+                            color: #767676;
                             font-size: 16px;
                             font-weight: 500;
                             line-height: 20px;
@@ -77,11 +77,11 @@ class Utils {
                         .cta-button {
                             display: inline-block;
                             border-radius: 8px;
-                            background: var(--Colour-background-brand-primary-default, #036);
+                            background: #003366;
                             color: white !important;
                             text-decoration: none;
                             padding: 8px 16px;
-                            color: #FFF;
+                            color: #FFFFFF;
                             font-size: 14px;
                             font-weight: 700;
                             line-height: 20px;
@@ -89,13 +89,13 @@ class Utils {
                             transition: background-color 0.3s ease;
                         }
                         .cta-button:hover {
-                            background-color: #036;
+                            background-color: #003366;
                         }
                         .footer {
                             text-align: center;
                             max-width: 684px;
                             margin: 20px auto;
-                            color: var(--Colour-text-subtlest, #A1A1A1);
+                            color: #A1A1A1;
                             font-size: 12px;
                             font-weight: 500;
                             line-height: 16px;
@@ -117,19 +117,19 @@ class Utils {
                 <body>
                     <div class="email-container">
                         <div class="header">
-                            <h1 class="logo"><img src="/assets/images/email_logo.png" alt="33LABS Logo" class="logo" width=""72px" height=""19px"></h1>
+                            <h1 class="logo"><img src="${loginUrl}/assets/images/email_logo.png" alt="33LABS Logo" class="logo" width="72px" height="19px"></h1>
                         </div>
                         
                         <div class="icon-section">
                             <div class="document-icon">
-                                <img src="/assets/images/email-new-case-icon.svg" alt="New Case Icon" class="new-case-icon" width="72px" height="72px">
+                                <img src="${loginUrl}/assets/images/email-new-case-icon.svg" alt="New Case Icon" class="new-case-icon" width="72px" height="72px">
                             </div>
                         </div>
                         
                         <div class="content">
                             <h2 class="headline">You have 1 new case.</h2>
                             <p class="subheadline">Login to view the case details and proceed to next process.</p>
-                            <a href="${loginUrl}/case/${caseid}" class="cta-button">Check Now</a>
+                            <a href="${loginUrl}/cases/${caseid}" class="cta-button">Check Now</a>
                         </div>
                     </div>
                     
