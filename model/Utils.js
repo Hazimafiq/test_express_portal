@@ -26,7 +26,7 @@ class Utils {
                             margin: 0;
                             padding: 20px;
                             font-family: Arial, sans-serif;
-                            background-color: #f8f8f8;
+                            background-color: #f8f8f8 !important;
                         }
                         .email-container {
                             max-width: 684px;
@@ -78,7 +78,7 @@ class Utils {
                             display: inline-block;
                             border-radius: 8px;
                             background: var(--Colour-background-brand-primary-default, #036);
-                            color: white;
+                            color: white !important;
                             text-decoration: none;
                             padding: 8px 16px;
                             color: #FFF;
