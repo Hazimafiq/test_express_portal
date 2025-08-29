@@ -104,8 +104,8 @@ CREATE TABLE `simulation_data_table` (
   `simulation_number` INT DEFAULT '1',
   `decision` VARCHAR(55) DEFAULT 'TBD',
   `simulation_url` TEXT DEFAULT NULL,
-  `created_time` DATETIME NULL,
-  `updated_time` DATETIME NULL,
+  `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 );
 
@@ -120,3 +120,8 @@ CREATE TABLE `comments_table` (
   `edit` INT DEFAULT 0,
   PRIMARY KEY (`id`)
 );  
+
+CREATE TABLE order_counter (
+    date_key int PRIMARY KEY,
+    counter INT NOT NULL
+);
