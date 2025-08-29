@@ -127,7 +127,8 @@ exports.update_stl_case = async (req, res) => {
             if(status == 0){
                 res.status(201).json({ message: 'Case draft created successfully' });
             } else {        
-                const sendmail = await Utils.new_case_notification(new_case);        
+                const sendmail = await Utils.new_case_notification(new_case); 
+                const upload_spreadsheet = await Utils.insert_upload_stl_case_to_spreadsheet(new_case, name, treatment_brand, product, req.session.user.fullName);        
                 res.status(201).json({ message: 'Case created successfully' });
             }
         } else {

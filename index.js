@@ -24,6 +24,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname + '/robots.txt'))
+})
+
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
