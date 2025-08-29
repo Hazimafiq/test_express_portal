@@ -520,11 +520,11 @@
                     rule: ['required'],
                     message: 'Phone number is required.'
                 },
-                {
-                    field: 'country',
-                    rule: 'required',
-                    message: 'Country is required.'
-                },
+                // {
+                //     field: 'country',
+                //     rule: 'required',
+                //     message: 'Country is required.'
+                // },
                 {
                     field: 'clinic',
                     rule: 'required',
@@ -546,6 +546,8 @@
                     message: 'Role is required.'
                 }
             ];
+
+            console.log(validations);
             
             // Validate all fields
             const isValid = formValidation.validateFields(validations);
