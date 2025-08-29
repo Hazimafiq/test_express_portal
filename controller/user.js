@@ -246,8 +246,8 @@ exports.deactivateUser = async (req, res) => {
 // Edit user
 exports.edit_user = async (req, res) => {
     try {
-        const { userId, username, fullName, phoneNumber, email, country, role } = req.body;
-        const result = await User.edit_user(userId, username, fullName, phoneNumber, email, country, role);
+        const { userId, username, fullName, phoneNumber, email, country, role, address, postcode, city, state } = req.body;
+        const result = await User.edit_user(userId, username, fullName, phoneNumber, email, country, role, address, postcode, city, state);
         res.status(200).json({ message: result.message });
     } catch (err) {
         console.error('Error updating user:', err);

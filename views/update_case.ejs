@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="/assets/css/date-picker.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
     <link rel="stylesheet" href="/assets/css/toast.css">
+    <link rel="stylesheet" href="/assets/css/custom-select.css">
     <script src="/assets/js/components.js"></script>
     <script src="/assets/js/date-picker.js"></script>
+    <script src="/assets/js/custom-select.js"></script>
 
 </head>
 <body>
@@ -61,8 +63,21 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Gender</span>
                             </label>
-                            <div class="select-wrapper">
-                                <select id="patientGender" name="patientGender" value="<%= normal_case_details.gender %>">
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select" id="patientGender-select">
+                                    <div class="custom-select__trigger">
+                                        <span class="custom-select__placeholder"><%= normal_case_details.gender || 'Select' %></span>
+                                        <div class="custom-select__arrow">
+                                            <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                        </div>
+                                    </div>
+                                    <div class="custom-select__options">
+                                        <span class="custom-select__option" data-value="Male">Male</span>
+                                        <span class="custom-select__option" data-value="Female">Female</span>
+                                        <span class="custom-select__option" data-value="Prefer not to say">Prefer not to say</span>
+                                    </div>
+                                </div>
+                                <select id="patientGender" name="patientGender" style="display: none;" value="<%= normal_case_details.gender %>">
                                     <option value="">Select</option>
                                     <option value="Male" <%= normal_case_details.gender === 'Male' ? 'selected' : '' %>>Male</option>
                                     <option value="Female" <%= normal_case_details.gender === 'Female' ? 'selected' : '' %>>Female</option>
@@ -90,8 +105,22 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Treatment Brand</span>
                             </label>
-                            <div class="select-wrapper">
-                                <select id="treatmentBrand" name="treatmentBrand" value="<%= normal_case_details.treatment_brand %>">
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select" id="treatmentBrand-select">
+                                    <div class="custom-select__trigger">
+                                        <span class="custom-select__placeholder"><%= normal_case_details.treatment_brand || 'Select' %></span>
+                                        <div class="custom-select__arrow">
+                                            <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                        </div>
+                                    </div>
+                                    <div class="custom-select__options">
+                                        <span class="custom-select__option" data-value="DCA Pro">DCA Pro</span>
+                                        <span class="custom-select__option" data-value="Diamond Aligner">Diamond Aligner</span>
+                                        <span class="custom-select__option" data-value="OEM-Plain">OEM-Plain</span>
+                                        <span class="custom-select__option" data-value="OEM-Clinic Brand">OEM-Clinic Brand</span>
+                                    </div>
+                                </div>
+                                <select id="treatmentBrand" name="treatmentBrand" style="display: none;" value="<%= normal_case_details.treatment_brand %>">
                                     <option value="">Select</option>
                                     <option value="DCA Pro" <%= normal_case_details.treatment_brand === 'DCA Pro' ? 'selected' : '' %>>DCA Pro</option>
                                     <option value="Diamond Aligner" <%= normal_case_details.treatment_brand === 'Diamond Aligner' ? 'selected' : '' %>>Diamond Aligner</option>
@@ -213,8 +242,21 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">IPR</span>
                             </label>
-                            <div class="select-wrapper">
-                                <select id="ipr" name="ipr" value="<%= normal_case_details.ipr %>">
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select" id="ipr-select">
+                                    <div class="custom-select__trigger">
+                                        <span class="custom-select__placeholder"><%= normal_case_details.ipr || 'Select' %></span>
+                                        <div class="custom-select__arrow">
+                                            <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                        </div>
+                                    </div>
+                                    <div class="custom-select__options">
+                                        <span class="custom-select__option" data-value="Yes">Yes</span>
+                                        <span class="custom-select__option" data-value="No">No</span>
+                                        <span class="custom-select__option" data-value="As Recommended">As Recommended</span>
+                                    </div>
+                                </div>
+                                <select id="ipr" name="ipr" style="display: none;" value="<%= normal_case_details.ipr %>">
                                     <option value="">Select</option>
                                     <option value="Yes" <%= normal_case_details.ipr === 'Yes' ? 'selected' : '' %>>Yes</option>
                                     <option value="No" <%= normal_case_details.ipr === 'No' ? 'selected' : '' %>>No</option>
@@ -228,8 +270,21 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Attachments</span>
                             </label>
-                            <div class="select-wrapper">
-                                <select id="attachments" name="attachments" value="<%= normal_case_details.attachments %>">
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select" id="attachments-select">
+                                    <div class="custom-select__trigger">
+                                        <span class="custom-select__placeholder"><%= normal_case_details.attachments || 'Select' %></span>
+                                        <div class="custom-select__arrow">
+                                            <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                        </div>
+                                    </div>
+                                    <div class="custom-select__options">
+                                        <span class="custom-select__option" data-value="Yes">Yes</span>
+                                        <span class="custom-select__option" data-value="No">No</span>
+                                        <span class="custom-select__option" data-value="As Recommended">As Recommended</span>
+                                    </div>
+                                </div>
+                                <select id="attachments" name="attachments" style="display: none;" value="<%= normal_case_details.attachments %>">
                                     <option value="">Select</option>
                                     <option value="Yes" <%= normal_case_details.attachments === 'Yes' ? 'selected' : '' %>>Yes</option>
                                     <option value="No" <%= normal_case_details.attachments === 'No' ? 'selected' : '' %>>No</option>
@@ -259,8 +314,20 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Model Type</span>
                             </label>
-                            <div class="select-wrapper">
-                                <select id="modelType" name="modelType" value="<%= normal_case_details.model_type %>">
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select" id="modelType-select">
+                                    <div class="custom-select__trigger">
+                                        <span class="custom-select__placeholder"><%= normal_case_details.model_type || 'Select' %></span>
+                                        <div class="custom-select__arrow">
+                                            <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                        </div>
+                                    </div>
+                                    <div class="custom-select__options">
+                                        <span class="custom-select__option" data-value="Digital Model">Digital Model</span>
+                                        <span class="custom-select__option" data-value="Plaster Model">Plaster Model</span>
+                                    </div>
+                                </div>
+                                <select id="modelType" name="modelType" style="display: none;" value="<%= normal_case_details.model_type %>">
                                     <option value="">Select</option>
                                     <option value="Digital Model" <%= normal_case_details.model_type === 'Digital Model' ? 'selected' : '' %>>Digital Model</option>
                                     <option value="Plaster Model" <%= normal_case_details.model_type === 'Plaster Model' ? 'selected' : '' %>>Plaster Model</option>
@@ -438,6 +505,24 @@
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
+            
+            // Initialize custom select dropdowns with pre-selected values
+            setTimeout(() => {
+                if (window.customSelect) {
+                    // Set initial values for custom selects using the new method
+                    const selects = [
+                        { id: 'patientGender', value: '<%= normal_case_details.gender %>' },
+                        { id: 'treatmentBrand', value: '<%= normal_case_details.treatment_brand %>' },
+                        { id: 'ipr', value: '<%= normal_case_details.ipr %>' },
+                        { id: 'attachments', value: '<%= normal_case_details.attachments %>' },
+                        { id: 'modelType', value: '<%= normal_case_details.model_type %>' }
+                    ];
+                    
+                    selects.forEach(select => {
+                        window.customSelect.setValueFromData(select.id, select.value);
+                    });
+                }
+            }, 100);
         });
 
         const deleteModal = document.getElementById('deleteModal');

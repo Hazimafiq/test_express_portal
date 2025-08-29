@@ -774,6 +774,8 @@ body {
     color: var(--Colour-text-danger, #D4382B);
     background: transparent;
   }
+
+
 /* Select wrapper container */
 .select-wrapper {
     position: relative;

@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="/assets/css/create_user.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
     <link rel="stylesheet" href="/assets/css/toast.css">
+    <link rel="stylesheet" href="/assets/css/custom-select.css">
     <script src="/assets/js/components.js"></script>
+    <script src="/assets/js/custom-select.js"></script>
 </head>
 <body>
     <!-- Navigation Rail Component -->
@@ -74,8 +76,21 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Country</span>
                                 </label>
-                                <div class="select-wrapper">
-                                    <select id="country" name="country">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="country-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder">Select</span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="Malaysia">Malaysia</span>
+                                            <span class="custom-select__option" data-value="Singapore">Singapore</span>
+                                            <span class="custom-select__option" data-value="Thailand">Thailand</span>
+                                        </div>
+                                    </div>
+                                    <select id="country" name="country" style="display: none;">
                                         <option value="">Select</option>
                                         <option value="malaysia">Malaysia</option>
                                         <option value="singapore">Singapore</option>
@@ -113,8 +128,33 @@
                             </div>
                             <div class="form-field">
                                 <label for="state">State</label>
-                                <div class="select-wrapper">
-                                    <select id="state" name="state">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="state-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder">Select</span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="Selangor">Selangor</span>
+                                            <span class="custom-select__option" data-value="Kuala Lumpur">Kuala Lumpur</span>
+                                            <span class="custom-select__option" data-value="Penang">Penang</span>
+                                            <span class="custom-select__option" data-value="Johor">Johor</span>
+                                            <span class="custom-select__option" data-value="Perak">Perak</span>
+                                            <span class="custom-select__option" data-value="Kedah">Kedah</span>
+                                            <span class="custom-select__option" data-value="Kelantan">Kelantan</span>
+                                            <span class="custom-select__option" data-value="Terengganu">Terengganu</span>
+                                            <span class="custom-select__option" data-value="Pahang">Pahang</span>
+                                            <span class="custom-select__option" data-value="Negeri Sembilan">Negeri Sembilan</span>
+                                            <span class="custom-select__option" data-value="Melaka">Melaka</span>
+                                            <span class="custom-select__option" data-value="Perlis">Perlis</span>
+                                            <span class="custom-select__option" data-value="Sabah">Sabah</span>
+                                            <span class="custom-select__option" data-value="Sarawak">Sarawak</span>
+                                            <span class="custom-select__option" data-value="Other">Other</span>
+                                        </div>
+                                    </div>
+                                    <select id="state" name="state" style="display: none;">
                                         <option value="">Select</option>
                                         <option value="selangor">Selangor</option>
                                         <option value="kuala_lumpur">Kuala Lumpur</option>
@@ -126,8 +166,6 @@
                                         <option value="terengganu">Terengganu</option>
                                         <option value="pahang">Pahang</option>
                                         <option value="negeri_sembilan">Negeri Sembilan</option>
-                                        <option value="melaka">Melaka</option>
-                                        <option value="perlis">Perlis</option>
                                         <option value="sabah">Sabah</option>
                                         <option value="sarawak">Sarawak</option>
                                         <option value="other">Other</option>

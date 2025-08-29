@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="/assets/css/create_user.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
     <link rel="stylesheet" href="/assets/css/toast.css">
+    <link rel="stylesheet" href="/assets/css/custom-select.css">
     <script src="/assets/js/components.js"></script>
+    <script src="/assets/js/custom-select.js"></script>
 </head>
 <body>
     <!-- Navigation Rail Component -->
@@ -85,16 +87,25 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Country</span>
                                 </label>
-                                <div class="select-wrapper">
-                                    <select id="country" name="country">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="country-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder"><%= user.country || 'Select' %></span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="malaysia">Malaysia</span>
+                                            <span class="custom-select__option" data-value="thailand">Thailand</span>
+                                            <span class="custom-select__option" data-value="singapore">Singapore</span>
+                                        </div>
+                                    </div>
+                                    <select id="country" name="country" style="display: none;">
                                         <option value="">Select</option>
                                         <option value="malaysia" <%= user.country === 'malaysia' ? 'selected' : '' %>>Malaysia</option>
-                                        <option value="thailand" <%= user.country === 'thailand' ? 'selected' : '' %>>Thailand</option>
                                         <option value="singapore" <%= user.country === 'singapore' ? 'selected' : '' %>>Singapore</option>
-                                        <option value="indonesia" <%= user.country === 'indonesia' ? 'selected' : '' %>>Indonesia</option>
-                                        <option value="philippines" <%= user.country === 'philippines' ? 'selected' : '' %>>Philippines</option>
-                                        <option value="vietnam" <%= user.country === 'vietnam' ? 'selected' : '' %>>Vietnam</option>
-                                        <option value="other" <%= user.country === 'other' ? 'selected' : '' %>>Other</option>
+                                        <option value="thailand" <%= user.country === 'thailand' ? 'selected' : '' %>>Thailand</option>
                                     </select>
                                 </div>
                             </div>
@@ -128,8 +139,33 @@
                             </div>
                             <div class="form-field">
                                 <label for="state">State</label>
-                                <div class="select-wrapper">
-                                    <select id="state" name="state">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="state-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder"><%= user.state || 'Select' %></span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="selangor">Selangor</span>
+                                            <span class="custom-select__option" data-value="kuala_lumpur">Kuala Lumpur</span>
+                                            <span class="custom-select__option" data-value="penang">Penang</span>
+                                            <span class="custom-select__option" data-value="johor">Johor</span>
+                                            <span class="custom-select__option" data-value="perak">Perak</span>
+                                            <span class="custom-select__option" data-value="kedah">Kedah</span>
+                                            <span class="custom-select__option" data-value="kelantan">Kelantan</span>
+                                            <span class="custom-select__option" data-value="terengganu">Terengganu</span>
+                                            <span class="custom-select__option" data-value="pahang">Pahang</span>
+                                            <span class="custom-select__option" data-value="negeri_sembilan">Negeri Sembilan</span>
+                                            <span class="custom-select__option" data-value="melaka">Melaka</span>
+                                            <span class="custom-select__option" data-value="perlis">Perlis</span>
+                                            <span class="custom-select__option" data-value="sabah">Sabah</span>
+                                            <span class="custom-select__option" data-value="sarawak">Sarawak</span>
+                                            <span class="custom-select__option" data-value="other">Other</span>
+                                        </div>
+                                    </div>
+                                    <select id="state" name="state" style="display: none;">
                                         <option value="">Select</option>
                                         <option value="selangor" <%= user.state === 'selangor' ? 'selected' : '' %>>Selangor</option>
                                         <option value="kuala_lumpur" <%= user.state === 'kuala_lumpur' ? 'selected' : '' %>>Kuala Lumpur</option>
@@ -242,6 +278,39 @@
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
+            
+            // Initialize custom select dropdowns with pre-selected values
+            setTimeout(() => {
+                if (window.customSelect) {
+                    // Set initial values for custom selects using the new method
+                    const selects = [
+                        { id: 'country', value: '<%= user.country %>' },
+                        { id: 'state', value: '<%= user.state %>' }
+                    ];
+                    
+                    selects.forEach(select => {
+                        window.customSelect.setValueFromData(select.id, select.value);
+                    });
+                }
+                
+                // Capitalize first letter of country and state placeholders
+                const capitalizeFirstLetter = (str) => {
+                    if (!str || str === 'Select') return str;
+                    return str.charAt(0).toUpperCase() + str.slice(1);
+                };
+                
+                // Apply capitalization to placeholders
+                const countryPlaceholder = document.querySelector('#country-select .custom-select__placeholder');
+                const statePlaceholder = document.querySelector('#state-select .custom-select__placeholder');
+                
+                if (countryPlaceholder && countryPlaceholder.textContent !== 'Select') {
+                    countryPlaceholder.textContent = capitalizeFirstLetter(countryPlaceholder.textContent);
+                }
+                
+                if (statePlaceholder && statePlaceholder.textContent !== 'Select') {
+                    statePlaceholder.textContent = capitalizeFirstLetter(statePlaceholder.textContent);
+                }
+            }, 100);
         });
 
         // Password toggle functionality
