@@ -130,7 +130,8 @@ exports.update_stl_case = async (req, res) => {
             }
             if(status == 0){
                 res.status(201).json({ message: 'Case draft created successfully' });
-            } else {                
+            } else {        
+                const sendmail = await Utils.new_case_notification(new_case);        
                 res.status(201).json({ message: 'Case created successfully' });
             }
         } else {
