@@ -51,7 +51,7 @@ exports.get_comment = async (req, res) => {
 exports.add_simulation_plan = async (req, res) => {
     try {
         // need name for ipr filename, simulation_number need to know which plan
-        const { name, simulation_url } = req.body;
+        const { name, simulationUrl } = req.body;
         const { caseid } = req.query
         if ( !caseid ) {
             return res.status(400).json({ message: 'No caseid received.' });
@@ -67,12 +67,14 @@ exports.add_simulation_plan = async (req, res) => {
             filesByField[file.fieldname].push(file);
         });
 
-        const { ipr } = filesByField
+        const { iprFile } = filesByField
 
-        if (!simulation_url || !ipr) {
+        console.log(req.body)
+
+        if (!simulationUrl || !iprFile) {
             return res.status(400).json({ message: 'All fields are required' });
         }
-        const add_simulation_plan = await Detail.add_simulation_plan(caseid, simulation_url);
+        const add_simulation_plan = await Detail.add_simulation_plan(caseid, simulationUrl);
         const new_ipr = await Case.new_case_file_upload(caseid, req.session, req.files, add_simulation_plan);
 
         res.status(201).json({ message: 'Simulation plan added.' });
@@ -91,6 +93,7 @@ exports.get_simulation_plan = async (req, res) => {
     try {
         // simulation_number need to know which plan
         const { caseid } = req.query
+        console.log(caseid)
 
         const simulation_details = await Detail.get_simulation_plan(caseid);
 

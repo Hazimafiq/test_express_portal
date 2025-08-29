@@ -69,7 +69,7 @@ const s3Storage = multerS3({
     documents: 'documents/',
 
     // ipr
-    ipr: 'ipr/'
+    iprFile: 'ipr/'
     };
     
     const folder = folderMap[file.fieldname] || 'misc/';
@@ -82,11 +82,11 @@ const s3Storage = multerS3({
 const upload = multer({ 
   storage: s3Storage,
   limits: {
-    fileSize: 50 * 1024 * 1024 // 50MB limit
+    fileSize: 100 * 1024 * 1024 // 50MB limit
   },
   fileFilter: function (req, file, cb) {
     // Allow specific file types
-    const allowedTypes = /jpeg|jpg|png|gif|stl|ply|zip|obj/;
+    const allowedTypes = /jpeg|jpg|png|gif|stl|ply|zip|obj|pdf/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype) || 
                     file.mimetype === 'application/octet-stream' || // for STL files
