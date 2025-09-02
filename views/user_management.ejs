@@ -51,15 +51,16 @@
                             <img src="/assets/images/select-icon.svg" class="chip-caret" alt="Select">
                         </button>
                         <div class="chip-menu" id="countryMenu">
-                            <button class="chip-menu-item" data-value="malaysia">Malaysia</button>
-                            <button class="chip-menu-item" data-value="singapore">Singapore</button>
-                            <button class="chip-menu-item" data-value="thailand">Thailand</button>
+                            <button class="chip-menu-item" data-value="Malaysia">Malaysia</button>
+                            <button class="chip-menu-item" data-value="Singapore">Singapore</button>
+                            <button class="chip-menu-item" data-value="Thailand">Thailand</button>
                         </div>
                         <!-- hidden native select for value storage and keyboard fallback -->
                         <select class="chip-input native-select" id="countryFilter" hidden>
                             <option value="">Country</option>
-                            <option value="malaysia">Malaysia</option>
-                            <option value="singapore">Singapore</option>
+                            <option value="Malaysia">Malaysia</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Thailand">Thailand</option>
                         </select>
                     </div>
 
@@ -280,7 +281,7 @@
 
                     row.innerHTML = `
                         <td class="td-name">${escapeHtml(user.fullName)}</td>
-                        <td class="td-country">${escapeHtml(user.country.charAt(0).toUpperCase() + user.country.slice(1).toLowerCase())}</td>
+                        <td class="td-country">${escapeHtml(capitalizeWords(user.country))}</td>
                         <td class="td-role">${escapeHtml(user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase())}</td>
                         <td class="td-created-at">${formatDate(user.created_at)}</td>
                         <td class="td-last-login">${formatDate(user.last_login)}</td>
@@ -291,6 +292,12 @@
                     
                     usersTableBody.appendChild(row);
                 });
+            }
+
+            // Helper function to capitalize first letter of every word
+            function capitalizeWords(str) {
+                if (!str) return str;
+                return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
             }
 
             // Escape HTML to prevent XSS

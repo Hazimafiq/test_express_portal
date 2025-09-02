@@ -45,6 +45,7 @@ async function initializeNavRail() {
             '/cases',
             '/update-case',
             '/add-treatment-plan',
+            '/update-upload-stl',
             '/cases/:id/delete',
             '/cases/:id/approve',
             '/cases/:id/revoke',
@@ -161,21 +162,15 @@ async function initializeNavRail() {
         });
     }
 
-    // Language menu functionality
+    // Language menu functionality - now hover-based
     const languageFab = document.getElementById('languageFab');
     const languageMenu = document.getElementById('languageMenu');
     const languageText = document.querySelector('.language-text');
     const flagPlaceholder = document.querySelector('.flag-placeholder img');
     
     if (languageFab && languageMenu) {
-        languageFab.addEventListener('click', (e) => {
-            e.stopPropagation();
-            languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
-        });
-        
-        document.addEventListener('click', () => { 
-            languageMenu.style.display = 'none'; 
-        });
+        // Remove the display: none inline style to allow CSS hover to work
+        languageMenu.style.display = '';
         
         document.querySelectorAll('.lang-item').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -192,25 +187,17 @@ async function initializeNavRail() {
                     flagPlaceholder.src = e.currentTarget.querySelector('img').src;
                     flagPlaceholder.alt = e.currentTarget.querySelector('span').textContent;
                 }
-                
-                languageMenu.style.display = 'none';
             });
         });
     }
 
-    // User menu functionality
+    // User menu functionality - now hover-based
     const userBtn = document.getElementById('userBtn');
     const userMenu = document.getElementById('userMenu');
     
     if (userBtn && userMenu) {
-        userBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
-        });
-        
-        document.addEventListener('click', () => {
-            userMenu.style.display = 'none';
-        });
+        // Remove the display: none inline style to allow CSS hover to work
+        userMenu.style.display = '';
     }
 
     // Handle logout click
@@ -270,6 +257,15 @@ class FormValidation {
                 uploadContainer.classList.remove('field-success');
             }
         }
+        
+        // For custom selects, add error class to the custom-select-wrapper
+        if (field.tagName === 'SELECT' && field.style.display === 'none') {
+            const customSelectWrapper = field.closest('.custom-select-wrapper');
+            if (customSelectWrapper) {
+                customSelectWrapper.classList.add('field-error');
+                customSelectWrapper.classList.remove('field-success');
+            }
+        }
 
         // Find or create error message element
         let errorElement = this.getErrorElement(field);
@@ -312,6 +308,15 @@ class FormValidation {
                 uploadContainer.classList.remove('field-error');
             }
         }
+        
+        // For custom selects, add success class to the custom-select-wrapper
+        if (field.tagName === 'SELECT' && field.style.display === 'none') {
+            const customSelectWrapper = field.closest('.custom-select-wrapper');
+            if (customSelectWrapper) {
+                customSelectWrapper.classList.add('field-success');
+                customSelectWrapper.classList.remove('field-error');
+            }
+        }
 
         // Find or create error message element (reused for success)
         let errorElement = this.getErrorElement(field);
@@ -351,6 +356,14 @@ class FormValidation {
             const uploadContainer = field.closest('.file-upload, .file-upload-simple');
             if (uploadContainer) {
                 uploadContainer.classList.remove('field-error', 'field-success');
+            }
+        }
+        
+        // For custom selects, clear classes from the custom-select-wrapper
+        if (field.tagName === 'SELECT' && field.style.display === 'none') {
+            const customSelectWrapper = field.closest('.custom-select-wrapper');
+            if (customSelectWrapper) {
+                customSelectWrapper.classList.remove('field-error', 'field-success');
             }
         }
         
@@ -570,8 +583,27 @@ class FormValidation {
             field.addEventListener('change', () => {
                 this.clearValidation(field);
             });
+        } else if (field.tagName === 'SELECT' && field.style.display === 'none') {
+            // For custom select dropdowns (hidden select element)
+            field.addEventListener('change', () => {
+                this.clearValidation(field);
+            });
+            
+            // Also listen for changes on the custom select
+            const customSelectWrapper = field.closest('.custom-select-wrapper');
+            if (customSelectWrapper) {
+                const customSelect = customSelectWrapper.querySelector('.custom-select');
+                if (customSelect) {
+                    const options = customSelect.querySelectorAll('.custom-select__option');
+                    options.forEach(option => {
+                        option.addEventListener('click', () => {
+                            this.clearValidation(field);
+                        });
+                    });
+                }
+            }
         } else if (field.tagName === 'SELECT') {
-            // For select dropdowns
+            // For regular select dropdowns
             field.addEventListener('change', () => {
                 this.clearValidation(field);
             });
@@ -635,7 +667,33 @@ class FormValidation {
             return errorElement;
         }
         
-        // Handle select fields - place error outside select-wrapper but inside form-field
+        // Handle custom select fields - place error after the custom-select-wrapper
+        if (field.tagName === 'SELECT' && field.style.display === 'none') {
+            const formField = field.closest('.form-field');
+            if (formField) {
+                // First try to find an existing error message
+                let errorElement = formField.querySelector('.field-error-message');
+                
+                if (!errorElement) {
+                    // If no error message exists, create one
+                    errorElement = document.createElement('div');
+                    errorElement.className = 'field-error-message';
+                    // Remove any other error messages that might exist
+                    formField.querySelectorAll('.field-error-message').forEach(el => el.remove());
+                    // Insert after the custom-select-wrapper
+                    const customSelectWrapper = formField.querySelector('.custom-select-wrapper');
+                    if (customSelectWrapper) {
+                        customSelectWrapper.parentNode.insertBefore(errorElement, customSelectWrapper.nextSibling);
+                    } else {
+                        formField.appendChild(errorElement);
+                    }
+                }
+                
+                return errorElement;
+            }
+        }
+        
+        // Handle regular select fields - place error outside select-wrapper but inside form-field
         if (field.tagName === 'SELECT') {
             const formField = field.closest('.form-field');
             let errorElement = formField.querySelector('.field-error-message');

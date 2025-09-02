@@ -297,6 +297,14 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
 }
 
 .modal-content {
@@ -305,13 +313,13 @@ body {
     width: 100%;
     max-width: 400px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    padding: 24px;
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px;
 }
 
 .modal-header h3 {
@@ -332,8 +340,8 @@ body {
     color: #767676;
 }
 
-.modal-body {
-    padding: 24px;
+.password-modal-header {
+    margin-bottom: 16px;
 }
 
 /* Form Fields */
@@ -437,7 +445,7 @@ body {
 
 .password-toggle {
     position: absolute;
-    top: 2px;
+    top: 0px;
     right: 12px;
     background: none;
     border: none;
@@ -471,8 +479,12 @@ body {
 }
 
 .validation-message {
-    font-size: 12px;
-    color: #dc2626;
+    color: var(--Colour-text-danger, #D4382B);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
     margin-top: 4px;
     min-height: 16px;
 }
