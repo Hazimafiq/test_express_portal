@@ -280,4 +280,8 @@ router.get('/simulation', (req, res) => {
     });
 });
 
+router.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname + '/robots.txt'))
+});
+
 module.exports = router;

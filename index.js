@@ -174,9 +174,7 @@ app.use('/assets/images', express.static(path.join(__dirname, '/assets/images'))
 app.use('/views', express.static(path.join(__dirname, 'views')));
 
 // Example routes
-app.use('/', indexRouter);
-
-// Add more routes as needed
+app.use('/', indexRouter); 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
