@@ -666,7 +666,7 @@
                 }
             });
             
-            console.log('File flags to send:', fileFlags);
+            //console.log('File flags to send:', fileFlags);
             
             
             // Add file flags to the form data
@@ -674,9 +674,8 @@
             formData.append('status', status);
             formData.append('category', 'Upload STL');
 
-            console.log('FormData entries:');
                 for (let pair of formData.entries()) {
-                    console.log(pair[0], pair[1]);
+                    //console.log(pair[0], pair[1]);
                 }
 
             try {
