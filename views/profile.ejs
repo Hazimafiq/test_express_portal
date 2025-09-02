@@ -92,9 +92,9 @@
     </main>
 
     <!-- Change Password Modal -->
-    <div class="modal" id="passwordModal" style="display: none;">
+    <div class="modal" id="passwordModal">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header password-modal-header">
                 <h3>Change Password</h3>
                 <button class="modal-close" id="closeModal">
                     <img src="/assets/images/x-icon.svg" alt="Close">
@@ -175,24 +175,24 @@
         const closeModal = document.getElementById('closeModal');
         const cancelBtn = document.getElementById('cancelBtn');
 
-        changePasswordBtn.onclick = () => {
-            modal.style.display = 'flex';
+        changePasswordBtn.addEventListener('click', () => {
+            modal.classList.add('show');
             clearValidation();
-        };
+        });
         
-        closeModal.onclick = () => {
-            modal.style.display = 'none';
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('show');
             clearValidation();
-        };
+        });
         
-        cancelBtn.onclick = () => {
-            modal.style.display = 'none';
+        cancelBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
             clearValidation();
-        };
+        });
         
         window.onclick = (e) => {
             if (e.target == modal) {
-                modal.style.display = 'none';
+                modal.classList.remove('show');
                 clearValidation();
             }
         };
@@ -468,7 +468,7 @@
             const response = await axios.post('/change-password', formData)
                 .then(response => {
                   //close modal
-                  modal.style.display = 'none';
+                  modal.classList.remove('show');
                     Toast.success('Password changed successfully');
                     clearValidation();
                     // Clear form fields

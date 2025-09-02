@@ -93,7 +93,6 @@ exports.get_simulation_plan = async (req, res) => {
     try {
         // simulation_number need to know which plan
         const { caseid } = req.query
-        console.log(caseid)
 
         const simulation_details = await Detail.get_simulation_plan(caseid);
 

@@ -8,7 +8,6 @@ const https = require('https');
 // Update case, if with case_id query, then means edit, else means new case, status code 0 = draft, status 1 = submitted, category = New Case, Upload STL
 exports.update_case = async (req, res) => {
     try {
-        console.log('req.body', req.body);
         const { name, gender, dob, email, treatment_brand, custom_sn, crowding, deep_bite, spacing, narrow_arch, class_ii_div_1, class_ii_div_2, class_iii, open_bite, overjet, anterior_crossbite, posterior_crossbite, others, ipr, attachments, treatment_notes, model_type, status, category, file_flags, removed_files } = req.body;
 
         const { caseid } = req.params
@@ -23,7 +22,6 @@ exports.update_case = async (req, res) => {
             filesByField[file.fieldname].push(file);
         });
         const { lower_scan, upper_scan, bite_scan, front, smiling, right_side, buccal_top, buccal_bottom, buccal_right, buccal_center, buccal_left, xray, other } = filesByField
-        console.log('filesByField', filesByField);
       
         // Parse file flags if provided
         let parsedFileFlags = {};
@@ -49,7 +47,6 @@ exports.update_case = async (req, res) => {
                 res.status(201).json({ message: 'Case created successfully' });
             }
         } else {
-            console.log('update filess')
             // For existing cases, validate scan files based on flags
             const fileValidation = await Case.validateRequiredFiles(caseid, parsedFileFlags);
             
@@ -130,7 +127,8 @@ exports.update_stl_case = async (req, res) => {
             if(status == 0){
                 res.status(201).json({ message: 'Case draft created successfully' });
             } else {        
-                const sendmail = await Utils.new_case_notification(new_case);        
+                const sendmail = await Utils.new_case_notification(new_case); 
+                const upload_spreadsheet = await Utils.insert_upload_stl_case_to_spreadsheet(new_case, name, treatment_brand, product, req.session.user.fullName);        
                 res.status(201).json({ message: 'Case created successfully' });
             }
         } else {

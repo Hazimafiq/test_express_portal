@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="/assets/css/date-picker.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
     <link rel="stylesheet" href="/assets/css/toast.css">
+    <link rel="stylesheet" href="/assets/css/custom-select.css">
     <script src="/assets/js/components.js"></script>
     <script src="/assets/js/date-picker.js"></script>
+    <script src="/assets/js/custom-select.js"></script>
 </head>
 <body>
     <!-- Navigation Rail Component -->
@@ -49,8 +51,21 @@
                             </div>
                             <div class="form-field">
                                 <label for="patientGender">Gender</label>
-                                <div class="select-wrapper">
-                                    <select id="patientGender" name="patientGender">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="patientGender-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder">Select</span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Tick Icon">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="Male">Male</span>
+                                            <span class="custom-select__option" data-value="Female">Female</span>
+                                            <span class="custom-select__option" data-value="Prefer not to say">Prefer not to say</span>
+                                        </div>
+                                    </div>
+                                    <select id="patientGender" name="patientGender" style="display: none;">
                                         <option value="">Select</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
@@ -74,8 +89,22 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Treatment Brand</span>
                                 </label>
-                                <div class="select-wrapper">
-                                    <select id="treatmentBrand" name="treatmentBrand">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="treatmentBrand-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder">Select</span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Tick Icon">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="DCA Pro">DCA Pro</span>
+                                            <span class="custom-select__option" data-value="Diamond Aligner">Diamond Aligner</span>
+                                            <span class="custom-select__option" data-value="OEM-Plain">OEM-Plain</span>
+                                            <span class="custom-select__option" data-value="OEM-Clinic Brand">OEM-Clinic Brand</span>
+                                        </div>
+                                    </div>
+                                    <select id="treatmentBrand" name="treatmentBrand" style="display: none;">
                                         <option value="">Select</option>
                                         <option value="DCA Pro">DCA Pro</option>
                                         <option value="Diamond Aligner">Diamond Aligner</option>
@@ -102,8 +131,22 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Product</span>
                                 </label>
-                                <div class="select-wrapper">
-                                    <select id="product" name="product">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="product-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder">Select</span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Tick Icon">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="Clear Aligners 0.76mm">Clear Aligners 0.76mm</span>
+                                            <span class="custom-select__option" data-value="Retainer 1.0mm">Retainer 1.0mm</span>
+                                            <span class="custom-select__option" data-value="Retainer 1.3mm / Soft Nightguard 1.3mm">Retainer 1.3mm / Soft Nightguard 1.3mm</span>
+                                            <span class="custom-select__option" data-value="Soft Nightguard 2.0mm">Soft Nightguard 2.0mm</span>
+                                        </div>
+                                    </div>
+                                    <select id="product" name="product" style="display: none;">
                                         <option value="">Select</option>
                                         <option value="Clear Aligners 0.76mm">Clear Aligners 0.76mm</option>
                                         <option value="Retainer 1.0mm">Retainer 1.0mm</option>
@@ -139,8 +182,20 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Model Type</span>
                             </label>
-                            <div class="select-wrapper">
-                                <select id="modelType" name="modelType">
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select" id="modelType-select">
+                                    <div class="custom-select__trigger">
+                                        <span class="custom-select__placeholder">Select</span>
+                                        <div class="custom-select__arrow">
+                                            <img src="/assets/images/select-icon.svg" alt="Select Tick Icon">
+                                        </div>
+                                    </div>
+                                    <div class="custom-select__options">
+                                        <span class="custom-select__option" data-value="Digital Model">Digital Model</span>
+                                        <span class="custom-select__option" data-value="Plaster Model">Plaster Model</span>
+                                    </div>
+                                </div>
+                                <select id="modelType" name="modelType" style="display: none;">
                                     <option value="">Select</option>
                                     <option value="Digital Model">Digital Model</option>
                                     <option value="Plaster Model">Plaster Model</option>
@@ -392,9 +447,11 @@
             formValidation.clearFormError('uploadStlForm');
 
             // Validate all fields for both draft and submit
+            if (status === '1') {
             const isValid = formValidation.validateFields(validations);
-            if (!isValid) {
-                return;
+                if (!isValid) {
+                    return;
+                }
             }
 
             // Disable button and show loading state

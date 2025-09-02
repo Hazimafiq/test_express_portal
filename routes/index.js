@@ -111,7 +111,9 @@ router.get('/cases/:caseId', requireAuth, async (req, res) => {
             caseId,
             patient_details: patient_details[0],
             user: req.session.user,
-            successMessage: success || null
+            successMessage: success || null,
+            simulationBaseUrl: process.env.SIMULATION_BASE_URL || 'https://doctor.33labs.io',
+          
         });
     } catch (error) {
         console.error('Error fetching patient details:', error);
@@ -272,7 +274,14 @@ router.get('/', (req, res) => {
 
 // Default route
 router.get('/simulation', (req, res) => {
-    res.render('simulation');
+    res.render('simulation', {
+        onyxBaseUrl: process.env.ONYX_BASE_URL,
+        drClearAlignersUrl: process.env.DR_CLEAR_ALIGNERS_URL
+    });
+});
+
+router.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname + '/robots.txt'))
 });
 
 module.exports = router;

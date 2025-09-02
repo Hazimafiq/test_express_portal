@@ -156,19 +156,21 @@
                                     </div>
                                     <select id="state" name="state" style="display: none;">
                                         <option value="">Select</option>
-                                        <option value="selangor">Selangor</option>
-                                        <option value="kuala_lumpur">Kuala Lumpur</option>
-                                        <option value="penang">Penang</option>
-                                        <option value="johor">Johor</option>
-                                        <option value="perak">Perak</option>
-                                        <option value="kedah">Kedah</option>
-                                        <option value="kelantan">Kelantan</option>
-                                        <option value="terengganu">Terengganu</option>
-                                        <option value="pahang">Pahang</option>
-                                        <option value="negeri_sembilan">Negeri Sembilan</option>
-                                        <option value="sabah">Sabah</option>
-                                        <option value="sarawak">Sarawak</option>
-                                        <option value="other">Other</option>
+                                        <option value="Selangor">Selangor</option>
+                                        <option value="Kuala Lumpur">Kuala Lumpur</option>
+                                        <option value="Penang">Penang</option>
+                                        <option value="Johor">Johor</option>
+                                        <option value="Perak">Perak</option>
+                                        <option value="Kedah">Kedah</option>
+                                        <option value="Kelantan">Kelantan</option>
+                                        <option value="Terengganu">Terengganu</option>
+                                        <option value="Pahang">Pahang</option>
+                                        <option value="Negeri Sembilan">Negeri Sembilan</option>
+                                        <option value="Melaka">Melaka</option>
+                                        <option value="Perlis">Perlis</option>
+                                        <option value="Sabah">Sabah</option>
+                                        <option value="Sarawak">Sarawak</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
                             </div>
@@ -270,6 +272,21 @@
     <script src="/assets/js/axios.min.js"></script>
     <script src="/assets/js/toast.js"></script>
     <script>
+        // Fix for custom select validation
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('custom-select__option')) {
+                // When a custom select option is clicked, find the hidden select and clear validation errors
+                const customSelect = e.target.closest('.custom-select');
+                if (customSelect) {
+                    const hiddenSelect = customSelect.parentNode.querySelector('select');
+                    if (hiddenSelect) {
+                        // Clear validation error if present
+                        formValidation.clearValidation(hiddenSelect);
+                    }
+                }
+            }
+        });
+        
         // Load navigation rail component
         document.addEventListener('DOMContentLoaded', () => {
             loadComponent('navRail', '/components/side-menu');
@@ -335,8 +352,15 @@
             
             input.classList.add('error');
             if (errorElement) {
+                // Set the base class first
                 errorElement.className = 'custom-validation-message';
                 errorElement.textContent = message;
+                
+                // Make sure we're not adding the 'show' class to any field-error-message
+                const fieldErrorMessage = document.querySelector(`.field-error-message[data-for="${inputId}"]`);
+                if (fieldErrorMessage) {
+                    fieldErrorMessage.classList.remove('show');
+                }
             }
         }
 
@@ -344,10 +368,23 @@
             const input = document.getElementById(inputId);
             const errorElement = document.getElementById(inputId + 'Error');
             
+            // Remove all error-related classes
             input.classList.remove('error');
+            input.classList.remove('field-error');
+            
             if (errorElement) {
                 errorElement.textContent = '';
+                // Reset to base class and explicitly remove all error classes
                 errorElement.className = 'custom-validation-message';
+                errorElement.classList.remove('field-error-message');
+                errorElement.classList.remove('show');
+                
+                // For validation.css compatibility
+                const fieldErrorMessage = document.querySelector(`.field-error-message[data-for="${inputId}"]`);
+                if (fieldErrorMessage) {
+                    fieldErrorMessage.classList.remove('show');
+                    fieldErrorMessage.textContent = '';
+                }
             }
         }
 
@@ -476,18 +513,47 @@
         function validateConfirmPassword() {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const errorElement = document.getElementById('confirmPasswordError');
             
             if (confirmPassword.length > 0) {
                 if (password !== confirmPassword) {
                     showValidationError('confirmPassword', 'Passwords do not match.');
                 } else {
-                    clearValidationError('confirmPassword');
+                    // Clear all validation error classes
+                    confirmPasswordInput.classList.remove('error');
+                    confirmPasswordInput.classList.remove('field-error');
+                    
+                    if (errorElement) {
+                        errorElement.textContent = '';
+                        errorElement.className = 'custom-validation-message';
+                        // Remove any field-error-message class as well
+                        errorElement.classList.remove('field-error-message');
+                    }
                 }
             }
         }
 
         // Add confirm password validation on input
-        //document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+        document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+        
+        // Clear error when user focuses on confirm password field
+        document.getElementById('confirmPassword').addEventListener('focus', function() {
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const errorElement = document.getElementById('confirmPasswordError');
+            
+            // Remove all error-related classes
+            confirmPasswordInput.classList.remove('error');
+            confirmPasswordInput.classList.remove('field-error');
+            
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.className = 'custom-validation-message';
+                // Remove any field-error-message and show classes
+                errorElement.classList.remove('field-error-message');
+                errorElement.classList.remove('show');
+            }
+        });
 
         // Form submission with universal validation
         document.getElementById('createUserForm').addEventListener('submit', async (e) => {
@@ -546,6 +612,7 @@
                     message: 'Role is required.'
                 }
             ];
+
             
             // Validate all fields
             const isValid = formValidation.validateFields(validations);
@@ -556,6 +623,28 @@
             
             if (password !== confirmPassword) {
                 showValidationError('confirmPassword', 'Passwords do not match.');
+                
+                // Add focus event listener to clear error when user focuses on the field again
+                const confirmPasswordInput = document.getElementById('confirmPassword');
+                const focusListener = function() {
+                    const errorElement = document.getElementById('confirmPasswordError');
+                    
+                    // Remove all error-related classes
+                    confirmPasswordInput.classList.remove('error');
+                    confirmPasswordInput.classList.remove('field-error');
+                    
+                    if (errorElement) {
+                        errorElement.textContent = '';
+                        errorElement.className = 'custom-validation-message';
+                        // Remove any field-error-message class as well
+                        errorElement.classList.remove('field-error-message');
+                    }
+                    
+                    // Remove the event listener after it's triggered once
+                    confirmPasswordInput.removeEventListener('focus', focusListener);
+                };
+                confirmPasswordInput.addEventListener('focus', focusListener);
+                
                 return;
             }
             
@@ -598,6 +687,7 @@
                     formValidation.clearAllValidation('createUserForm');
                     formValidation.clearFormError('createUserForm');
                     // Redirect to user management page with success message
+                    
                     window.location.href = `/user-management?success=${encodeURIComponent(response.data.message)}`;
                 }).catch(error => {
                     console.error(error);

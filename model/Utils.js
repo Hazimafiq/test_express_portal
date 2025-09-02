@@ -1,3 +1,4 @@
+const pool = require('../utils/mysql');
 const nodemailer = require('nodemailer');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
@@ -170,9 +171,11 @@ class Utils {
         }
     }
     
-    static async insert_upload_stl_case_to_spreadsheet(caseid) {
+    static async insert_upload_stl_case_to_spreadsheet(caseid, name, treatment_brand, product, doctor_name) {
         try {
-            doc = new GoogleSpreadsheet('1QqjF6GXml5_TTi-bBo-jRMpoW9FlmKKuKBbGjFw7EzE');
+            let newOrderId = await checkOrderId(caseid)
+            let urls = await getDocumentsLink(caseid)
+            let doc = new GoogleSpreadsheet('1QqjF6GXml5_TTi-bBo-jRMpoW9FlmKKuKBbGjFw7EzE');
 
             await doc.useServiceAccountAuth({
                 client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -183,37 +186,16 @@ class Utils {
             const sheet = doc.sheetsByTitle['33Lab Express'];
             const larryRow = await sheet.addRow({
                 'Timestamp': formatDate('', 1),
-                'Order ID': '',
-                'Country': req.session.mysqlid,
-                'Brand': formatdate(),
-                'Submitter' : idealtreatment,
-                'Patient Name' : teethtype,
-                '33Lab Case ID' : reason,
-                'Product': name1,
-                'Documents' : phone
+                'Order ID': newOrderId,
+                'Brand': treatment_brand,
+                'Submitter' : doctor_name,
+                'Patient Name' : name,
+                '33Lab Case ID' : caseid,
+                'Product': product,
+                'Documents' : urls
             });
         } catch (err) {
             console.error(err)
-            errorDetails.id = req.session.mysqlid
-            errorDetails.errMessage = err
-            // dcerror(errorDetails)
-            data = {
-                name: '',
-                space: '',
-                id: req.session.mysqlid,
-                date: formatdate(),
-                idealtreatment,
-                teethtype,
-                reason,
-                firstname: name1,
-                phone,
-                email,
-                message,
-                language: form_lang,
-                kol,
-                social_media: sm,
-            }
-            // insertDiscordErrorData('dca', '1nAERomUuddXupzX_sC7GdCNZgzc56Y32Gqvgc4dss5w', 'Web AUS', leedsheetname, err, data, 'none')
         }
     }
 }
@@ -244,24 +226,37 @@ function formatDate(date, type) {
     }
 }
 
-async function checkOrderId(caseid, connection) {
+async function checkOrderId(caseid) {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = String(today.getFullYear()).slice(-2);
     const formattedDate = `${day}${month}${year}`;
 
-    await connection.query(
-        `INSERT INTO order_counter (date_key, counter)
-        VALUES (${formattedDate}, 1)
-        ON DUPLICATE KEY UPDATE counter = counter + 1;`
-    );
+    const insert_current_date_orderid = `INSERT INTO order_counter (date_key, counter) VALUES (${formattedDate}, 1) ON DUPLICATE KEY UPDATE counter = counter + 1;`;
+    const [number] = await pool.query(insert_current_date_orderid);
 
-    const [raw] = await connection.query(`SELECT counter FROM order_counter WHERE date_key = ? LIMIT 1 FOR UPDATE;`, [formattedDate]);
+    const check_latest_orderid = 'SELECT counter FROM order_counter WHERE date_key = ? LIMIT 1 FOR UPDATE;';
+    const [latest_orderid] = await pool.query(check_latest_orderid, formattedDate);
 
-    const orderIdNumberPart = raw[0].counter;
+    const orderIdNumberPart = latest_orderid[0].counter;
 
     return `${String(formattedDate).padStart(4, '0')}-${String(orderIdNumberPart).padStart(4, '0')}`;
+}
+
+async function getDocumentsLink(caseid) {
+
+    let return_url = [];
+    const get_documents_url = 'SELECT signedurl FROM file_upload_table WHERE case_id = ?;';
+    const [documents_urls] = await pool.query(get_documents_url, caseid);
+
+    for (i = 0; i< documents_urls.length; i++){
+        return_url.push(documents_urls[i].signedurl)
+    }
+
+    const singleLineString = return_url.join(', ');
+
+    return singleLineString;
 }
 
 module.exports = Utils;

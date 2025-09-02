@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="/assets/css/date-picker.css">
     <link rel="stylesheet" href="/assets/css/validation.css">
     <link rel="stylesheet" href="/assets/css/toast.css">
+    <link rel="stylesheet" href="/assets/css/custom-select.css">
     <script src="/assets/js/components.js"></script>
     <script src="/assets/js/date-picker.js"></script>
+    <script src="/assets/js/custom-select.js"></script>
 </head>
 <body>
     <!-- Navigation Rail Component -->
@@ -58,8 +60,21 @@
                             </div>
                             <div class="form-field">
                                 <label for="patientGender">Gender</label>
-                                <div class="select-wrapper">
-                                    <select id="patientGender" name="patientGender" value="<%= upload_stl_details.gender %>">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="patientGender-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder"><%= upload_stl_details.gender || 'Select' %></span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="Male">Male</span>
+                                            <span class="custom-select__option" data-value="Female">Female</span>
+                                            <span class="custom-select__option" data-value="Prefer not to say">Prefer not to say</span>
+                                        </div>
+                                    </div>
+                                    <select id="patientGender" name="patientGender" style="display: none;" value="<%= upload_stl_details.gender %>">
                                         <option value="">Select</option>
                                         <option value="Male" <%= upload_stl_details.gender === 'Male' ? 'selected' : '' %>>Male</option>
                                         <option value="Female" <%= upload_stl_details.gender === 'Female' ? 'selected' : '' %>>Female</option>
@@ -80,8 +95,22 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Treatment Brand</span>
                                 </label>
-                                <div class="select-wrapper">
-                                    <select id="treatmentBrand" name="treatmentBrand" value="<%= upload_stl_details.treatment_brand %>">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="treatmentBrand-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder"><%= upload_stl_details.treatment_brand || 'Select' %></span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="DCA Pro">DCA Pro</span>
+                                            <span class="custom-select__option" data-value="Diamond Aligner">Diamond Aligner</span>
+                                            <span class="custom-select__option" data-value="OEM-Plain">OEM-Plain</span>
+                                            <span class="custom-select__option" data-value="OEM-Clinic Brand">OEM-Clinic Brand</span>
+                                        </div>
+                                    </div>
+                                    <select id="treatmentBrand" name="treatmentBrand" style="display: none;" value="<%= upload_stl_details.treatment_brand %>">
                                         <option value="">Select</option>
                                         <option value="DCA Pro" <%= upload_stl_details.treatment_brand === 'DCA Pro' ? 'selected' : '' %>>DCA Pro</option>
                                         <option value="Diamond Aligner" <%= upload_stl_details.treatment_brand === 'Diamond Aligner' ? 'selected' : '' %>>Diamond Aligner</option>
@@ -108,8 +137,22 @@
                                     <span class="required-asterisk">*</span>
                                     <span class="label-text">Product</span>
                                 </label>
-                                <div class="select-wrapper">
-                                    <select id="product" name="product" value="<%= upload_stl_details.product %>">
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select" id="product-select">
+                                        <div class="custom-select__trigger">
+                                            <span class="custom-select__placeholder"><%= upload_stl_details.product || 'Select' %></span>
+                                            <div class="custom-select__arrow">
+                                                <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                            </div>
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <span class="custom-select__option" data-value="Clear Aligners 0.76mm">Clear Aligners 0.76mm</span>
+                                            <span class="custom-select__option" data-value="Retainer 1.0mm">Retainer 1.0mm</span>
+                                            <span class="custom-select__option" data-value="Retainer 1.3mm / Soft Nightguard 1.3mm">Retainer 1.3mm / Soft Nightguard 1.3mm</span>
+                                            <span class="custom-select__option" data-value="Soft Nightguard 2.0mm">Soft Nightguard 2.0mm</span>
+                                        </div>
+                                    </div>
+                                    <select id="product" name="product" style="display: none;" value="<%= upload_stl_details.product %>">
                                         <option value="">Select</option>
                                         <option value="Clear Aligners 0.76mm" <%= upload_stl_details.product === 'Clear Aligners 0.76mm' ? 'selected' : '' %>>Clear Aligners 0.76mm</option>
                                         <option value="Retainer 1.0mm" <%= upload_stl_details.product === 'Retainer 1.0mm' ? 'selected' : '' %>>Retainer 1.0mm</option>
@@ -145,12 +188,25 @@
                                 <span class="required-asterisk">*</span>
                                 <span class="label-text">Model Type</span>
                             </label>
-                            <div class="select-wrapper">
-                                <select id="modelType" name="modelType" value="<%= upload_stl_details.model_type %>">
-                                    <option value="">Select</option>
-                                    <option value="Digital Model" <%= upload_stl_details.model_type === 'Digital Model' ? 'selected' : '' %>>Digital Model</option>
-                                    <option value="Plaster Model" <%= upload_stl_details.model_type === 'Plaster Model' ? 'selected' : '' %>>Plaster Model</option>
-                                </select>
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select" id="modelType-select">
+                                    <div class="custom-select__trigger">
+                                        <span class="custom-select__placeholder"><%= upload_stl_details.model_type || 'Select' %></span>
+                                        <div class="custom-select__arrow">
+                                            <img src="/assets/images/select-icon.svg" alt="Select Arrow">
+                                        </div>
+                                    </div>
+                                    <div class="custom-select__options">
+                                        <span class="custom-select__option" data-value="Digital Model">Digital Model</span>
+                                        <span class="custom-select__option" data-value="Plaster Model">Plaster Model</span>
+                                    </div>
+                                </div>
+                                    <select id="modelType" name="modelType" style="display: none;" value="<%= upload_stl_details.model_type %>">
+                                        <option value="">Select</option>
+                                        <option value="Digital Model" <%= upload_stl_details.model_type === 'Digital Model' ? 'selected' : '' %>>Digital Model</option>
+                                        <option value="Plaster Model" <%= upload_stl_details.model_type === 'Plaster Model' ? 'selected' : '' %>>Plaster Model</option>
+                                    </select>
+                               
                             </div>
                         </div>
 
@@ -560,11 +616,12 @@
             formValidation.clearFormError('uploadStlForm');
 
             // Validate all fields for both draft and submit
-            const isValid = formValidation.validateFields(validations);
-            console.log('isValid', isValid);
-            if (!isValid) {
-                return;
-            }
+            if (status === '1') {
+                const isValid = formValidation.validateFields(validations);
+                if (!isValid) {
+                    return;
+                }
+            }   
 
             // Disable button and show loading state
             const originalText = button.textContent;
@@ -609,7 +666,7 @@
                 }
             });
             
-            console.log('File flags to send:', fileFlags);
+            //console.log('File flags to send:', fileFlags);
             
             
             // Add file flags to the form data
@@ -617,9 +674,8 @@
             formData.append('status', status);
             formData.append('category', 'Upload STL');
 
-            console.log('FormData entries:');
                 for (let pair of formData.entries()) {
-                    console.log(pair[0], pair[1]);
+                    //console.log(pair[0], pair[1]);
                 }
 
             try {

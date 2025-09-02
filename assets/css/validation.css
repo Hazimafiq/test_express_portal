@@ -130,10 +130,63 @@ textarea.field-error:hover {
 .role-selection.field-error .radio-custom {
     border-color: #dc2626;
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    border-radius: 8px;
 }
 
 .role-selection .field-error-message {
     margin-top: 12px;
+}
+
+/* Custom Select Error States */
+.custom-select-wrapper.field-error .custom-select__trigger {
+    border-color: #dc2626 !important;
+    border-width: 1px !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.custom-select-wrapper.field-error .custom-select__trigger:hover {
+    border-color: #b91c1c !important;
+}
+
+.custom-select-wrapper.field-error .custom-select:focus-within .custom-select__trigger {
+    border-color: #003366 !important;
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1) !important;
+}
+
+/* Custom Select Success States */
+.custom-select-wrapper.field-success .custom-select__trigger {
+    border-color: #059669 !important;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+    background-color: #f0fdf4;
+}
+
+/* Custom Select Error Message Positioning */
+.custom-select-wrapper .field-error-message {
+    margin-top: 4px;
+    color: var(--Colour-text-danger, #D4382B);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+    min-height: 16px;
+    display: block;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+.custom-select-wrapper .field-error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.custom-select-wrapper .field-error-message.field-success-message {
+    color: #059669;
+}
+
+.custom-select-wrapper .field-error-message:empty {
+    display: none;
 }
 
 

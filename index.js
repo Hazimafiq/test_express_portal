@@ -24,6 +24,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname + '/robots.txt'))
+})
+
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -177,9 +181,7 @@ app.use('/assets/images', express.static(path.join(__dirname, '/assets/images'))
 app.use('/views', express.static(path.join(__dirname, 'views')));
 
 // Example routes
-app.use('/', indexRouter);
-
-// Add more routes as needed
+app.use('/', indexRouter); 
 
 const PORT = process.env.PORT || 3000;
 
