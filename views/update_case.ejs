@@ -948,13 +948,13 @@
             formValidation.clearFormError('createUserForm');
 
             // For drafts, skip validation
-            //if (status === '1') {
+            if (status === '1') {
                 // Validate all fields for submission
                 const isValid = formValidation.validateFields(validations);
                 if (!isValid) {
                     return;
                 }
-            //}
+            }
 
 
             // Disable button and show loading state
