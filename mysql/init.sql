@@ -55,6 +55,18 @@ CREATE TABLE patient_table (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Composite index for search functionality (case_id, name)
+CREATE INDEX idx_patient_table_case_id_name ON patient_table (case_id, name);
+
+CREATE INDEX idx_patient_table_case_id ON patient_table (case_id);
+CREATE INDEX idx_patient_table_name ON patient_table (name);
+CREATE INDEX idx_patient_table_treatment_brand ON patient_table (treatment_brand);
+CREATE INDEX idx_patient_table_category ON patient_table (category);
+CREATE INDEX idx_patient_table_status ON patient_table (status);
+CREATE INDEX idx_patient_table_created_at ON patient_table (created_at);
+CREATE INDEX idx_patient_table_updated_at ON patient_table (updated_at);
+
+
 CREATE TABLE treatment_model_table (
     id INT AUTO_INCREMENT PRIMARY KEY,
     case_id VARCHAR(255) NOT NULL,

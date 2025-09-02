@@ -948,13 +948,13 @@
             formValidation.clearFormError('createUserForm');
 
             // For drafts, skip validation
-            //if (status === '1') {
+            if (status === '1') {
                 // Validate all fields for submission
                 const isValid = formValidation.validateFields(validations);
                 if (!isValid) {
                     return;
                 }
-            //}
+            }
 
 
             // Disable button and show loading state
@@ -988,9 +988,6 @@
             const lowerScanFile = document.getElementById('lowerScan').files[0];
             const biteScanFile = document.getElementById('biteScan').files[0];
             
-            console.log('upperScanFile', upperScanFile);
-            console.log('lowerScanFile', lowerScanFile);
-            console.log('biteScanFile', biteScanFile);
             if (upperScanFile) {
                 formData.append('upper_scan', upperScanFile);
                 if (!fileFlags.has('upper_scan')) fileFlags.set('upper_scan', 'new');
@@ -1064,7 +1061,6 @@
             
             // Add file flags information for backend to process
             const fileFlagsObject = Object.fromEntries(fileFlags);
-            console.log('Final file flags being sent:', fileFlagsObject);
             formData.append('file_flags', JSON.stringify(fileFlagsObject));
             
             // Add removed files information for backend to process (keeping for backward compatibility)
@@ -1073,10 +1069,8 @@
             }
 
             try {
-                console.log('Sending form data to:', '/add-case/<%= caseid %>');
-                console.log('FormData entries:');
                 for (let pair of formData.entries()) {
-                    console.log(pair[0], pair[1]);
+                    //console.log(pair[0], pair[1]);
                 }
                 
                 const response = await axios.post('/add-case/<%= caseid %>', formData, {

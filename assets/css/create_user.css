@@ -707,7 +707,7 @@ body {
 
   .password-toggle {
     position: absolute;
-    top: 2px;
+    top: 0px;
     right: 12px;
     background: none;
     border: none;

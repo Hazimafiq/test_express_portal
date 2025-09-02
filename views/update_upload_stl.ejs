@@ -616,11 +616,12 @@
             formValidation.clearFormError('uploadStlForm');
 
             // Validate all fields for both draft and submit
-            const isValid = formValidation.validateFields(validations);
-            console.log('isValid', isValid);
-            if (!isValid) {
-                return;
-            }
+            if (status === '1') {
+                const isValid = formValidation.validateFields(validations);
+                if (!isValid) {
+                    return;
+                }
+            }   
 
             // Disable button and show loading state
             const originalText = button.textContent;
@@ -665,7 +666,7 @@
                 }
             });
             
-            console.log('File flags to send:', fileFlags);
+            //console.log('File flags to send:', fileFlags);
             
             
             // Add file flags to the form data
@@ -673,9 +674,8 @@
             formData.append('status', status);
             formData.append('category', 'Upload STL');
 
-            console.log('FormData entries:');
                 for (let pair of formData.entries()) {
-                    console.log(pair[0], pair[1]);
+                    //console.log(pair[0], pair[1]);
                 }
 
             try {
