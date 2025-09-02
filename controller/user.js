@@ -5,13 +5,72 @@ const CustomError = require('../errors/CustomError');
 exports.register = async (req, res) => {
     try {
         const { username, fullName, phoneNumber, email, clinic, address, country, password, confirmPassword, role, postcode, city, state } = req.body;
+        
+        // Debug logging (only in test environment)
+        if (process.env.NODE_ENV === 'test') {
+            console.log('🔍 Debug - Received data:', {
+                username: !!username,
+                fullName: !!fullName,
+                phoneNumber: !!phoneNumber,
+                email: !!email,
+                clinic: !!clinic,
+                country: !!country,
+                password: !!password,
+                confirmPassword: !!confirmPassword,
+                role: !!role
+            });
+        }
+        
         if (!username || !password || !confirmPassword || !role || !fullName || !phoneNumber || !email || !country || !clinic ) {
+            console.log('❌ Validation failed: Required fields missing');
             return res.status(400).json({ message: 'All fields are required' });
         }
         if (password !== confirmPassword) {
+            console.log('❌ Validation failed: Passwords do not match');
             return res.status(400).json({ message: 'Passwords do not match' });
         }
+        
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            console.log('❌ Validation failed: Invalid email format');
+            return res.status(400).json({ message: 'Invalid email format' });
+        }
+        
+        // Password strength validation
+        if (password.length < 8) {
+            console.log('❌ Validation failed: Password too short');
+            return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+        }
+        
+        // Check for at least one number, one uppercase, one lowercase, and one special character
+        const hasNumber = /\d/.test(password);
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        
+        if (process.env.NODE_ENV === 'test') {
+            console.log('🔍 Debug - Password validation:', {
+                length: password.length,
+                hasNumber,
+                hasUpperCase,
+                hasLowerCase,
+                hasSpecialChar
+            });
+        }
+        
+        if (!hasNumber || !hasUpperCase || !hasLowerCase || !hasSpecialChar) {
+            console.log('❌ Validation failed: Password complexity requirements not met');
+            return res.status(400).json({ message: 'Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character' });
+        }
+        
+        if (process.env.NODE_ENV === 'test') {
+            console.log('✅ All validations passed, calling User.register...');
+        }
         const user = await User.register(req.body);
+        if (process.env.NODE_ENV === 'test') {
+            console.log('✅ User created successfully');
+        }
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
         if (err instanceof CustomError) {

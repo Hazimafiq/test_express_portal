@@ -128,15 +128,22 @@ app.use(
 );
 
 // Session store with DB storage (using file store as example)
-const store_options = {
-    host: process.env.DB_HOST,
-    port: 3306,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    clearExpired: true,
-};
-const sessionStore = new MySQLStore(store_options);
+let sessionStore;
+if (process.env.NODE_ENV === 'test') {
+    // Use memory store for tests to avoid database dependency
+    sessionStore = undefined;
+} else {
+    const store_options = {
+        host: process.env.DB_HOST,
+        port: 3306,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
+        clearExpired: true,
+    };
+    sessionStore = new MySQLStore(store_options);
+}
+
 app.use(
     session({
         store: sessionStore,
@@ -175,6 +182,12 @@ app.use('/', indexRouter);
 // Add more routes as needed
 
 const PORT = process.env.PORT || 3000;
+
+// Only start the server if not in test mode
+if (process.env.NODE_ENV !== 'test') {
+   
+}
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
+module.exports = app;

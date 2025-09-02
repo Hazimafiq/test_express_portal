@@ -5,15 +5,37 @@ const CustomError = require('../errors/CustomError');
 
 class User {
     static async register({ username, password, fullName, phoneNumber, email, clinic, address, country, role, postcode, city, state }) {
-        const existingUserQuery = 'SELECT * FROM users_table WHERE username = ?';
-        const existingUserValues = [username];
-        const [existingUsers] = await pool.query(existingUserQuery, existingUserValues);
-        if (existingUsers.length > 0) {
-            throw new CustomError('User already exists', 400);
+        // Check for existing username
+        const existingUsernameQuery = 'SELECT * FROM users_table WHERE username = ?';
+        const existingUsernameValues = [username];
+        const [existingUsernames] = await pool.query(existingUsernameQuery, existingUsernameValues);
+        if (existingUsernames.length > 0) {
+            throw new CustomError('Username already exists', 400);
+        }
+        
+        // Check for existing email
+        const existingEmailQuery = 'SELECT * FROM users_table WHERE email = ?';
+        const existingEmailValues = [email];
+        const [existingEmails] = await pool.query(existingEmailQuery, existingEmailValues);
+        if (existingEmails.length > 0) {
+            throw new CustomError('Email already exists', 400);
         }
         const hashedPassword = await argon2.hash(password);
         const query = 'INSERT INTO users_table (username, password, fullName, phoneNumber, email, clinic, country, role, address, postcode, city, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [username.trim(), hashedPassword, fullName.trim(), phoneNumber.trim(), email.trim(), clinic.trim(), country.trim(), role.trim(), address.trim(), postcode.trim(), city.trim(), state.trim()];
+        const values = [
+            username.trim(), 
+            hashedPassword, 
+            fullName.trim(), 
+            phoneNumber.trim(), 
+            email.trim(), 
+            clinic.trim(), 
+            country.trim(), 
+            role.trim(), 
+            address ? address.trim() : null, 
+            postcode ? postcode.trim() : null, 
+            city ? city.trim() : null, 
+            state ? state.trim() : null
+        ];
         const [results] = await pool.query(query, values);
         return {results, message: 'User created.'};
     }

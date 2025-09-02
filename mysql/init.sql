@@ -1,11 +1,13 @@
-DROP DATABASE IF EXISTS 33labs_portal;
-CREATE DATABASE 33labs_portal;
-USE 33labs_portal;
+-- DROP DATABASE IF EXISTS 33labs_portal;
+-- CREATE DATABASE 33labs_portal;
+-- USE 33labs_portal;
 
 CREATE TABLE users_table (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    remember_token VARCHAR(255) NULL,
+    token_expires_at DATETIME NULL,
     fullName VARCHAR(255) NOT NULL,
     phoneNumber VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -32,6 +34,7 @@ CREATE INDEX idx_users_role ON users_table (role);
 CREATE INDEX idx_users_status ON users_table (status);
 CREATE INDEX idx_users_created_at ON users_table (created_at);
 CREATE INDEX idx_users_last_login ON users_table (last_login);
+CREATE INDEX idx_users_remember_token ON users_table (remember_token);
 
 CREATE TABLE sessions (
     session_id VARCHAR(128) NOT NULL PRIMARY KEY,
