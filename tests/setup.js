@@ -61,44 +61,115 @@ async function setupTestDatabase() {
       }
     }
 
-    // Create admin test user
-    const adminPassword = 'AdminPass123!';
-    const hashedPassword = await argon2.hash(adminPassword);
-    
-    const adminUser = {
-      username: 'admin_test',
-      password: hashedPassword,
-      email: 'admin@test.com',
-      fullName: 'Admin Test User',
-      phoneNumber: '+60123456789',
-      country: 'malaysia',
-      clinic: 'Test Clinic',
-      role: 'superadmin',
-      status: 'active',
-      created_at: new Date(),
-      updated_at: new Date()
-    };
+    // Create multiple test users with different states for comprehensive testing
+    const testUsers = [
+      {
+        id: 1,
+        username: 'admin_test',
+        password: 'AdminPass123!',
+        email: 'admin@test.com',
+        fullName: 'Admin Test User',
+        phoneNumber: '+60123456789',
+        country: 'malaysia',
+        clinic: 'Test Clinic',
+        role: 'superadmin',
+        status: 'active'
+      },
+      {
+        id: 2,
+        username: 'active_user_test',
+        password: 'ActivePass123!',
+        email: 'active@test.com',
+        fullName: 'Active Test User',
+        phoneNumber: '+60123456790',
+        country: 'malaysia',
+        clinic: 'Active Test Clinic',
+        role: 'doctor',
+        status: 'active'
+      },
+      {
+        id: 3,
+        username: 'inactive_user_test',
+        password: 'InactivePass123!',
+        email: 'inactive@test.com',
+        fullName: 'Inactive Test User',
+        phoneNumber: '+60123456791',
+        country: 'malaysia',
+        clinic: 'Inactive Test Clinic',
+        role: 'doctor',
+        status: 'inactive'
+      },
+      {
+        id: 4,
+        username: 'delete_user_test',
+        password: 'DeletePass123!',
+        email: 'delete@test.com',
+        fullName: 'Delete Test User',
+        phoneNumber: '+60123456792',
+        country: 'malaysia',
+        clinic: 'Delete Test Clinic',
+        role: 'doctor',
+        status: 'inactive'
+      },
+      {
+        id: 5,
+        username: 'deactivate_user_test',
+        password: 'DeactivatePass123!',
+        email: 'deactivate@test.com',
+        fullName: 'Deactivate Test User',
+        phoneNumber: '+60123456793',
+        country: 'malaysia',
+        clinic: 'Deactivate Test Clinic',
+        role: 'doctor',
+        status: 'active'
+      },
+      {
+        id: 6,
+        username: 'reactivate_user_test',
+        password: 'ReactivatePass123!',
+        email: 'reactivate@test.com',
+        fullName: 'Reactivate Test User',
+        phoneNumber: '+60123456794',
+        country: 'malaysia',
+        clinic: 'Reactivate Test Clinic',
+        role: 'doctor',
+        status: 'inactive'
+      }
+    ];
 
-    // Insert admin user
-    await connection.query(`
-      INSERT INTO users_table (username, password, email, fullName, phoneNumber, country, clinic, role, status, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-      adminUser.username,
-      adminUser.password,
-      adminUser.email,
-      adminUser.fullName,
-      adminUser.phoneNumber,
-      adminUser.country,
-      adminUser.clinic,
-      adminUser.role,
-      adminUser.status,
-      adminUser.created_at,
-      adminUser.updated_at
-    ]);
+    for (const user of testUsers) {
+      const hashedPassword = await argon2.hash(user.password);
+      const now = new Date();
+      
+      await connection.query(`
+        INSERT INTO users_table (id, username, password, email, fullName, phoneNumber, country, clinic, role, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        user.id,
+        user.username,
+        hashedPassword,
+        user.email,
+        user.fullName,
+        user.phoneNumber,
+        user.country,
+        user.clinic,
+        user.role,
+        user.status,
+        now,
+        now
+      ]);
+      
+      console.log(`${user.status} test user created: ${user.username} (ID: ${user.id})`);
+    }
 
-    console.log('Admin test user created successfully');
-    console.log('Username: admin_test, Password: AdminPass123!');
+    console.log('All test users created successfully');
+    console.log('Test user credentials:');
+    console.log('- Admin (ID 1): admin_test / AdminPass123!');
+    console.log('- Active (ID 2): active_user_test / ActivePass123!');
+    console.log('- Inactive (ID 3): inactive_user_test / InactivePass123!');
+    console.log('- Delete (ID 4): delete_user_test / DeletePass123!');
+    console.log('- Deactivate (ID 5): deactivate_user_test / DeactivatePass123!');
+    console.log('- Reactivate (ID 6): reactivate_user_test / ReactivatePass123!');
     console.log('Test database setup complete');
   } catch (error) {
     console.error('Error setting up test database:', error);

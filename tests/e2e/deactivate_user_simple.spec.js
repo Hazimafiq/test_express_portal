@@ -1,9 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Deactivate User Modal Tests', () => {
-  // Using admin user (ID 1) for testing modal functionality only
-  // NOTE: These tests only test UI interactions, not actual deactivation
-  const testUserId = '1';
+  // Using dedicated deactivate test user (ID 5) for testing deactivate functionality
+  const testUserId = '5';
 
   test.beforeEach(async ({ page }) => {
     // Navigate to the admin user's update page for modal testing
