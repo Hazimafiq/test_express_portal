@@ -46,7 +46,7 @@ jobs:
       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     S3_BUCKET_NAME: test-bucket
         
-      - name: Install Playwright browsers
+      - name: Install Playwright browsers (chrome, firefox and webkit)
         run: npx playwright install --with-deps
         
       - name: Start server for E2E tests
