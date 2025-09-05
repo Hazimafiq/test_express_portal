@@ -1,4 +1,6 @@
 const mysql = require('mysql2/promise');
+const fs = require('fs').promises;
+const path = require('path');
 
 module.exports = async () => {
   // Clean up test database if needed
@@ -23,5 +25,17 @@ module.exports = async () => {
     await connection.end();
   } catch (error) {
     console.log('Error cleaning up test database:', error.message);
+  }
+
+  // Clean up authentication state file
+  try {
+    const authStatePath = path.join(__dirname, 'auth-state.json');
+    await fs.unlink(authStatePath);
+    console.log('Authentication state file cleaned up');
+  } catch (error) {
+    // File might not exist, which is fine
+    if (error.code !== 'ENOENT') {
+      console.log('Error cleaning up auth state file:', error.message);
+    }
   }
 };

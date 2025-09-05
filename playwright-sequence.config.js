@@ -2,14 +2,14 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
+ * Playwright config for running user lifecycle tests in sequence
  * @see https://playwright.dev/docs/test-configuration
  */
 module.exports = defineConfig({
   testDir: './tests/e2e',
-  /* Run tests in files in sequence for proper user lifecycle */
+  /* Run tests sequentially instead of in parallel */
   fullyParallel: false,
-  /* Use single worker to ensure proper test sequence */
-  workers: 1,
+  workers: 1, // Single worker to ensure sequence
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -28,42 +28,15 @@ module.exports = defineConfig({
     storageState: './tests/auth-state.json',
   },
 
-  /* Configure single browser project for sequential user lifecycle testing */
+  /* Configure single browser project for sequential testing */
   projects: [
     {
-      name: 'user-lifecycle',
+      name: 'user-lifecycle-sequence',
       use: { ...devices['Desktop Chrome'] },
       testMatch: [
-        'create_user.spec.js',
-        'user_details_page.spec.js', 
-        'update_user.spec.js',
-        'change_password.spec.js',
-        'deactivate_user_simple.spec.js',
-        'reactivate_user.spec.js',
-        'delete_user.spec.js',
-        'profile.spec.js'
+        'user_lifecycle_sequence.spec.js'
       ]
-    },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    }
   ],
 
   /* Run your local dev server before starting the tests */
