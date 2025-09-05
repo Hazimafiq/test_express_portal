@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Reactivate User', () => {
-  // Using admin user (ID 1) for testing - assumes user might be in inactive state
-  const testUserId = '1';
+  // Using dedicated reactivate test user (ID 6) for testing reactivate functionality
+  const testUserId = '6';
 
   test.beforeEach(async ({ page }) => {
     // Navigate to the user details page
